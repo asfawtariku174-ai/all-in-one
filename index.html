@@ -163,7 +163,7 @@ document.getElementById('result').innerHTML=
 '<h3>'+name+'</h3><p>ይህ አገልግሎት በልማት ላይ ነው።</p>';
 }
 
-document.getElementById('search').addEventListener('input',function() {
+document.getElementById('search').addEventListener('input',function(){
 let q=this.value.toLowerCase();
 document.querySelectorAll('.item').forEach(item=>{
 item.style.display=item.innerText.toLowerCase().includes(q)?'':'none';
