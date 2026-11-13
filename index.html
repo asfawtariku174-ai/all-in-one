@@ -95,3 +95,114 @@ document.getElementById('search').addEventListener('input',function(){
 </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="am">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALL IN ONE ETHIOPIA</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f5fa;color:#172033}
+header{background:#123b75;color:white;padding:25px 18px;border-radius:0 0 25px 25px}
+header h1{margin:0;font-size:27px}
+header p{color:#dbeafe;margin-bottom:0}
+.search{margin:18px 15px;background:white;padding:14px;border-radius:12px}
+.search input{width:100%;border:0;outline:0;font-size:16px}
+h2{margin:20px 15px;font-size:20px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 15px}
+.item{background:white;padding:20px 8px;border-radius:15px;text-align:center;box-shadow:0 2px 8px #00000010;cursor:pointer}
+.item span{font-size:30px}
+.item h3{font-size:15px;margin-bottom:5px}
+.item p{font-size:12px;color:#64748b}
+.item:active{background:#e6efff}
+button{background:#1765bd;color:white;border:0;padding:12px 18px;border-radius:10px}
+footer{position:fixed;bottom:0;left:0;width:100%;background:white;display:flex;justify-content:space-around;padding:10px 2px;box-shadow:0 -2px 10px #00000012}
+footer button{background:transparent;color:#123b75;font-size:12px;padding:9px 5px}
+main{padding-bottom:90px}
+#result{margin:15px}
+</style>
+</head>
+<body>
+<header>
+<h1>🌍 ALL IN ONE</h1>
+<p>ሁሉም አገልግሎቶች በአንድ ቦታ!</p>
+</header>
+
+<main>
+<div class="search">
+<input id="search" placeholder="🔍 የሚፈልጉትን ይፈልጉ...">
+</div>
+
+<h2>እንኳን ወደ ALL IN ONE በደህና መጡ!</h2>
+<h2>ዋና ዋና አገልግሎቶች</h2>
+
+<div class="grid" id="services">
+<div class="item" onclick="openService('ገበያ')">
+<span>🛒</span><h3>ገበያ</h3><p>ግዢና ሽያጭ</p>
+</div>
+<div class="item" onclick="openService('ውይይት')">
+<span>💬</span><h3>ውይይት</h3><p>መልዕክት ላክ</p>
+</div>
+<div class="item" onclick="openService('ክፍያ')">
+<span>💳</span><h3>ክፍያ</h3><p>የክፍያ አገልግሎት</p>
+</div>
+<div class="item" onclick="openService('ማድረስ')">
+<span>🚚</span><h3>ዕቃ ማድረስ</h3><p>ዕቃዎን ያስረክቡ</p>
+</div>
+<div class="item" onclick="openService('ሥራ')">
+<span>💼</span><h3>ሥራ</h3><p>ሥራ ይፈልጉ</p>
+</div>
+<div class="item" onclick="openService('ቤት')">
+<span>🏠</span><h3>ቤትና መሬት</h3><p>ይከራዩ ወይም ይግዙ</p>
+</div>
+<div class="item" onclick="openService('ትራንስፖርት')">
+<span>🚕</span><h3>ትራንስፖርት</h3><p>የመጓጓዣ አገልግሎት</p>
+</div>
+<div class="item" onclick="openService('መለያ')">
+<span>👤</span><h3>መለያዬ</h3><p>የግል መረጃ</p>
+</div>
+</div>
+
+<div id="result"></div>
+</main>
+
+<footer>
+<button onclick="home()">🏠<br>መነሻ</button>
+<button onclick="openService('ገበያ')">🛒<br>ገበያ</button>
+<button onclick="openService('ውይይት')">💬<br>ውይይት</button>
+<button onclick="openService('መለያ')">👤<br>መለያ</button>
+</footer>
+
+<script>
+function home(){
+document.getElementById('result').innerHTML='';
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openService(name){
+let messages={
+'ገበያ':'ወደ ግዢና ሽያጭ ክፍል በደህና መጡ።',
+'ውይይት':'የመልዕክት አገልግሎት በቅርቡ ይገነባል።',
+'ክፍያ':'የቴሌብርና የባንክ ክፍያ ማገናኘት በሂደት ላይ ነው።',
+'ማድረስ':'የዕቃ ማድረስ አገልግሎት በቅርቡ ይጀምራል።',
+'ሥራ':'የሥራ ማስታወቂያዎች ክፍል በቅርቡ ይገነባል።',
+'ቤት':'የቤትና መሬት አገልግሎት በቅርቡ ይገነባል።',
+'ትራንስፖርት':'የመጓጓዣ አገልግሎት በቅርቡ ይጀምራል።',
+'መለያ':'የተጠቃሚ መለያ ምዝገባ በቅርቡ ይገነባል።'
+};
+document.getElementById('result').innerHTML=
+'<h2>'+name+'</h2><p>'+messages[name]+'</p><button onclick="home()">ወደ መነሻ ተመለስ</button>';
+window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
+document.getElementById('search').addEventListener('input',function(){
+let q=this.value.toLowerCase();
+document.querySelectorAll('.item').forEach(item=>{
+item.style.display=item.innerText.toLowerCase().includes(q)?'':'none';
+});
+});
+</script>
+</body>
+</html>
