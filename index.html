@@ -2,30 +2,61 @@
 <html lang="am">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b75">
 <title>ALL IN ONE</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f5fa;color:#172033}
-header{background:#123b75;color:white;padding:25px 18px;border-radius:0 0 22px 22px}
+body{
+ margin:0;font-family:Arial,sans-serif;
+ background:#f1f5f9;color:#172033
+}
+header{
+ background:#123b75;color:white;
+ padding:22px 17px;border-radius:0 0 22px 22px
+}
 header h1{margin:0}
 header p{color:#dbeafe}
-.container{padding:20px 15px;max-width:500px;margin:auto}
-.card{background:white;padding:22px;border-radius:16px;margin:15px 0;box-shadow:0 2px 10px #0001}
-input{width:100%;padding:14px;margin:8px 0;border:1px solid #ddd;border-radius:9px;font-size:16px}
-button{background:#1765bd;color:white;border:0;padding:13px 18px;border-radius:9px;font-size:15px;cursor:pointer}
-.full{width:100%;margin-top:10px}
-.link{color:#1765bd;background:none;padding:8px}
-.hidden{display:none}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.item{background:white;padding:18px 8px;text-align:center;border-radius:14px;box-shadow:0 2px 8px #0001}
-.item span{font-size:30px}
-.item h3{font-size:15px}
+.container{max-width:650px;margin:auto;padding:15px}
+.card{
+ background:white;padding:18px;border-radius:15px;
+ margin:13px 0;box-shadow:0 2px 9px #0001
+}
+input,textarea,select{
+ width:100%;padding:13px;margin:7px 0;
+ border:1px solid #ddd;border-radius:9px;
+ font-size:16px;background:white
+}
+button{
+ border:0;border-radius:9px;padding:12px 16px;
+ background:#1765bd;color:white;font-size:15px;
+ cursor:pointer
+}
+button:disabled{opacity:.5}
+.full{width:100%;margin-top:8px}
+.link{background:none;color:#1765bd}
+.hidden{display:none!important}
+.grid{
+ display:grid;grid-template-columns:1fr 1fr;gap:11px
+}
+.item{
+ background:white;padding:16px 7px;text-align:center;
+ border-radius:14px;box-shadow:0 2px 8px #0001;
+ cursor:pointer
+}
+.item span{font-size:28px}
+.item h3{font-size:14px}
 .item p{font-size:12px;color:#64748b}
-.language{text-align:center;padding:15px}
-#app{padding-bottom:30px}
+.post{border-bottom:1px solid #eee;padding:12px 0}
+.post:last-child{border:0}
+.small{font-size:12px;color:#64748b}
+#message{color:#dc2626}
+#status{color:#087443}
+.language{text-align:center;padding:12px}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -39,170 +70,620 @@ button{background:#1765bd;color:white;border:0;padding:13px 18px;border-radius:9
 </div>
 
 <div class="container">
+
+<!-- AUTH -->
 <section id="auth">
 <div class="card">
-<h2 id="formTitle">አካውንት ፍጠር</h2>
+<h2 id="authTitle">አካውንት ፍጠር</h2>
+
 <div id="nameBox">
 <input id="name" placeholder="ሙሉ ስም">
 </div>
+
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
-<button class="full" onclick="submitAuth()" id="submitBtn">Sign Up</button>
+
+<button class="full" id="authButton"
+onclick="submitAuth()">Sign Up</button>
+
 <p style="text-align:center">
 <span id="switchText">አካውንት አለህ?</span>
-<button class="link" onclick="switchAuth()" id="switchBtn">Login</button>
+<button class="link" onclick="switchAuth()" id="switchButton">
+Login
+</button>
 </p>
 <p id="message"></p>
 </div>
 </section>
 
+<!-- MAIN APP -->
 <section id="app" class="hidden">
-<h2 id="welcome">እንኳን ደህና መጡ!</h2>
-<input id="search" placeholder="🔍 አገልግሎት ፈልግ...">
-<h3 id="servicesTitle">ዋና አገልግሎቶች</h3>
 
-<div class="grid" id="services">
-<div class="item" onclick="service(0)"><span>🛒</span><h3>ገበያ</h3><p>ግዢና ሽያጭ</p></div>
-<div class="item" onclick="service(1)"><span>💬</span><h3>ውይይት</h3><p>መልዕክት</p></div>
-<div class="item" onclick="service(2)"><span>💳</span><h3>ክፍያ</h3><p>የክፍያ አገልግሎት</p></div>
-<div class="item" onclick="service(3)"><span>🚚</span><h3>ዕቃ ማድረስ</h3><p>ዕቃ ማድረስ</p></div>
-<div class="item" onclick="service(4)"><span>💼</span><h3>ሥራ</h3><p>የሥራ ፍለጋ</p></div>
-<div class="item" onclick="service(5)"><span>🏠</span><h3>ቤትና መሬት</h3><p>ኪራይና ሽያጭ</p></div>
-<div class="item" onclick="service(6)"><span>🚕</span><h3>ትራንስፖርት</h3><p>መጓጓዣ</p></div>
-<div class="item" onclick="service(7)"><span>👤</span><h3>መለያዬ</h3><p>የግል መረጃ</p></div>
+<div class="card">
+<h2 id="welcome">እንኳን ደህና መጡ!</h2>
+<p id="userEmail" class="small"></p>
+<input id="search" placeholder="🔍 አገልግሎት ፈልግ...">
 </div>
 
-<div class="card" id="result">ALL IN ONE እንኳን ደህና መጡ!</div>
-<button class="full" onclick="logout()" id="logoutBtn">ውጣ</button>
+<h3 id="serviceTitle">ዋና አገልግሎቶች</h3>
+
+<div class="grid" id="services">
+<div class="item" onclick="openService('market')">
+<span>🛒</span><h3>ገበያ</h3><p>ግዢና ሽያጭ</p>
+</div>
+<div class="item" onclick="openService('chat')">
+<span>💬</span><h3>ውይይት</h3><p>መልዕክት</p>
+</div>
+<div class="item" onclick="openService('payment')">
+<span>💳</span><h3>ክፍያ</h3><p>የክፍያ ጥያቄ</p>
+</div>
+<div class="item" onclick="openService('delivery')">
+<span>🚚</span><h3>ዕቃ ማድረስ</h3><p>የማድረስ ጥያቄ</p>
+</div>
+<div class="item" onclick="openService('jobs')">
+<span>💼</span><h3>ሥራ</h3><p>የሥራ ፍለጋ</p>
+</div>
+<div class="item" onclick="openService('house')">
+<span>🏠</span><h3>ቤትና መሬት</h3><p>ኪራይና ሽያጭ</p>
+</div>
+<div class="item" onclick="openService('transport')">
+<span>🚕</span><h3>ትራንስፖርት</h3><p>መጓጓዣ</p>
+</div>
+<div class="item" onclick="openService('profile')">
+<span>👤</span><h3>መለያዬ</h3><p>የግል መረጃ</p>
+</div>
+</div>
+
+<!-- SERVICE PAGE -->
+<div id="servicePage" class="card hidden">
+<button onclick="goHome()">← ተመለስ</button>
+<h2 id="pageTitle"></h2>
+
+<div id="formArea">
+<input id="postTitle" placeholder="ርዕስ">
+<textarea id="postDescription" placeholder="ዝርዝር መግለጫ"></textarea>
+<input id="postPrice" type="number" placeholder="ዋጋ / መጠን">
+<input id="postPhone" type="tel" placeholder="ስልክ ቁጥር">
+<button class="full" onclick="savePost()" id="saveButton">
+አስቀምጥ
+</button>
+</div>
+
+<div id="chatArea" class="hidden">
+<textarea id="chatMessage" placeholder="መልዕክብህን ጻፍ"></textarea>
+<button class="full" onclick="sendMessage()">ላክ</button>
+<div id="messages"></div>
+</div>
+
+<div id="profileArea" class="hidden">
+<p id="profileName"></p>
+<p id="profileEmail"></p>
+<button onclick="loadMyPosts()">የእኔ ማስታወቂያዎች</button>
+</div>
+
+<div id="posts"></div>
+</div>
+
+<div class="card">
+<button class="full" onclick="logout()" id="logoutButton">
+ውጣ / Logout
+</button>
+</div>
+
 </section>
 </div>
 
-<script>
-let isSignup=true;
-let currentLanguage=localStorage.getItem('language')||'am';
-let loggedInName='';
+<script type="module">
 
-const translations={
-am:{
-header:'ሁሉም አገልግሎቶች በአንድ ቦታ!',
-create:'አካውንት ፍጠር',
-loginTitle:'ወደ አካውንትህ ግባ',
-fullName:'ሙሉ ስም',
-signup:'Sign Up',
-login:'Login',
-have:'አካውንት አለህ?',
-noHave:'አካውንት የለህም?',
-welcome:'እንኳን ደህና መጣህ',
-search:'🔍 አገልግሎት ፈልግ...',
-services:'ዋና አገልግሎቶች',
-names:['ገበያ','ውይይት','ክፍያ','ዕቃ ማድረስ','ሥራ','ቤትና መሬት','ትራንስፖርት','መለያዬ'],
-desc:['ግዢና ሽያጭ','መልዕክት','የክፍያ አገልግሎት','ዕቃ ማድረስ','የሥራ ፍለጋ','ኪራይና ሽያጭ','መጓጓዣ','የግል መረጃ'],
-logout:'ውጣ',
-result:'ይህ አገልግሎት በልማት ላይ ነው።',
-fill:'እባክህ ሁሉንም ቦታ ሙላ።',
-passError:'Password ቢያንስ 6 ፊደል ይሁን።'
-},
-en:{
-header:'All services in one place!',
-create:'Create Account',
-loginTitle:'Login to Your Account',
-fullName:'Full Name',
-signup:'Sign Up',
-login:'Login',
-have:'Already have an account?',
-noHave:"Don't have an account?",
-welcome:'Welcome',
-search:'🔍 Search services...',
-services:'Main Services',
-names:['Market','Chat','Payment','Delivery','Jobs','House & Land','Transport','My Account'],
-desc:['Buy and Sell','Messages','Payment Services','Deliver Items','Find Jobs','Rent and Sell','Transportation','Personal Information'],
-logout:'Logout',
-result:'This service is under development.',
-fill:'Please fill in all fields.',
-passError:'Password must be at least 6 characters.'
-}
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+
+import {
+ getAuth,createUserWithEmailAndPassword,
+ signInWithEmailAndPassword,signOut,
+ onAuthStateChanged,updateProfile
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+import {
+ getFirestore,collection,addDoc,getDocs,
+ query,where,orderBy,serverTimestamp,limit,
+ doc,setDoc
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+/* =================================
+   1. FIREBASE CONFIGURATION
+   ================================= */
+
+const firebaseConfig = {
+ apiKey: "YOUR_API_KEY",
+ authDomain: "YOUR_PROJECT.firebaseapp.com",
+ projectId: "YOUR_PROJECT_ID",
+ storageBucket: "YOUR_PROJECT.firebasestorage.app",
+ messagingSenderId: "YOUR_SENDER_ID",
+ appId: "YOUR_APP_ID"
 };
 
-function setLanguage(lang){
-if(!translations[lang])return;
-currentLanguage=lang;
-localStorage.setItem('language',lang);
-document.documentElement.lang=lang;
-const t=translations[lang];
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
-document.getElementById('headerText').innerText=t.header;
-document.getElementById('formTitle').innerText=isSignup?t.create:t.loginTitle;
-document.getElementById('name').placeholder=t.fullName;
-document.getElementById('submitBtn').innerText=isSignup?t.signup:t.login;
-document.getElementById('switchText').innerText=isSignup?t.have:t.noHave;
-document.getElementById('switchBtn').innerText=isSignup?t.login:t.signup;
-document.getElementById('search').placeholder=t.search;
-document.getElementById('servicesTitle').innerText=t.services;
-document.getElementById('logoutBtn').innerText=t.logout;
+/* =================================
+   2. APP VARIABLES
+   ================================= */
 
-document.querySelectorAll('.item').forEach((item,i)=>{
-item.querySelector('h3').innerText=t.names[i];
-item.querySelector('p').innerText=t.desc[i];
-});
+let isSignup = true;
+let currentUser = null;
+let currentService = "market";
+let language = localStorage.getItem("language") || "am";
 
-if(loggedInName){
-document.getElementById('welcome').innerText=t.welcome+' '+loggedInName+'!';
+const services = {
+ market:"ገበያ",
+ chat:"ውይይት",
+ payment:"ክፍያ",
+ delivery:"ዕቃ ማድረስ",
+ jobs:"ሥራ",
+ house:"ቤትና መሬት",
+ transport:"ትራንስፖርት"
+};
+
+const english = {
+ market:"Market",
+ chat:"Chat",
+ payment:"Payment",
+ delivery:"Delivery",
+ jobs:"Jobs",
+ house:"House & Land",
+ transport:"Transport",
+ profile:"My Account"
+};
+
+function el(id){
+ return document.getElementById(id);
 }
-}
+
+/* =================================
+   3. AUTHENTICATION
+   ================================= */
 
 function switchAuth(){
-isSignup=!isSignup;
-document.getElementById('nameBox').classList.toggle('hidden',!isSignup);
-document.getElementById('message').innerText='';
-setLanguage(currentLanguage);
+ isSignup = !isSignup;
+
+ el("nameBox").classList.toggle("hidden",!isSignup);
+ el("authTitle").innerText =
+ isSignup ? "አካውንት ፍጠር" : "ወደ አካውንትህ ግባ";
+
+ el("authButton").innerText =
+ isSignup ? "Sign Up" : "Login";
+
+ el("switchText").innerText =
+ isSignup ? "አካውንት አለህ?" : "አካውንት የለህም?";
+
+ el("switchButton").innerText =
+ isSignup ? "Login" : "Sign Up";
+
+ el("message").innerText = "";
 }
 
-function submitAuth(){
-const name=document.getElementById('name').value.trim();
-const email=document.getElementById('email').value.trim();
-const password=document.getElementById('password').value;
-const t=translations[currentLanguage];
+window.switchAuth = switchAuth;
 
-if(!email||!password||(isSignup&&!name)){
-document.getElementById('message').innerText=t.fill;
-return;
-}
-if(password.length<6){
-document.getElementById('message').innerText=t.passError;
-return;
-}
-loggedInName=isSignup?name:email.split('@')[0];
-document.getElementById('auth').classList.add('hidden');
-document.getElementById('app').classList.remove('hidden');
-setLanguage(currentLanguage);
+async function submitAuth(){
+
+ const name = el("name").value.trim();
+ const email = el("email").value.trim();
+ const password = el("password").value;
+
+ if(!email || !password || (isSignup && !name)){
+  el("message").innerText = "እባክህ ሁሉንም ቦታ ሙላ።";
+  return;
+ }
+
+ if(password.length < 6){
+  el("message").innerText =
+  "Password ቢያንስ 6 ፊደል ይሁን።";
+  return;
+ }
+
+ el("authButton").disabled = true;
+
+ try{
+
+  if(isSignup){
+
+   const result =
+    await createUserWithEmailAndPassword(auth,email,password);
+
+   await updateProfile(result.user,{
+    displayName:name
+   });
+
+   await setDoc(doc(db,"users",result.user.uid),{
+    name:name,
+    email:email,
+    createdAt:serverTimestamp()
+   });
+
+  }else{
+
+   await signInWithEmailAndPassword(auth,email,password);
+
+  }
+
+ }catch(error){
+
+  el("message").innerText = friendlyError(error.code);
+
+ }finally{
+
+  el("authButton").disabled = false;
+
+ }
+
 }
 
-function logout(){
-document.getElementById('app').classList.add('hidden');
-document.getElementById('auth').classList.remove('hidden');
-document.getElementById('email').value='';
-document.getElementById('password').value='';
-document.getElementById('name').value='';
-loggedInName='';
-isSignup=false;
-switchAuth();
+window.submitAuth = submitAuth;
+
+function friendlyError(code){
+
+ const errors = {
+  "auth/email-already-in-use":"ይህ Email ቀድሞ ተመዝግቧል።",
+  "auth/invalid-email":"Email ትክክል አይደለም።",
+  "auth/weak-password":"Password ጠንካራ ያድርግ።",
+  "auth/invalid-credential":"Email ወይም Password ትክክል አይደለም።",
+  "auth/network-request-failed":"የInternet ግንኙነትን አረጋግጥ።"
+ };
+
+ return errors[code] || "ስህተት ተፈጥሯል። "+code;
 }
 
-function service(index){
-document.getElementById('result').innerHTML=
-'<h3>'+translations[currentLanguage].names[index]+'</h3><p>'+
-translations[currentLanguage].result+'</p>';
-}
+/* =================================
+   4. LOGIN STATE
+   ================================= */
 
-document.getElementById('search').addEventListener('input',function(){
-const q=this.value.toLowerCase();
-document.querySelectorAll('.item').forEach(item=>{
-item.style.display=item.innerText.toLowerCase().includes(q)?'':'none';
+onAuthStateChanged(auth,user=>{
+
+ currentUser = user;
+
+ if(user){
+
+  el("auth").classList.add("hidden");
+  el("app").classList.remove("hidden");
+
+  el("welcome").innerText =
+  "እንኳን ደህና መጣህ "+(user.displayName || "ተጠቃሚ");
+
+  el("userEmail").innerText = user.email;
+
+ }else{
+
+  el("auth").classList.remove("hidden");
+  el("app").classList.add("hidden");
+
+ }
+
 });
+
+/* =================================
+   5. SERVICE NAVIGATION
+   ================================= */
+
+window.openService = async function(service){
+
+ currentService = service;
+
+ el("servicePage").classList.remove("hidden");
+ el("pageTitle").innerText =
+ language === "am" ? services[service] :
+ (english[service] || service);
+
+ el("formArea").classList.toggle("hidden",
+ service === "chat" || service === "profile");
+
+ el("chatArea").classList.toggle("hidden",service !== "chat");
+ el("profileArea").classList.toggle("hidden",service !== "profile");
+
+ el("posts").innerHTML = "";
+
+ if(service === "profile"){
+  el("profileName").innerText =
+   "ስም: "+(currentUser.displayName || "");
+  el("profileEmail").innerText =
+   "Email: "+currentUser.email;
+  return;
+ }
+
+ if(service === "chat"){
+  await loadMessages();
+  return;
+ }
+
+ await loadPosts(service);
+
+};
+
+window.goHome = function(){
+ el("servicePage").classList.add("hidden");
+};
+
+/* =================================
+   6. SAVE SERVICE POSTS
+   ================================= */
+
+window.savePost = async function(){
+
+ const title = el("postTitle").value.trim();
+ const description = el("postDescription").value.trim();
+ const price = el("postPrice").value;
+ const phone = el("postPhone").value.trim();
+
+ if(!title || !description){
+  alert("ርዕስና መግለጫ ሙላ።");
+  return;
+ }
+
+ try{
+
+  el("saveButton").disabled = true;
+
+  await addDoc(collection(db,"posts"),{
+
+   category:currentService,
+   title:title,
+   description:description,
+   price:price ? Number(price) : 0,
+   phone:phone,
+   uid:currentUser.uid,
+   author:currentUser.displayName || currentUser.email,
+   createdAt:serverTimestamp()
+
+  });
+
+  alert("በተሳካ ሁኔታ ተቀምጧል!");
+
+  el("postTitle").value = "";
+  el("postDescription").value = "";
+  el("postPrice").value = "";
+  el("postPhone").value = "";
+
+  await loadPosts(currentService);
+
+ }catch(error){
+
+  alert("ማስቀመጥ አልተቻለም። "+error.message);
+
+ }finally{
+
+  el("saveButton").disabled = false;
+
+ }
+
+};
+
+/* =================================
+   7. LOAD POSTS
+   ================================= */
+
+async function loadPosts(category){
+
+ const area = el("posts");
+ area.innerHTML = "<p>በመጫን ላይ...</p>";
+
+ try{
+
+  const q = query(
+   collection(db,"posts"),
+   where("category","==",category),
+   orderBy("createdAt","desc"),
+   limit(50)
+  );
+
+  const result = await getDocs(q);
+
+  area.innerHTML = "<h3>የተለጠፉ ማስታወቂያዎች</h3>";
+
+  if(result.empty){
+   area.innerHTML += "<p>ገና ምንም ማስታወቂያ የለም።</p>";
+   return;
+  }
+
+  result.forEach(item=>{
+
+   const data = item.data();
+
+   const post = document.createElement("div");
+   post.className = "post";
+
+   const title = document.createElement("h3");
+   title.textContent = data.title;
+
+   const description = document.createElement("p");
+   description.textContent = data.description;
+
+   const price = document.createElement("p");
+   price.textContent = "ዋጋ: "+(data.price || 0);
+
+   const author = document.createElement("p");
+   author.className = "small";
+   author.textContent = "ሻጭ: "+(data.author || "");
+
+   const phone = document.createElement("p");
+   phone.textContent = "ስልክ: "+(data.phone || "አልተገለጸም");
+
+   post.append(title,description,price,author,phone);
+   area.appendChild(post);
+
+  });
+
+ }catch(error){
+
+  area.innerText = "ስህተት: "+error.message;
+
+ }
+
+}
+
+/* =================================
+   8. CHAT
+   ================================= */
+
+window.sendMessage = async function(){
+
+ const message = el("chatMessage").value.trim();
+
+ if(!message)return;
+
+ try{
+
+  await addDoc(collection(db,"messages"),{
+   uid:currentUser.uid,
+   name:currentUser.displayName || currentUser.email,
+   message:message,
+   createdAt:serverTimestamp()
+  });
+
+  el("chatMessage").value = "";
+  await loadMessages();
+
+ }catch(error){
+
+  alert("መልዕክብ አልተላከም። "+error.message);
+
+ }
+
+};
+
+async function loadMessages(){
+
+ const area = el("messages");
+ area.innerHTML = "በመጫን ላይ...";
+
+ try{
+
+  const q = query(
+   collection(db,"messages"),
+   orderBy("createdAt","desc"),
+   limit(30)
+  );
+
+  const result = await getDocs(q);
+  area.innerHTML = "<h3>መልዕክቶች</h3>";
+
+  result.forEach(item=>{
+
+   const data = item.data();
+   const p = document.createElement("p");
+
+   p.textContent = (data.name || "User")+": "+data.message;
+   area.appendChild(p);
+
+  });
+
+ }catch(error){
+
+  area.innerText = error.message;
+
+ }
+
+}
+
+/* =================================
+   9. MY POSTS
+   ================================= */
+
+window.loadMyPosts = async function(){
+
+ const q = query(
+  collection(db,"posts"),
+  where("uid","==",currentUser.uid),
+  limit(50)
+ );
+
+ const result = await getDocs(q);
+ const area = el("posts");
+
+ area.innerHTML = "<h3>የእኔ ማስታወቂያዎች</h3>";
+
+ result.forEach(item=>{
+
+  const data = item.data();
+  const p = document.createElement("p");
+  p.textContent = data.title+" - "+data.description;
+  area.appendChild(p);
+
+ });
+
+};
+
+/* =================================
+   10. SEARCH
+   ================================= */
+
+el("search").addEventListener("input",function(){
+
+ const value = this.value.toLowerCase();
+
+ document.querySelectorAll(".item").forEach(item=>{
+
+  item.style.display =
+  item.innerText.toLowerCase().includes(value) ? "" : "none";
+
+ });
+
 });
 
-setLanguage(currentLanguage);
+/* =================================
+   11. LANGUAGE
+   ================================= */
+
+window.setLanguage = function(lang){
+
+ language = lang;
+ localStorage.setItem("language",lang);
+ document.documentElement.lang = lang;
+
+ if(lang === "en"){
+
+  el("headerText").innerText = "All services in one place!";
+  el("serviceTitle").innerText = "Main Services";
+  el("search").placeholder = "Search services...";
+  el("logoutButton").innerText = "Logout";
+
+ }else{
+
+  el("headerText").innerText = "ሁሉም አገልግሎቶች በአንድ ቦታ!";
+  el("serviceTitle").innerText = "ዋና አገልግሎቶች";
+  el("search").placeholder = "🔍 አገልግሎት ፈልግ...";
+  el("logoutButton").innerText = "ውጣ";
+
+ }
+
+ document.querySelectorAll(".item").forEach((item,index)=>{
+
+  const names = lang === "am"
+   ? ["ገበያ","ውይይት","ክፍያ","ዕቃ ማድረስ","ሥራ","ቤትና መሬት","ትራንስፖርት","መለያዬ"]
+   : ["Market","Chat","Payment","Delivery","Jobs","House & Land","Transport","My Account"];
+
+  item.querySelector("h3").innerText = names[index];
+
+ });
+
+};
+
+/* =================================
+   12. LOGOUT
+   ================================= */
+
+window.logout = async function(){
+
+ try{
+  await signOut(auth);
+ }catch(error){
+  alert(error.message);
+ }
+
+};
+
+setLanguage(language);
+
 </script>
-
 </body>
 </html>
