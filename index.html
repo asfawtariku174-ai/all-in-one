@@ -212,11 +212,62 @@ setLanguage(localStorage.getItem('language') || 'am');
 </script>
 
 
+
+<div style="text-align:center;padding:15px">
+  <button onclick="setLanguage('am')">አማርኛ</button>
+  <button onclick="setLanguage('en')">English</button>
+</div>
+
 <script>
+const translations = {
+  am: {
+    header: "ሁሉም አገልግሎቶች በአንድ ቦታ!",
+    welcome: "እንኳን ደህና መጡ!",
+    search: "🔍 አገልግሎት ፈልግ...",
+    services: "ዋና አገልግሎቶች",
+    names: ["ገበያ","ውይይት","ክፍያ","ዕቃ ማድረስ","ሥራ","ቤትና መሬት","ትራንስፖርት","መለያዬ"],
+    desc: ["ግዢና ሽያጭ","መልዕክት","የክፍያ አገልግሎት","ዕቃ ማድረስ","የሥራ ፍለጋ","ኪራይና ሽያጭ","መጓጓዣ","የግል መረጃ"],
+    logout: "ውጣ"
+  },
+  en: {
+    header: "All services in one place!",
+    welcome: "Welcome!",
+    search: "🔍 Search services...",
+    services: "Main Services",
+    names: ["Market","Chat","Payment","Delivery","Jobs","House & Land","Transport","My Account"],
+    desc: ["Buy and Sell","Messages","Payment Services","Deliver Items","Find Jobs","Rent and Sell","Transportation","Personal Information"],
+    logout: "Logout"
+  }
+};
+
+let currentLanguage = localStorage.getItem('language') || 'am';
+
 function setLanguage(lang) {
+  currentLanguage = lang;
   localStorage.setItem('language', lang);
-  alert(lang === 'am' ? 'አማርኛ ተመርጧል' : 'English selected');
+  document.documentElement.lang = lang;
+
+  const t = translations[lang];
+
+  document.querySelector('header p').innerText = t.header;
+  document.getElementById('welcome').innerText = t.welcome;
+  document.getElementById('search').placeholder = t.search;
+  document.querySelector('#app h3').innerText = t.services;
+
+  document.querySelectorAll('.item').forEach((item,i) => {
+    item.querySelector('h3').innerText = t.names[i];
+    item.querySelector('p').innerText = t.desc[i];
+  });
+
+  document.querySelector('#result').innerText =
+    lang === 'am' ? 'ALL IN ONE እንኳን ደህና መጡ!' :
+    'Welcome to ALL IN ONE!';
+
+  document.querySelector('#app button.full').innerText = t.logout;
 }
+
+setLanguage(currentLanguage);
 </script>
+
 </body>
 </html>
