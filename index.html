@@ -170,5 +170,16 @@ item.style.display=item.innerText.toLowerCase().includes(q)?'':'none';
 });
 });
 </script>
+<div style="text-align:center;padding:15px">
+  <button onclick="setLanguage('am')">አማርኛ</button>
+  <button onclick="setLanguage('en')">English</button>
+</div>
+
+<script>
+function setLanguage(lang) {
+  localStorage.setItem('language', lang);
+  alert(lang === 'am' ? 'አማርኛ ተመርጧል' : 'English selected');
+}
+</script>
 </body>
 </html>
