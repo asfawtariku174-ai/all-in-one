@@ -1,249 +1,281 @@
 <!DOCTYPE html>
 <html lang="am">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#123b75">
-<title>ALL IN ONE</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172033}
-header{background:#123b75;color:white;padding:22px 17px;border-radius:0 0 22px 22px}
-header h1{margin:0;font-size:30px} header p{color:#dbeafe}
-.container{max-width:650px;margin:auto;padding:15px}
-.card{background:white;padding:18px;border-radius:15px;margin:13px 0;box-shadow:0 2px 9px #0001}
-input,textarea{width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;border-radius:10px;font-size:16px;background:white;color:#172033}
-textarea{min-height:95px;resize:vertical}
-button{border:0;border-radius:9px;padding:12px 16px;background:#1765bd;color:white;font-size:15px;cursor:pointer}
-button:disabled{opacity:.55;cursor:not-allowed}
-.full{width:100%;margin-top:8px}.link{background:none;color:#1765bd}
-.hidden{display:none!important}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.item{background:white;padding:16px 7px;text-align:center;border-radius:14px;box-shadow:0 2px 8px #0001;cursor:pointer}
-.item span{font-size:28px}.item h3{font-size:14px}.item p{font-size:12px;color:#64748b}
-.post{border-bottom:1px solid #eee;padding:12px 0}.post:last-child{border:0}
-.small{font-size:12px;color:#64748b}#message{color:#b91c1c;overflow-wrap:anywhere}
-.language{text-align:center;padding:12px}.status{color:#087443}.muted{color:#64748b}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All in One - መተግበሪያ</title>
+    <!-- FontAwesome ለاይኮኖች -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            padding-bottom: 70px; /* የታችኛው ናቪጌሽን እንዳይጋርደው */
+        }
+        /* የላይኛው አረንጓዴ ከለር ክፍል */
+        .header-section {
+            background-color: #008751;
+            padding: 15px;
+            color: white;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .lang-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .search-container h2 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .search-box-wrapper {
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 4px;
+        }
+        .location-select {
+            border: none;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 6px;
+            margin-right: 5px;
+            font-size: 14px;
+            outline: none;
+        }
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+        .search-btn {
+            background: none;
+            border: none;
+            padding: 0 12px;
+            cursor: pointer;
+            color: #008751;
+            font-size: 16px;
+        }
+
+        /* ፈጣን አዝራሮች (Quick Pills) */
+        .quick-pills {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 15px;
+            background: white;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .quick-pills::-webkit-scrollbar {
+            display: none;
+        }
+        .pill {
+            background: #f0f4f1;
+            border: 1px solid #dcdcdc;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #008751;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* ዋና ዋና ክፍሎች (Categories Grid) */
+        .container {
+            padding: 15px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #222;
+        }
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .cat-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            padding: 8px 4px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .cat-card:active {
+            background: #f0f0f0;
+        }
+        .cat-icon {
+            width: 50px;
+            height: 50px;
+            background: #f0f4f1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+        .cat-card span {
+            font-size: 12px;
+            line-height: 1.2;
+        }
+
+        /* የታችኛው ናቪጌሽን (Bottom Navigation Bar) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #e0e0e0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #777;
+            font-size: 11px;
+        }
+        .nav-item i {
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #008751;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<header><h1>🌍 ALL IN ONE</h1><p id="headerText">ሁሉም አገልግሎቶች በአንድ ቦታ!</p></header>
-<div class="language"><button onclick="setLanguage('am')">አማርኛ</button> <button onclick="setLanguage('en')">English</button></div>
-<div class="container">
-<section id="auth">
- <div class="card">
-  <h2 id="authTitle">አካውንት ፍጠር</h2>
-  <div id="nameBox"><input id="name" autocomplete="name" placeholder="ሙሉ ስም"></div>
-  <input id="email" type="email" autocomplete="email" placeholder="Email">
-  <input id="password" type="password" autocomplete="current-password" placeholder="Password">
-  <button class="full" id="authButton" onclick="submitAuth()">Sign Up</button>
-  <p style="text-align:center"><span id="switchText">አካውንት አለህ?</span> <button class="link" onclick="switchAuth()" id="switchButton">Login</button></p>
-  <p id="message" role="alert"></p>
- </div>
-</section>
-<section id="app" class="hidden">
- <div class="card">
-  <h2 id="welcome">እንኳን ደህና መጡ!</h2><p id="userEmail" class="small"></p>
-  <input id="search" placeholder="🔍 አገልግሎት ፈልግ...">
- </div>
- <h3 id="serviceTitle">ዋና አገልግሎቶች</h3>
- <div class="grid" id="services">
-  <div class="item" onclick="openService('market')"><span>🛒</span><h3>ገበያ</h3><p>ግዢና ሽያጭ</p></div>
-  <div class="item" onclick="openService('chat')"><span>💬</span><h3>ውይይት</h3><p>መልዕክት</p></div>
-  <div class="item" onclick="openService('payment')"><span>💳</span><h3>ክፍያ</h3><p>የክፍያ ጥያቄ</p></div>
-  <div class="item" onclick="openService('delivery')"><span>🚚</span><h3>ዕቃ ማድረስ</h3><p>የማድረስ ጥያቄ</p></div>
-  <div class="item" onclick="openService('jobs')"><span>💼</span><h3>ሥራ</h3><p>የሥራ ፍለጋ</p></div>
-  <div class="item" onclick="openService('house')"><span>🏠</span><h3>ቤትና መሬት</h3><p>ኪራይና ሽያጭ</p></div>
-  <div class="item" onclick="openService('transport')"><span>🚕</span><h3>ትራንስፖርት</h3><p>መጓጓዣ</p></div>
-  <div class="item" onclick="openService('profile')"><span>👤</span><h3>መለያዬ</h3><p>የግል መረጃ</p></div>
- </div>
- <div id="servicePage" class="card hidden">
-  <button onclick="goHome()" id="backButton">← ተመለስ</button><h2 id="pageTitle"></h2>
-  <div id="formArea">
-   <input id="postTitle" placeholder="ርዕስ">
-   <textarea id="postDescription" placeholder="ዝርዝር መግለጫ"></textarea>
-   <input id="postPrice" type="number" min="0" placeholder="ዋጋ / መጠን">
-   <input id="postPhone" type="tel" placeholder="ስልክ ቁጥር">
-   <button class="full" onclick="savePost()" id="saveButton">አስቀምጥ</button>
-  </div>
-  <div id="chatArea" class="hidden">
-   <textarea id="chatMessage" placeholder="መልዕክብህን ጻፍ"></textarea>
-   <button class="full" onclick="sendMessage()" id="sendButton">ላክ</button><div id="messages"></div>
-  </div>
-  <div id="profileArea" class="hidden">
-   <p id="profileName"></p><p id="profileEmail"></p>
-   <button onclick="loadMyPosts()" id="myPostsButton">የእኔ ማስታወቂያዎች</button>
-  </div>
-  <div id="posts"></div>
- </div>
- <div class="card"><button class="full" onclick="logout()" id="logoutButton">ውጣ / Logout</button></div>
-</section>
-</div>
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,updateProfile} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import {getFirestore,collection,addDoc,getDocs,query,where,serverTimestamp,limit,doc,setDoc} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-const firebaseConfig = {
- apiKey: "AIzaSyCRQJeoRNKSIdQ0LTCHoBSUUftl2o-dUjQ",
- authDomain: "all-in-one-45d48.firebaseapp.com",
- projectId: "all-in-one-45d48",
- storageBucket: "all-in-one-45d48.firebasestorage.app",
- messagingSenderId: "1023627656415",
- appId: "1:1023627656415:web:0072d483258742a7bbfd6a"
-};
-const appFirebase=initializeApp(firebaseConfig);
-const auth=getAuth(appFirebase);
-const db=getFirestore(appFirebase);
+    <!-- የላይኛው አረንጓዴ ክፍል እና መፈለጊያ -->
+    <div class="header-section">
+        <div class="top-bar">
+            <button class="lang-btn"><i class="fa-solid fa-globe"></i> English / አማርኛ</button>
+        </div>
+        <div class="search-container">
+            <h2>ምን ይፈልጋሉ?</h2>
+            <div class="search-box-wrapper">
+                <select class="location-select">
+                    <option>ኢትዮጵያ</option>
+                    <option>አዲስ አበባ</option>
+                </select>
+                <input type="text" class="search-input" placeholder="እቃዎችን ወይም አገልግሎቶችን ይፈልጉ...">
+                <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+    </div>
 
-let isSignup=true,currentUser=null,currentService="market";
-let language=localStorage.getItem("language")||"am";
-const names={
- market:{am:"ገበያ",en:"Market"},chat:{am:"ውይይት",en:"Chat"},
- payment:{am:"ክፍያ",en:"Payment"},delivery:{am:"ዕቃ ማድረስ",en:"Delivery"},
- jobs:{am:"ሥራ",en:"Jobs"},house:{am:"ቤትና መሬት",en:"House & Land"},
- transport:{am:"ትራንስፖርት",en:"Transport"},profile:{am:"መለያዬ",en:"My Account"}
-};
-const T={
- am:{header:"ሁሉም አገልግሎቶች በአንድ ቦታ!",signup:"አካውንት ፍጠር",login:"ወደ አካውንትህ ግባ",have:"አካውንት አለህ?",nohave:"አካውንት የለህም?",services:"ዋና አገልግሎቶች",search:"🔍 አገልግሎት ፈልግ...",back:"← ተመለስ",title:"ርዕስ",desc:"ዝርዝር መግለጫ",price:"ዋጋ / መጠን",phone:"ስልክ ቁጥር",save:"አስቀምጥ",send:"ላክ",chat:"መልዕክብህን ጻፍ",logout:"ውጣ",my:"የእኔ ማስታወቂያዎች",posts:"የተለጠፉ ማስታወቂያዎች",none:"ገና ምንም ማስታወቂያ የለም።",loading:"በመጫን ላይ...",required:"ርዕስና መግለጫ ሙላ።",saved:"በተሳካ ሁኔታ ተቀምጧል!",seller:"ሻጭ",noPhone:"አልተገለጸም",noResults:"ምንም ውጤት አልተገኘም።"},
- en:{header:"All services in one place!",signup:"Create Account",login:"Login to your account",have:"Already have an account?",nohave:"Don't have an account?",services:"Main Services",search:"🔍 Search services...",back:"← Back",title:"Title",desc:"Description",price:"Price / Amount",phone:"Phone Number",save:"Save",send:"Send",chat:"Write your message",logout:"Logout",my:"My Advertisements",posts:"Published Advertisements",none:"No advertisements yet.",loading:"Loading...",required:"Please enter a title and description.",saved:"Saved successfully!",seller:"Seller",noPhone:"Not provided",noResults:"No results found."}
-};
-const $=id=>document.getElementById(id), t=key=>T[language][key]||key;
-function showError(error){
- const code=error?.code||"";
- const map={
- "auth/email-already-in-use":"ይህ Email ቀድሞ ተመዝግቧል.",
- "auth/invalid-email":"Email ትክክል አይደለም.",
- "auth/weak-password":"Password ቢያንስ 6 ቁምፊዎች ይሁን.",
- "auth/invalid-credential":"Email ወይም Password ትክክል አይደለም.",
- "auth/api-key-not-valid.-please-pass-a-valid-api-key.":"Firebase API Key ትክክል አይደለም፤ Config እና Google API restrictions አረጋግጥ.",
- "auth/network-request-failed":"Internet ግንኙነትን አረጋግጥ.",
- "permission-denied":"Firestore Security Rules ፈቃድ አልሰጡም."
- };
- return map[code]||error?.message||"ያልታወቀ ስህተት ተፈጥሯል።";
-}
-window.switchAuth=()=>{
- isSignup=!isSignup;
- $("nameBox").classList.toggle("hidden",!isSignup);
- $("authTitle").textContent=isSignup?t("signup"):t("login");
- $("authButton").textContent=isSignup?"Sign Up":"Login";
- $("switchText").textContent=isSignup?t("have"):t("nohave");
- $("switchButton").textContent=isSignup?"Login":"Sign Up";
- $("message").textContent="";
-};
-window.submitAuth=async()=>{
- const name=$("name").value.trim(),email=$("email").value.trim(),password=$("password").value;
- if(!email||!password||(isSignup&&!name)){ $("message").textContent="እባክህ ሁሉንም ቦታ ሙላ።";return; }
- if(password.length<6){$("message").textContent="Password ቢያንስ 6 ቁምፊዎች ይሁን።";return;}
- $("authButton").disabled=true;$("message").textContent="";
- try{
-  if(isSignup){
-   const result=await createUserWithEmailAndPassword(auth,email,password);
-   await updateProfile(result.user,{displayName:name});
-   await setDoc(doc(db,"users",result.user.uid),{name,email,createdAt:serverTimestamp()});
-  }else await signInWithEmailAndPassword(auth,email,password);
- }catch(error){$("message").textContent=showError(error);}
- finally{$("authButton").disabled=false;}
-};
-onAuthStateChanged(auth,user=>{
- currentUser=user;
- $("auth").classList.toggle("hidden",!!user);
- $("app").classList.toggle("hidden",!user);
- if(user){$("welcome").textContent=(language==="am"?"እንኳን ደህና መጣህ ":"Welcome ")+(user.displayName||"");$("userEmail").textContent=user.email||"";}
-});
-window.openService=async service=>{
- if(!currentUser)return;
- currentService=service;
- $("servicePage").classList.remove("hidden");
- $("pageTitle").textContent=names[service]?.[language]||service;
- $("formArea").classList.toggle("hidden",service==="chat"||service==="profile");
- $("chatArea").classList.toggle("hidden",service!=="chat");
- $("profileArea").classList.toggle("hidden",service!=="profile");
- $("posts").innerHTML="";
- if(service==="profile"){
-  $("profileName").textContent=(language==="am"?"ስም: ":"Name: ")+(currentUser.displayName||"");
-  $("profileEmail").textContent="Email: "+currentUser.email;
- }else if(service==="chat") await loadMessages();
- else await loadPosts(service);
-};
-window.goHome=()=>$("servicePage").classList.add("hidden");
-window.savePost=async()=>{
- const title=$("postTitle").value.trim(),description=$("postDescription").value.trim();
- const price=$("postPrice").value,phone=$("postPhone").value.trim();
- if(!title||!description){alert(t("required"));return;}
- $("saveButton").disabled=true;
- try{
-  await addDoc(collection(db,"posts"),{category:currentService,title,description,price:price?Number(price):0,phone,uid:currentUser.uid,author:currentUser.displayName||currentUser.email,createdAt:serverTimestamp()});
-  alert(t("saved"));$("postTitle").value="";$("postDescription").value="";$("postPrice").value="";$("postPhone").value="";
-  await loadPosts(currentService);
- }catch(error){alert(showError(error));}
- finally{$("saveButton").disabled=false;}
-};
-function addPostCard(area,data){
- const post=document.createElement("div");post.className="post";
- const title=document.createElement("h3");title.textContent=data.title||"";
- const desc=document.createElement("p");desc.textContent=data.description||"";
- const price=document.createElement("p");price.textContent=t("price")+": "+(data.price??0);
- const author=document.createElement("p");author.className="small";author.textContent=t("seller")+": "+(data.author||"");
- const phone=document.createElement("p");phone.textContent=t("phone")+": "+(data.phone||t("noPhone"));
- post.append(title,desc,price,author,phone);area.appendChild(post);
-}
-async function loadPosts(category){
- const area=$("posts");area.textContent=t("loading");
- try{
-  const snap=await getDocs(query(collection(db,"posts"),where("category","==",category),limit(50)));
-  const rows=snap.docs.map(d=>d.data()).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  area.innerHTML="";const heading=document.createElement("h3");heading.textContent=t("posts");area.appendChild(heading);
-  if(!rows.length){const p=document.createElement("p");p.textContent=t("none");area.appendChild(p);return;}
-  rows.forEach(data=>addPostCard(area,data));
- }catch(error){area.textContent=showError(error);}
-}
-window.sendMessage=async()=>{
- const message=$("chatMessage").value.trim();if(!message)return;
- $("sendButton").disabled=true;
- try{
-  await addDoc(collection(db,"messages"),{uid:currentUser.uid,name:currentUser.displayName||currentUser.email,message,createdAt:serverTimestamp()});
-  $("chatMessage").value="";await loadMessages();
- }catch(error){alert(showError(error));}
- finally{$("sendButton").disabled=false;}
-};
-async function loadMessages(){
- const area=$("messages");area.textContent=t("loading");
- try{
-  const snap=await getDocs(query(collection(db,"messages"),limit(50)));
-  const rows=snap.docs.map(d=>d.data()).sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
-  area.innerHTML="<h3>Messages</h3>";
-  rows.forEach(data=>{const p=document.createElement("p");p.textContent=(data.name||"User")+": "+(data.message||"");area.appendChild(p);});
- }catch(error){area.textContent=showError(error);}
-}
-window.loadMyPosts=async()=>{
- const area=$("posts");area.textContent=t("loading");
- try{
-  const snap=await getDocs(query(collection(db,"posts"),where("uid","==",currentUser.uid),limit(50)));
-  area.innerHTML="";const h=document.createElement("h3");h.textContent=t("my");area.appendChild(h);
-  if(snap.empty){const p=document.createElement("p");p.textContent=t("none");area.appendChild(p);return;}
-  snap.forEach(d=>{const data=d.data();const p=document.createElement("p");p.textContent=(data.title||"")+" - "+(data.description||"");area.appendChild(p);});
- }catch(error){area.textContent=showError(error);}
-};
-$("search").addEventListener("input",function(){
- const value=this.value.toLocaleLowerCase();
- document.querySelectorAll(".item").forEach(item=>{item.style.display=item.innerText.toLocaleLowerCase().includes(value)?"":"none";});
-});
-window.setLanguage=lang=>{
- language=lang;localStorage.setItem("language",lang);document.documentElement.lang=lang;
- $("headerText").textContent=t("header");$("serviceTitle").textContent=t("services");$("search").placeholder=t("search");
- $("logoutButton").textContent=t("logout");$("backButton").textContent=t("back");
- $("postTitle").placeholder=t("title");$("postDescription").placeholder=t("desc");$("postPrice").placeholder=t("price");$("postPhone").placeholder=t("phone");
- $("saveButton").textContent=t("save");$("sendButton").textContent=t("send");$("chatMessage").placeholder=t("chat");
- $("myPostsButton").textContent=t("my");
- document.querySelectorAll(".item").forEach((item,index)=>{const key=["market","chat","payment","delivery","jobs","house","transport","profile"][index];item.querySelector("h3").textContent=names[key][lang];});
- $("authTitle").textContent=isSignup?t("signup"):t("login");$("switchText").textContent=isSignup?t("have"):t("nohave");
- $("switchButton").textContent=isSignup?"Login":"Sign Up";$("authButton").textContent=isSignup?"Sign Up":"Login";
- if(currentUser)$("welcome").textContent=(lang==="am"?"እንኳን ደህና መጣህ ":"Welcome ")+(currentUser.displayName||"");
- if(!$("servicePage").classList.contains("hidden"))$("pageTitle").textContent=names[currentService][lang];
-};
-window.logout=async()=>{try{await signOut(auth);}catch(error){alert(showError(error));}};
-setLanguage(language);
-</script>
+    <!-- ፈጣን መረጣዎች -->
+    <div class="quick-pills">
+        <a href="#" class="pill"><i class="fa-solid fa-bullseye"></i> ንቁ መረጃዎች</a>
+        <a href="#" class="pill"><i class="fa-solid fa-store"></i> እንዴት መሸጥ ይቻላል?</a>
+        <a href="#" class="pill"><i class="fa-solid fa-gamepad"></i> ጨዋታዎች</a>
+    </div>
+
+    <!-- ዋና ዋና አገልግሎቶች (ማትሪክስ/ግሪድ) -->
+    <div class="container">
+        <div class="section-title">ዋና አገልግሎቶች</div>
+        <div class="categories-grid">
+            <a href="#" class="cat-card">
+                <div class="cat-icon">🛒</div>
+                <span>ገበያ</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-icon">💬</div>
+                <span>ውይይት</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-icon">💳</div>
+                <span>ክፍያ</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-icon">🚚</div>
+                <span>ዕቃ ማድረስ</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-icon">💼</div>
+                <span>ሥራ</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-icon">🏠</div>
+                <span>ቤትና መሬት</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-icon">🚕</div>
+                <span>ትራንስፖርት</span>
+            </a>
+            <a href="#" class="cat-card">
+                <div class="cat-icon">👤</div>
+                <span>መለያዬ</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- የታችኛው ናቪጌሽን ባር -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-bookmark"></i>
+            <span>Saved</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-square-plus" style="font-size: 22px; color: #008751;"></i>
+            <span>Sell</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-comment-dots"></i>
+            <span>Messages</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
 </body>
 </html>
-
