@@ -3,178 +3,55 @@
 <html lang="am">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#008751">
-<title>All in One</title>
-
+<title>ALL IN ONE</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-*{
- box-sizing:border-box;
- margin:0;
- padding:0;
- font-family:Arial,sans-serif;
-}
-body{
- background:#f5f5f5;
- color:#333;
- padding-bottom:75px;
-}
-.header-section{
- background:#008751;
- padding:15px;
- color:white;
-}
-.top-bar{
- display:flex;
- justify-content:flex-end;
- margin-bottom:15px;
-}
-.lang-btn{
- background:white;
- color:#008751;
- border:0;
- padding:9px 13px;
- border-radius:8px;
- font-weight:bold;
- cursor:pointer;
-}
-.search-container{
- text-align:center;
- margin-bottom:15px;
-}
-.search-container h2{
- font-size:18px;
- margin-bottom:12px;
-}
-.search-box-wrapper{
- display:flex;
- background:white;
- border-radius:8px;
- overflow:hidden;
- padding:4px;
-}
-.location-select{
- border:0;
- background:#f0f0f0;
- padding:10px 5px;
- border-radius:6px;
- font-size:12px;
- max-width:100px;
-}
-.search-input{
- flex:1;
- min-width:0;
- border:0;
- padding:10px 5px;
- outline:none;
- font-size:13px;
-}
-.search-btn{
- border:0;
- background:white;
- color:#008751;
- padding:0 10px;
- font-size:17px;
-}
-.quick-pills{
- display:flex;
- gap:10px;
- overflow-x:auto;
- padding:12px 15px;
- background:white;
- white-space:nowrap;
-}
-.pill{
- background:#f0f4f1;
- border:1px solid #ddd;
- padding:9px 13px;
- border-radius:20px;
- font-size:12px;
- color:#008751;
- text-decoration:none;
-}
-.container{
- padding:15px;
-}
-.section-title{
- font-size:16px;
- font-weight:bold;
- margin-bottom:12px;
-}
-.categories-grid{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:12px;
- background:white;
- padding:15px;
- border-radius:12px;
- box-shadow:0 2px 5px #0000000d;
-}
-.cat-card{
- display:flex;
- flex-direction:column;
- align-items:center;
- text-align:center;
- text-decoration:none;
- color:#333;
- padding:8px 3px;
- border-radius:8px;
-}
-.cat-icon{
- width:50px;
- height:50px;
- background:#f0f4f1;
- border-radius:12px;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:22px;
- margin-bottom:6px;
-}
-.cat-card span{
- font-size:12px;
-}
-.bottom-nav{
- position:fixed;
- bottom:0;
- left:0;
- width:100%;
- background:white;
- display:flex;
- justify-content:space-around;
- padding:10px 0;
- border-top:1px solid #ddd;
- box-shadow:0 -2px 5px #0000000d;
- z-index:1000;
-}
-.nav-item{
- display:flex;
- flex-direction:column;
- align-items:center;
- text-decoration:none;
- color:#777;
- font-size:11px;
-}
-.nav-item i{
- font-size:18px;
- margin-bottom:4px;
-}
-.nav-item.active{
- color:#008751;
- font-weight:bold;
-}
-@media(max-width:350px){
- .categories-grid{grid-template-columns:repeat(3,1fr)}
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f5f5f5;color:#333;padding-bottom:80px}
+.header-section{background:#008751;padding:15px;color:white}
+.top-bar{display:flex;justify-content:flex-end;margin-bottom:15px}
+.lang-btn{background:white;color:#008751;border:0;padding:9px 13px;border-radius:8px;font-weight:bold}
+.search-container{text-align:center;margin-bottom:10px}
+.search-container h2{font-size:18px;margin-bottom:12px}
+.search-box-wrapper{display:flex;background:white;border-radius:8px;padding:4px}
+.search-input{flex:1;min-width:0;border:0;padding:10px;outline:none}
+.search-btn{border:0;background:white;color:#008751;padding:0 10px}
+.quick-pills{display:flex;gap:10px;overflow-x:auto;padding:12px 15px;background:white}
+.pill{background:#f0f4f1;border:1px solid #ddd;padding:9px 13px;border-radius:20px;font-size:12px;color:#008751;text-decoration:none;white-space:nowrap}
+.container{padding:15px}
+.section-title{font-size:17px;font-weight:bold;margin:18px 0 12px}
+.categories-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:white;padding:12px;border-radius:12px}
+.cat-card{display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;color:#333;padding:8px 3px}
+.cat-icon{width:48px;height:48px;background:#f0f4f1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:6px}
+.cat-card span{font-size:12px}
+.panel{background:white;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 5px #0000000d}
+input,textarea,select{width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:8px;font-size:14px}
+textarea{min-height:80px;resize:vertical}
+.btn{border:0;background:#008751;color:white;padding:12px 15px;border-radius:8px;font-weight:bold;cursor:pointer;margin:5px 0}
+.btn.secondary{background:#666}
+.btn.danger{background:#c62828}
+.btn.full{width:100%}
+.auth-actions{display:flex;gap:8px}
+.auth-actions button{flex:1}
+.product-card{background:white;border-radius:10px;padding:13px;margin:10px 0;box-shadow:0 2px 5px #0000000d}
+.product-card h3{color:#008751;margin-bottom:7px}
+.product-card p{margin:5px 0;font-size:14px}
+.muted{color:#777;font-size:13px}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:white;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #ddd;z-index:1000}
+.nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#777;font-size:11px}
+.nav-item i{font-size:18px;margin-bottom:4px}
+.nav-item.active{color:#008751;font-weight:bold}
+.hidden{display:none!important}
+@media(max-width:350px){.categories-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 
 <body>
 
 <div class="header-section">
-
  <div class="top-bar">
   <button class="lang-btn" onclick="toggleLanguage()">
    <i class="fa-solid fa-globe"></i>
@@ -183,24 +60,13 @@ body{
  </div>
 
  <div class="search-container">
-  <h2 data-am="ምን ይፈልጋሉ?"
-      data-en="What are you looking for?">
-      ምን ይፈልጋሉ?
-  </h2>
-
+  <h2 data-am="ምን ይፈልጋሉ?" data-en="What are you looking for?">ምን ይፈልጋሉ?</h2>
   <div class="search-box-wrapper">
-   <select class="location-select">
-    <option data-am="ኢትዮጵያ" data-en="Ethiopia">ኢትዮጵያ</option>
-    <option data-am="አዲስ አበባ" data-en="Addis Ababa">አዲስ አበባ</option>
-   </select>
-
-   <input type="text"
-    class="search-input"
-    data-placeholder-am="እቃዎችን ወይም አገልግሎቶችን ይፈልጉ..."
-    data-placeholder-en="Search products or services..."
-    placeholder="እቃዎችን ወይም አገልግሎቶችን ይፈልጉ...">
-
-   <button class="search-btn">
+   <input id="searchInput" class="search-input"
+    data-placeholder-am="ዕቃዎችን ይፈልጉ..."
+    data-placeholder-en="Search products..."
+    placeholder="ዕቃዎችን ይፈልጉ...">
+   <button class="search-btn" onclick="searchProducts()">
     <i class="fa-solid fa-magnifying-glass"></i>
    </button>
   </div>
@@ -208,151 +74,328 @@ body{
 </div>
 
 <div class="quick-pills">
- <a href="#" class="pill">
-  <i class="fa-solid fa-bullseye"></i>
-  <span data-am="ንቁ መረጃዎች" data-en="Featured">ንቁ መረጃዎች</span>
- </a>
-
- <a href="#" class="pill">
-  <i class="fa-solid fa-store"></i>
-  <span data-am="እንዴት መሸጥ ይቻላል?"
-        data-en="How to sell?">እንዴት መሸጥ ይቻላል?</span>
- </a>
-
- <a href="#" class="pill">
-  <i class="fa-solid fa-gamepad"></i>
-  <span data-am="ጨዋታዎች" data-en="Games">ጨዋታዎች</span>
- </a>
+ <a href="#products" class="pill">🛒 <span data-am="ገበያ" data-en="Market">ገበያ</span></a>
+ <a href="#sell" class="pill">➕ <span data-am="ዕቃ ሽያጭ" data-en="Sell">ዕቃ ሽያጭ</span></a>
+ <a href="#account" class="pill">👤 <span data-am="መለያ" data-en="Account">መለያ</span></a>
 </div>
 
 <div class="container">
 
- <div class="section-title"
-  data-am="ዋና አገልግሎቶች"
-  data-en="Main Services">
-  ዋና አገልግሎቶች
- </div>
+ <div class="section-title" data-am="ዋና አገልግሎቶች" data-en="Main Services">ዋና አገልግሎቶች</div>
 
  <div class="categories-grid">
-
-  <a href="#" class="cat-card">
-   <div class="cat-icon">🛒</div>
-   <span data-am="ገበያ" data-en="Market">ገበያ</span>
-  </a>
-
-  <a href="#" class="cat-card">
-   <div class="cat-icon">💬</div>
-   <span data-am="ውይይት" data-en="Chat">ውይይት</span>
-  </a>
-
-  <a href="#" class="cat-card">
-   <div class="cat-icon">💳</div>
-   <span data-am="ክፍያ" data-en="Payment">ክፍያ</span>
-  </a>
-
-  <a href="#" class="cat-card">
-   <div class="cat-icon">🚚</div>
-   <span data-am="ዕቃ ማድረስ" data-en="Delivery">ዕቃ ማድረስ</span>
-  </a>
-
-  <a href="#" class="cat-card">
-   <div class="cat-icon">💼</div>
-   <span data-am="ሥራ" data-en="Jobs">ሥራ</span>
-  </a>
-
-  <a href="#" class="cat-card">
-   <div class="cat-icon">🏠</div>
-   <span data-am="ቤትና መሬት" data-en="House & Land">ቤትና መሬት</span>
-  </a>
-
-  <a href="#" class="cat-card">
-   <div class="cat-icon">🚕</div>
-   <span data-am="ትራንስፖርት" data-en="Transport">ትራንስፖርት</span>
-  </a>
-
-  <a href="#" class="cat-card">
-   <div class="cat-icon">👤</div>
-   <span data-am="መለያዬ" data-en="My Account">መለያዬ</span>
-  </a>
-
+  <a href="#products" class="cat-card"><div class="cat-icon">🛒</div><span data-am="ገበያ" data-en="Market">ገበያ</span></a>
+  <a href="#account" class="cat-card"><div class="cat-icon">💬</div><span data-am="ውይይት" data-en="Chat">ውይይት</span></a>
+  <a href="#" class="cat-card"><div class="cat-icon">💳</div><span data-am="ክፍያ" data-en="Payment">ክፍያ</span></a>
+  <a href="#" class="cat-card"><div class="cat-icon">🚚</div><span data-am="ዕቃ ማድረስ" data-en="Delivery">ዕቃ ማድረስ</span></a>
+  <a href="#" class="cat-card"><div class="cat-icon">💼</div><span data-am="ሥራ" data-en="Jobs">ሥራ</span></a>
+  <a href="#" class="cat-card"><div class="cat-icon">🏠</div><span data-am="ቤትና መሬት" data-en="House & Land">ቤትና መሬት</span></a>
+  <a href="#" class="cat-card"><div class="cat-icon">🚕</div><span data-am="ትራንስፖርት" data-en="Transport">ትራንስፖርት</span></a>
+  <a href="#account" class="cat-card"><div class="cat-icon">👤</div><span data-am="መለያዬ" data-en="My Account">መለያዬ</span></a>
  </div>
+
+ <!-- ACCOUNT -->
+ <div id="account">
+  <div class="section-title" data-am="መለያ / መግቢያ" data-en="Account / Login">መለያ / መግቢያ</div>
+  <div class="panel">
+   <p id="authStatus" class="muted">እባክዎ ይግቡ ወይም መለያ ይፍጠሩ።</p>
+   <input id="email" type="email" placeholder="Email">
+   <input id="password" type="password" placeholder="Password (ቢያንስ 6 ፊደል)">
+   <div class="auth-actions">
+    <button class="btn" onclick="signUp()">መለያ ፍጠር</button>
+    <button class="btn secondary" onclick="signIn()">ግባ</button>
+   </div>
+   <button id="logoutBtn" class="btn danger full hidden" onclick="signOutUser()">ውጣ</button>
+  </div>
+ </div>
+
+ <!-- SELL PRODUCT -->
+ <div id="sell">
+  <div class="section-title" data-am="ዕቃ ለመሸጥ" data-en="Post a Product">ዕቃ ለመሸጥ</div>
+  <div class="panel">
+   <p class="muted" id="sellNotice">ዕቃ ለመለጠፍ መጀመሪያ ይግቡ።</p>
+   <form id="productForm">
+    <input id="productName" required maxlength="100" placeholder="የዕቃው ስም">
+    <input id="productPrice" required type="number" min="0" placeholder="ዋጋ (ብር)">
+    <input id="productQuantity" required type="number" min="1" placeholder="ብዛት">
+    <select id="productCategory" required>
+     <option value="">ምድብ ይምረጡ</option>
+     <option value="Electronics">ኤሌክትሮኒክስ</option>
+     <option value="Clothes">ልብስ</option>
+     <option value="Home">የቤት ዕቃ</option>
+     <option value="Other">ሌላ</option>
+    </select>
+    <textarea id="productDescription" maxlength="1000" placeholder="የዕቃው መግለጫ"></textarea>
+    <button id="saveProductBtn" class="btn full" type="submit">ዕቃውን ለጥፍ</button>
+    <button id="cancelEditBtn" class="btn secondary full hidden" type="button" onclick="cancelEdit()">ማስተካከያውን ተወው</button>
+   </form>
+  </div>
+ </div>
+
+ <!-- MARKET -->
+ <div id="products">
+  <div class="section-title" data-am="የተለጠፉ ዕቃዎች" data-en="Products for Sale">የተለጠፉ ዕቃዎች</div>
+  <div id="productList"><p class="muted">ዕቃዎች በመጫን ላይ...</p></div>
+ </div>
+
 </div>
 
 <div class="bottom-nav">
-
- <a href="#" class="nav-item active">
-  <i class="fa-solid fa-house"></i>
-  <span data-am="መነሻ" data-en="Home">መነሻ</span>
- </a>
-
- <a href="#" class="nav-item">
-  <i class="fa-solid fa-bookmark"></i>
-  <span data-am="የተቀመጡ" data-en="Saved">የተቀመጡ</span>
- </a>
-
- <a href="#" class="nav-item">
-  <i class="fa-solid fa-square-plus"
-     style="font-size:22px;color:#008751"></i>
-  <span data-am="ሽያጭ" data-en="Sell">ሽያጭ</span>
- </a>
-
- <a href="#" class="nav-item">
-  <i class="fa-solid fa-comment-dots"></i>
-  <span data-am="መልዕክቶች" data-en="Messages">መልዕክቶች</span>
- </a>
-
- <a href="#" class="nav-item">
-  <i class="fa-solid fa-user"></i>
-  <span data-am="መገለጫ" data-en="Profile">መገለጫ</span>
- </a>
-
+ <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i><span>መነሻ</span></a>
+ <a href="#products" class="nav-item"><i class="fa-solid fa-store"></i><span>ገበያ</span></a>
+ <a href="#sell" class="nav-item"><i class="fa-solid fa-square-plus"></i><span>ሽያጭ</span></a>
+ <a href="#account" class="nav-item"><i class="fa-solid fa-user"></i><span>መለያ</span></a>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-let currentLanguage =
- localStorage.getItem("allInOneLanguage") || "am";
+import {
+ getAuth, createUserWithEmailAndPassword,
+ signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-function setLanguage(lang){
+import {
+ getFirestore, collection, addDoc, onSnapshot,
+ query, orderBy, doc, updateDoc, deleteDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// Firebase configuration - existing ALL IN ONE project
+const firebaseConfig = {
+ apiKey: "AIzaSyCRQJeoRNKSIdQ0LTCHoBSUUftl2o-dUjQ",
+ authDomain: "all-in-one-45d48.firebaseapp.com",
+ projectId: "all-in-one-45d48",
+ storageBucket: "all-in-one-45d48.firebasestorage.app",
+ messagingSenderId: "1023627656415",
+ appId: "1:1023627656415:web:0072d483258742a7bbfd6a"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let products = [];
+let editingId = null;
+let searchTerm = "";
+
+const $ = id => document.getElementById(id);
+
+window.signUp = async function(){
+ const email = $("email").value.trim();
+ const password = $("password").value;
+ try{
+  await createUserWithEmailAndPassword(auth,email,password);
+  alert("መለያዎ ተፈጥሯል!");
+ }catch(error){alert(error.message);}
+};
+
+window.signIn = async function(){
+ const email = $("email").value.trim();
+ const password = $("password").value;
+ try{
+  await signInWithEmailAndPassword(auth,email,password);
+  alert("በትክክል ገብተዋል!");
+ }catch(error){alert(error.message);}
+};
+
+window.signOutUser = async function(){
+ try{await signOut(auth);}
+ catch(error){alert(error.message);}
+};
+
+onAuthStateChanged(auth,user=>{
+ currentUser = user;
+ if(user){
+  $("authStatus").textContent = "ገብተዋል: " + user.email;
+  $("logoutBtn").classList.remove("hidden");
+  $("sellNotice").textContent = "ዕቃዎን አሁን መለጠፍ ይችላሉ።";
+ }else{
+  $("authStatus").textContent = "እባክዎ ይግቡ ወይም መለያ ይፍጠሩ።";
+  $("logoutBtn").classList.add("hidden");
+  $("sellNotice").textContent = "ዕቃ ለመለጠፍ መጀመሪያ ይግቡ።";
+ }
+ renderProducts();
+});
+
+// Save or update product
+$("productForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+
+ if(!currentUser){
+  alert("መጀመሪያ ወደ መለያዎ ይግቡ።");
+  return;
+ }
+
+ const data = {
+  name: $("productName").value.trim(),
+  price: Number($("productPrice").value),
+  quantity: Number($("productQuantity").value),
+  category: $("productCategory").value,
+  description: $("productDescription").value.trim()
+ };
+
+ if(!data.name || data.price < 0 || data.quantity < 1){
+  alert("እባክዎ መረጃውን በትክክል ያስገቡ።");
+  return;
+ }
+
+ try{
+  $("saveProductBtn").disabled = true;
+
+  if(editingId){
+   const existing = products.find(p=>p.id===editingId);
+   if(!existing || existing.sellerId !== currentUser.uid){
+    throw new Error("ይህን ዕቃ ማስተካከል አይችሉም።");
+   }
+   await updateDoc(doc(db,"products",editingId),data);
+   alert("ዕቃው ተስተካክሏል!");
+  }else{
+   await addDoc(collection(db,"products"),{
+    ...data,
+    sellerId: currentUser.uid,
+    sellerEmail: currentUser.email,
+    createdAt: serverTimestamp()
+   });
+   alert("ዕቃው ተለጥፏል!");
+  }
+
+  cancelEdit();
+ }catch(error){
+  alert("ስህተት: " + error.message);
+ }finally{
+  $("saveProductBtn").disabled = false;
+ }
+});
+
+function escapeHTML(value){
+ return String(value ?? "").replace(/[&<>"']/g,char=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[char]));
+}
+
+function renderProducts(){
+ const list = $("productList");
+ list.innerHTML = "";
+
+ const filtered = products.filter(p=>{
+  const text = [p.name,p.category,p.description].join(" ").toLowerCase();
+  return text.includes(searchTerm.toLowerCase());
+ });
+
+ if(!filtered.length){
+  list.innerHTML = "<p class='muted'>ገና ዕቃ አልተለጠፈም።</p>";
+  return;
+ }
+
+ filtered.forEach(p=>{
+  const card = document.createElement("div");
+  card.className = "product-card";
+
+  const owner = currentUser && currentUser.uid === p.sellerId;
+
+  card.innerHTML = `
+   <h3>${escapeHTML(p.name)}</h3>
+   <p>💰 ዋጋ: ${Number(p.price).toLocaleString()} ብር</p>
+   <p>📦 ብዛት: ${Number(p.quantity)}</p>
+   <p>📂 ምድብ: ${escapeHTML(p.category)}</p>
+   <p>${escapeHTML(p.description)}</p>
+   <p class="muted">ሻጭ: ${escapeHTML(p.sellerEmail)}</p>
+   ${owner ? `
+    <button class="btn" data-edit="${p.id}">አስተካክል</button>
+    <button class="btn danger" data-delete="${p.id}">ሰርዝ</button>
+   ` : ""}
+  `;
+
+  list.appendChild(card);
+ });
+
+ list.querySelectorAll("[data-edit]").forEach(button=>{
+  button.addEventListener("click",()=>editProduct(button.dataset.edit));
+ });
+ list.querySelectorAll("[data-delete]").forEach(button=>{
+  button.addEventListener("click",()=>removeProduct(button.dataset.delete));
+ });
+}
+
+function listenToProducts(){
+ const q = query(collection(db,"products"),orderBy("createdAt","desc"));
+ onSnapshot(q,snapshot=>{
+  products = snapshot.docs.map(item=>({id:item.id,...item.data()}));
+  renderProducts();
+ },error=>{
+  $("productList").textContent = "የዕቃ መረጃ ለማምጣት አልተቻለም: " + error.message;
+ });
+}
+
+window.editProduct = function(id){
+ const p = products.find(item=>item.id===id);
+ if(!p || !currentUser || p.sellerId!==currentUser.uid) return;
+
+ editingId = id;
+ $("productName").value = p.name || "";
+ $("productPrice").value = p.price ?? "";
+ $("productQuantity").value = p.quantity ?? "";
+ $("productCategory").value = p.category || "";
+ $("productDescription").value = p.description || "";
+ $("saveProductBtn").textContent = "ለውጡን አስቀምጥ";
+ $("cancelEditBtn").classList.remove("hidden");
+ $("sell").scrollIntoView({behavior:"smooth"});
+};
+
+window.cancelEdit = function(){
+ editingId = null;
+ $("productForm").reset();
+ $("saveProductBtn").textContent = "ዕቃውን ለጥፍ";
+ $("cancelEditBtn").classList.add("hidden");
+};
+
+window.removeProduct = async function(id){
+ const p = products.find(item=>item.id===id);
+ if(!p || !currentUser || p.sellerId!==currentUser.uid) return;
+ if(!confirm("ይህን ዕቃ መሰረዝ ይፈልጋሉ?")) return;
+
+ try{
+  await deleteDoc(doc(db,"products",id));
+  alert("ዕቃው ተሰርዟል።");
+ }catch(error){alert(error.message);}
+};
+
+window.searchProducts = function(){
+ searchTerm = $("searchInput").value.trim();
+ renderProducts();
+};
+
+$("searchInput").addEventListener("input",window.searchProducts);
+
+listenToProducts();
+
+// Language
+let currentLanguage = localStorage.getItem("allInOneLanguage") || "am";
+
+window.setLanguage = function(lang){
  currentLanguage = lang;
-
  document.documentElement.lang = lang;
-
  localStorage.setItem("allInOneLanguage",lang);
 
  document.querySelectorAll("[data-am]").forEach(element=>{
-
-  element.textContent = element.getAttribute(
-   lang === "am" ? "data-am" : "data-en"
-  );
-
+  element.textContent = element.getAttribute(lang==="am"?"data-am":"data-en");
  });
 
  document.querySelectorAll("[data-placeholder-am]").forEach(element=>{
-
   element.placeholder = element.getAttribute(
-   lang === "am"
-   ? "data-placeholder-am"
-   : "data-placeholder-en"
+   lang==="am"?"data-placeholder-am":"data-placeholder-en"
   );
-
  });
 
- document.getElementById("languageButton").textContent =
-  lang === "am" ? "English" : "አማርኛ";
+ $("languageButton").textContent = lang==="am"?"English":"አማርኛ";
+};
 
-}
-
-function toggleLanguage(){
-
- setLanguage(currentLanguage === "am" ? "en" : "am");
-
-}
+window.toggleLanguage = function(){
+ setLanguage(currentLanguage==="am"?"en":"am");
+};
 
 setLanguage(currentLanguage);
-
 </script>
-
 </body>
 </html>
