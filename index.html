@@ -1,501 +1,201 @@
 <!DOCTYPE html>
-<html lang="am">
+<html lang="am" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#00B251">
-<title>ALL IN ONE - የችርቻሮ እና የጅምላ ገበያ (Marketplace)</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
-body{background:#f4f7f5;color:#26332c;padding-bottom:85px}
-.header-section{background:linear-gradient(135deg,#00B251,#00873d);color:#fff;padding:16px 16px 24px;border-bottom-left-radius:24px;border-bottom-right-radius:24px;box-shadow:0 4px 12px rgba(0,178,81,0.2)}
-.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.brand{font-size:20px;font-weight:800;letter-spacing:0.5px}
-.brand span{background:#ff6a00;font-size:11px;padding:3px 7px;border-radius:10px;vertical-align:middle;margin-left:4px}
-.lang-btn{background:#fff;color:#00B251;border:0;border-radius:20px;padding:6px 14px;font-weight:bold;font-size:13px;cursor:pointer}
-.search-container h2{text-align:center;font-size:17px;margin:6px 0 12px;font-weight:500}
-.search-row{display:flex;gap:8px;align-items:center}
-.location-dropdown{background:#fff;border:0;border-radius:12px;padding:12px 10px;color:#333;font-weight:bold;outline:none;font-size:13px;max-width:125px}
-.search-box{display:flex;background:#fff;border-radius:12px;padding:3px 10px;flex:1;align-items:center;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
-.search-box input{border:0;margin:0;min-width:0;flex:1;outline:none;font-size:14px;padding:9px 5px}
-.search-box button{border:0;background:#fff;color:#00B251;padding:0 6px;cursor:pointer;font-size:16px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALL IN ONE - ሁሉም አገልግሎቶች በአንድ ቦታ!</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #4338ca;
+            --accent-color: #f59e0b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-light: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+        }
 
-/* Filter Tabs */
-.quick{display:flex;gap:8px;overflow-x:auto;background:#fff;padding:12px 16px;box-shadow:0 2px 5px rgba(0,0,0,0.04);position:sticky;top:0;z-index:9}
-.pill{white-space:nowrap;border:1px solid #dce4df;color:#444;background:#f8faf9;padding:8px 14px;border-radius:20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer;transition:0.2s}
-.pill.active{background:#00B251;color:#fff;border-color:#00B251}
-.pill.wholesale.active{background:#ff6a00;border-color:#ff6a00;color:#fff}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-.container{max-width:880px;margin:auto;padding:14px}
-.section-title{font-size:18px;font-weight:bold;margin:18px 0 11px;color:#1e2b24;display:flex;justify-content:space-between;align-items:center}
-.panel,.product-card,.stat{background:#fff;border-radius:14px;padding:15px;margin-bottom:14px;box-shadow:0 2px 10px rgba(16,42,26,0.06)}
-input,textarea,select{width:100%;padding:11px;margin:5px 0 11px;border:1px solid #d5ded9;border-radius:9px;font-size:14px;background:#fff}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#00B251}
-textarea{min-height:70px;resize:vertical}
-label{font-size:13px;font-weight:bold;color:#3d4f45;display:block;margin-top:4px}
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-.btn{border:0;background:#00B251;color:#fff;padding:11px 14px;border-radius:9px;font-weight:bold;cursor:pointer;margin:4px 3px 4px 0;font-size:14px;transition:0.2s}
-.btn:hover{opacity:0.92}
-.btn.wholesale-btn{background:#ff6a00}
-.btn.secondary{background:#64736a}
-.btn.danger{background:#d93030}
-.btn.light{background:#eaf4ee;color:#006b40}
-.btn.full{width:100%}
-.btn.sm{padding:7px 10px;font-size:12px}
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
 
-.muted{color:#6e7d75;font-size:13px;line-height:1.5}
-.auth-actions{display:flex;gap:8px}.auth-actions .btn{flex:1}
-.hidden{display:none!important}
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
 
-/* Product Grid */
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.product-card{margin:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;position:relative;border:1px solid #edf2ef}
-.product-card img{width:100%;height:150px;object-fit:cover;border-radius:9px;background:#edf2ee}
-.type-tag{position:absolute;top:12px;left:12px;padding:4px 9px;border-radius:6px;font-size:11px;font-weight:bold;color:#fff;box-shadow:0 2px 5px rgba(0,0,0,0.2)}
-.tag-retail{background:#00B251}
-.tag-wholesale{background:#ff6a00}
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
 
-.product-card h3{color:#1d2b23;font-size:15px;margin:9px 0 4px;overflow-wrap:anywhere}
-.price{font-size:17px!important;font-weight:800;color:#008751;margin:4px 0}
-.wholesale-price{color:#e65c00!important}
-.meta-info{font-size:12px;color:#66756d;margin:2px 0}
-.badge{display:inline-block;background:#eef6f1;color:#006b40;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;margin:4px 2px 4px 0}
-.badge.orange{background:#fff0e6;color:#cc5200}
+        main {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
 
-.card-actions{display:flex;gap:6px;margin-top:10px}
-.card-actions .btn{flex:1;margin:0;text-align:center;text-decoration:none}
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
 
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-.stat strong{display:block;font-size:20px;color:#008751;margin-top:4px}
+        .service-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#fff;display:flex;justify-content:space-around;padding:9px 0;border-top:1px solid #dce4df;z-index:10;box-shadow:0 -2px 10px rgba(0,0,0,0.04)}
-.nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#758078;font-size:11px;gap:4px;cursor:pointer}
-.nav-item i{font-size:18px}.nav-item.active{color:#00B251;font-weight:bold}
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
 
-/* Modal */
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:15px}
-.modal-content{background:#fff;border-radius:16px;padding:20px;max-width:420px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.2)}
+        .service-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
 
-@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:380px){.grid{grid-template-columns:1fr}.product-card img{height:170px}}
-</style>
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        footer {
+            background-color: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<header class="header-section">
- <div class="top-bar">
-  <div class="brand">🌍 ALL IN ONE <span>ችርቻሮ እና ጅምላ</span></div>
-  <button class="lang-btn" onclick="toggleLanguage()" id="languageButton">English</button>
- </div>
- <div class="search-container">
-  <h2 data-am="በችርቻሮ ወይም በጅምላ ይገበያዩ!" data-en="Buy & Sell Retail or Wholesale!">በችርቻሮ ወይም በጅምላ ይገበያዩ!</h2>
-  <div class="search-row">
-   <select class="location-dropdown" id="locationSelect" onchange="renderProducts()">
-    <option value="ALL">ሁሉም ቦታ / All</option>
-    <option value="Addis Ababa">አዲስ አበባ</option>
-    <option value="Adama">አዳማ</option>
-    <option value="Bahir Dar">ባህር ዳር</option>
-    <option value="Hawassa">ሀዋሳ</option>
-    <option value="China / Import">ውጭ ሀገር (Import)</option>
-   </select>
-   <div class="search-box">
-    <input id="searchInput" oninput="renderProducts()" placeholder="ዕቃዎችን ይፈልጉ..." data-placeholder-am="ዕቃዎችን ይፈልጉ..." data-placeholder-en="Search products, wholesale...">
-    <button onclick="renderProducts()"><i class="fa-solid fa-magnifying-glass"></i></button>
-   </div>
-  </div>
- </div>
-</header>
+    <header>
+        <h1>ALL IN ONE</h1>
+        <p>ሁሉም አገልግሎቶች በአንድ ቦታ!</p>
+    </header>
 
-<!-- Filter Tabs -->
-<nav class="quick">
- <button class="pill active" id="tab-all" onclick="setFilter('ALL')"><i class="fa-solid fa-border-all"></i> ሁሉም (All)</button>
- <button class="pill" id="tab-retail" onclick="setFilter('retail')"><i class="fa-solid fa-tag" style="color:#00B251"></i> ችርቻሮ (Retail)</button>
- <button class="pill wholesale" id="tab-wholesale" onclick="setFilter('wholesale')"><i class="fa-solid fa-boxes-stacked" style="color:#ff6a00"></i> ጅምላ (Wholesale)</button>
- <a class="pill" href="#sell" style="text-decoration:none"><i class="fa-solid fa-plus-circle"></i> ዕቃ ለጥፍ</a>
-</nav>
+    <main>
+        <div class="services-grid">
+            <!-- ገበያ -->
+            <a href="#gebeya" class="service-card">
+                <i class="fa-solid fa-store"></i>
+                <h3>ገበያ</h3>
+                <p>ዕቃዎችን ይግዙ እና ይሽጡ</p>
+            </a>
 
-<main class="container">
+            <!-- ውይይት -->
+            <a href="#chat" class="service-card">
+                <i class="fa-solid fa-comments"></i>
+                <h3>ውይይት</h3>
+                <p>ከጓደኞችዎ ጋር ይወያዩ</p>
+            </a>
 
- <!-- Marketplace Feed -->
- <section id="products">
-  <div class="section-title">
-   <span id="feedTitle">🛒 የገበያ ዕቃዎች / Marketplace</span>
-   <span id="itemCount" class="muted">0 ዕቃዎች</span>
-  </div>
-  <div id="productGrid" class="grid"></div>
- </section>
+            <!-- ክፍያ -->
+            <a href="#payment" class="service-card">
+                <i class="fa-solid fa-wallet"></i>
+                <h3>ክፍያ</h3>
+                <p>ፈጣን እና አስተማማኝ የክፍያ አማራጮች</p>
+            </a>
 
- <!-- Sell Section -->
- <section id="sell">
-  <h2 class="section-title">➕ ዕቃ ለመሸጥ / Post Product</h2>
-  <div class="panel">
-   <p id="sellNotice" class="muted">የችርቻሮ ወይም የጅምላ ዕቃዎን እዚህ ይለጥፉ።</p>
-   <form id="productForm" onsubmit="saveProduct(event)">
-    <input type="hidden" id="editProductId">
-    
-    <label>የሽያጭ ዓይነት (Marketplace Type)</label>
-    <select id="tradeType" onchange="toggleWholesaleFields()" required>
-     <option value="retail">ችርቻሮ / ነጠላ ሽያጭ (Retail)</option>
-     <option value="wholesale">ጅምላ ሽያጭ (Wholesale B2B)</option>
-    </select>
+            <!-- ዕቃ ማድረስ -->
+            <a href="#delivery" class="service-card">
+                <i class="fa-solid fa-truck-fast"></i>
+                <h3>ዕቃ ማድረስ</h3>
+                <p>ያዘዙትን በንብረትዎ ደጃፍ ያድርሱ</p>
+            </a>
 
-    <label>የዕቃው ስም (Product Name)</label>
-    <input id="productName" required maxlength="100" placeholder="ለምሳሌ፦ iPhone 15 Pro ወይም የጅምላ ቲሸርት">
+            <!-- ሥራ -->
+            <a href="#jobs" class="service-card">
+                <i class="fa-solid fa-briefcase"></i>
+                <h3>ሥራ</h3>
+                <p>የሥራ እድሎችን ያግኙ</p>
+            </a>
 
-    <label id="priceLabel">ዋጋ በብር (Retail Price - ETB)</label>
-    <input id="productPrice" required type="number" min="1" step="0.01" placeholder="ለምሳሌ፦ 1500">
+            <!-- ቤትና መሬት -->
+            <a href="#realestate" class="service-card">
+                <i class="fa-solid fa-house"></i>
+                <h3>ቤትና መሬት</h3>
+                <p>ቤቶችን እና መሬቶችን ይከራዩ ወይም ይግዙ</p>
+            </a>
 
-    <!-- Wholesale Fields -->
-    <div id="wholesaleFields" class="hidden" style="background:#fff7f2;padding:10px;border-radius:10px;border:1px solid #ffd8bf;margin-bottom:10px">
-     <label style="color:#cc5200">ዝቅተኛ የትዕዛዝ መጠን (MOQ - Minimum Order)</label>
-     <input id="productMoq" type="number" min="2" placeholder="ለምሳሌ፦ 50 ፍሬ">
-     
-     <label style="color:#cc5200">የአቅራቢ ሁኔታ (Supplier Badge)</label>
-     <select id="supplierStatus">
-      <option value="Verified Supplier">✓ Verified Supplier (የተረጋገጠ አቅራቢ)</option>
-      <option value="Manufacturer">🏭 Direct Manufacturer (ቀጥታ ፋብሪካ)</option>
-      <option value="Trade Assurance">🛡️ Trade Assurance (ዋስትና ያለው)</option>
-     </select>
-    </div>
+            <!-- ትራንስፖርት -->
+            <a href="#transport" class="service-card">
+                <i class="fa-solid fa-car"></i>
+                <h3>ትራንስፖርት</h3>
+                <p>የጉዞ እና የትራንስፖርት አገልግሎቶች</p>
+            </a>
 
-    <div style="display:flex;gap:10px">
-     <div style="flex:1">
-      <label>ያለው ብዛት (Stock)</label>
-      <input id="productQuantity" required type="number" min="1" value="1">
-     </div>
-     <div style="flex:1">
-      <label>ከተማ / ቦታ (Location)</label>
-      <select id="productLocation">
-       <option value="Addis Ababa">አዲስ አበባ</option>
-       <option value="Adama">አዳማ</option>
-       <option value="Bahir Dar">ባህር ዳር</option>
-       <option value="Hawassa">ሀዋሳ</option>
-       <option value="China / Import">ውጭ ሀገር (Import)</option>
-      </select>
-     </div>
-    </div>
+            <!-- መለያዬ -->
+            <a href="#profile" class="service-card">
+                <i class="fa-solid fa-user-circle"></i>
+                <h3>መለያዬ</h3>
+                <p>የግል መረጃዎ እና ቅንብሮችዎ</p>
+            </a>
+        </div>
+    </main>
 
-    <label>ምድብ (Category)</label>
-    <select id="productCategory" required>
-     <option value="Electronics">Electronics (ኤሌክትሮኒክስ)</option>
-     <option value="Clothes">Clothes & Fashion (አልባሳት)</option>
-     <option value="Vehicles">Vehicles (መኪና)</option>
-     <option value="Home">Home & Furniture (የቤት ዕቃ)</option>
-     <option value="Machinery">Machinery & Wholesale (ማሽነሪ)</option>
-     <option value="Other">Other (ሌላ)</option>
-    </select>
+    <footer>
+        <p>&copy; 2026 ALL IN ONE. መብቱ በህግ የተጠበቀ ነው። | <a href="https://asfawtariku174-ai.github.io/all-in-one/" target="_blank">ኦፊሴላዊ ድር ጣቢያ</a></p>
+    </footer>
 
-    <label>ስልክ ቁጥር (ለገዢዎች መገናኛ)</label>
-    <input id="sellerPhone" required type="tel" placeholder="ለምሳሌ፦ 0911223344">
-
-    <label>የዕቃ ፎቶ ሊንክ (Image URL - አማራጭ)</label>
-    <input id="productImageUrl" type="url" placeholder="https://example.com/photo.jpg">
-
-    <label>ዝርዝር መግለጫ (Description)</label>
-    <textarea id="productDescription" maxlength="1000" placeholder="ስለ ዕቃው ሁኔታ ወይም የጅምላ አቅርቦት ዝርዝር ይጻፉ..."></textarea>
-
-    <button id="saveProductBtn" class="btn full" type="submit">ዕቃውን ለጥፍ (Publish)</button>
-    <button id="cancelEditBtn" class="btn secondary full hidden" type="button" onclick="resetForm()">ሰርዝ (Cancel Edit)</button>
-   </form>
-  </div>
- </section>
-
- <!-- Account Section -->
- <section id="account">
-  <h2 class="section-title">👤 መለያ እና ዳሽቦርድ / Account</h2>
-  <div class="stats">
-   <div class="stat"><span class="muted">ጠቅላላ ዕቃዎች</span><strong id="statTotal">0</strong></div>
-   <div class="stat"><span class="muted">የቀረቡ ጥያቄዎች</span><strong id="statInquiries">0</strong></div>
-  </div>
-  <div class="panel">
-   <p id="authStatus" class="muted">ለመገበያየት መለያ ይፍጠሩ ወይም ይግቡ።</p>
-   <div id="authInputs">
-    <input id="userName" type="text" placeholder="ስም ወይም የድርጅት ስም (Company / Name)">
-    <input id="email" type="email" placeholder="Email">
-    <div class="auth-actions">
-     <button class="btn" onclick="signInDemo()">ግባ / መለያ ፍጠር</button>
-    </div>
-   </div>
-   <button id="logoutBtn" class="btn danger full hidden" onclick="signOutDemo()">ውጣ (Logout)</button>
-  </div>
- </section>
-
-</main>
-
-<!-- Modal -->
-<div id="actionModal" class="modal hidden">
- <div class="modal-content">
-  <h3 id="modalTitle" style="margin-bottom:8px;color:#008751">ትዕዛዝ / ጥያቄ</h3>
-  <p id="modalSubtitle" class="muted" style="margin-bottom:12px"></p>
-  <label id="modalQtyLabel">ብዛት (Quantity)</label>
-  <input id="modalQty" type="number" min="1" value="1">
-  <label>መልዕክት ለሻጩ (Message to Seller)</label>
-  <textarea id="modalMsg" placeholder="ዋጋ ይቀንሳል? መቼ ማግኘት እችላለሁ?"></textarea>
-  <div style="display:flex;gap:8px;margin-top:10px">
-   <button class="btn" style="flex:1" onclick="submitInquiry()">ላክ (Send)</button>
-   <button class="btn secondary" style="flex:1" onclick="closeModal()">ዝጋ</button>
-  </div>
- </div>
-</div>
-
-<!-- Bottom Navigation -->
-<nav class="bottom-nav">
- <a class="nav-item active" href="#products" onclick="setActiveNav(this)"><i class="fa-solid fa-store"></i><span>ገበያ (Home)</span></a>
- <a class="nav-item" href="#products" onclick="setFilter('wholesale');setActiveNav(this)"><i class="fa-solid fa-industry"></i><span>ጅምላ (B2B)</span></a>
- <a class="nav-item" href="#sell" onclick="setActiveNav(this)"><i class="fa-solid fa-circle-plus"></i><span>ሽጥ (Sell)</span></a>
- <a class="nav-item" href="#account" onclick="setActiveNav(this)"><i class="fa-solid fa-user"></i><span>መለያ (Me)</span></a>
-</nav>
-
-<script>
-const defaultProducts = [
- {
-  id: '1',
-  tradeType: 'retail',
-  name: 'Samsung Galaxy S23 Ultra (ንጹህ ያገለገለ)',
-  price: 68000,
-  quantity: 1,
-  location: 'Addis Ababa',
-  category: 'Electronics',
-  phone: '0911001122',
-  image: 'https://images.unsplash.com/photo-1678911820864-e2c567c65fb0?auto=format&fit=crop&w=500&q=60',
-  desc: '256GB፣ ምንም ስብራት የሌለው፣ ከነቻርጀሩ። ቦሌ አካባቢ ይገኛል።',
-  owner: 'system'
- },
- {
-  id: '2',
-  tradeType: 'wholesale',
-  name: 'የወንዶች የጥጥ ቲሸርት (100% Cotton T-Shirts Bulk)',
-  price: 380,
-  moq: 50,
-  supplierStatus: 'Direct Manufacturer',
-  quantity: 2000,
-  location: 'Addis Ababa',
-  category: 'Clothes',
-  phone: '0922334455',
-  image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=500&q=60',
-  desc: 'ለሱቅ ነጋዴዎች በፋብሪካ ዋጋ እናቀርባለን። ሁሉም ቀለም እና ሳይዝ አለን።',
-  owner: 'system'
- },
- {
-  id: '3',
-  tradeType: 'wholesale',
-  name: 'Solar Power Bank 20,000mAh (የጅምላ አቅርቦት)',
-  price: 1150,
-  moq: 10,
-  supplierStatus: 'Verified Supplier',
-  quantity: 300,
-  location: 'China / Import',
-  category: 'Electronics',
-  phone: '0933445566',
-  image: 'https://images.unsplash.com/photo-1609592424104-93557a6d36e2?auto=format&fit=crop&w=500&q=60',
-  desc: 'በውጭ ሀገር ትዕዛዝ የሚገባ ጥራት ያለው የሶላር ፓወር ባንክ ለጅምላ ገዢዎች።',
-  owner: 'system'
- }
-];
-
-let products = JSON.parse(localStorage.getItem('all_in_one_products')) || defaultProducts;
-let currentFilter = 'ALL';
-let currentUser = JSON.parse(localStorage.getItem('all_in_one_user')) || null;
-let currentLang = 'am';
-let activeModalProduct = null;
-let inquiriesCount = parseInt(localStorage.getItem('all_in_one_inquiries')) || 0;
-
-function initApp() {
- updateAuthUI();
- renderProducts();
- updateStats();
-}
-
-function setFilter(type) {
- currentFilter = type;
- document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
- if(type === 'ALL') document.getElementById('tab-all').classList.add('active');
- else if(type === 'retail') document.getElementById('tab-retail').classList.add('active');
- else if(type === 'wholesale') document.getElementById('tab-wholesale').classList.add('active');
- renderProducts();
-}
-
-function toggleWholesaleFields() {
- const type = document.getElementById('tradeType').value;
- const wholesaleFields = document.getElementById('wholesaleFields');
- const priceLabel = document.getElementById('priceLabel');
- 
- if(type === 'wholesale') {
-  wholesaleFields.classList.remove('hidden');
-  priceLabel.innerText = 'የጅምላ ዋጋ በብር (Wholesale Price per Unit - ETB)';
- } else {
-  wholesaleFields.classList.add('hidden');
-  priceLabel.innerText = 'ዋጋ በብር (Retail Price - ETB)';
- }
-}
-
-function renderProducts() {
- const grid = document.getElementById('productGrid');
- const search = document.getElementById('searchInput').value.toLowerCase();
- const location = document.getElementById('locationSelect').value;
-
- const filtered = products.filter(p => {
-  const matchesType = (currentFilter === 'ALL' || p.tradeType === currentFilter);
-  const matchesLoc = (location === 'ALL' || p.location === location);
-  const matchesSearch = p.name.toLowerCase().includes(search) || (p.desc && p.desc.toLowerCase().includes(search));
-  return matchesType && matchesLoc && matchesSearch;
- });
-
- document.getElementById('itemCount.innerHTML` = filtered.length + ' ዕቃዎች'; // safely managed
- document.getElementById('itemCount').innerText = filtered.length + ' ዕቃዎች';
-
- if(filtered.length === 0) {
-  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#666">ምንም ዕቃ አልተገኘም።</div>';
-  return;
- }
-
- grid.innerHTML = filtered.map(p => {
-  const isWholesale = p.tradeType === 'wholesale';
-  const tagClass = isWholesale ? 'tag-wholesale' : 'tag-retail';
-  const tagText = isWholesale ? 'ጅምላ (Wholesale)' : 'ችርቻሮ (Retail)';
-  const priceClass = isWholesale ? 'price wholesale-price' : 'price';
-  
-  let extraBadge = '';
-  if(isWholesale) {
-   extraBadge = `<div class="badge orange">MOQ: ${p.moq || 1} ፍሬ</div> <div class="badge">${p.supplierStatus || 'Verified'}</div>`;
-  } else {
-   extraBadge = `<div class="badge">Stock: ${p.quantity}</div>`;
-  }
-
-  const defaultImg = isWholesale ? 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=500&q=60' : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=60';
-  const imgUrl = p.image && p.image.trim() !== '' ? p.image : defaultImg;
-
-  return `
-   <div class="product-card">
-    <div>
-     <div style="position:relative">
-      <img src="${imgUrl}" alt="${p.name}" onerror="this.src='${defaultImg}'">
-      <span class="type-tag ${tagClass}">${tagText}</span>
-     </div>
-     <div style="padding:10px">
-      <span class="meta-info"><i class="fa-solid fa-location-dot"></i> ${p.location} •${p.category}</span>
-      <h3>${p.name}</h3>
-      <div class="${priceClass}">${Number(p.price).toLocaleString()} ETB</div>
-      <div style="margin-top:4px">${extraBadge}</div>
-      <p class="muted" style="font-size:12px;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.desc || ''}</p>
-     </div>
-    </div>
-    <div style="padding:10px;padding-top:0">
-     <div class="card-actions">
-      <a href="tel:${p.phone}" class="btn sm" style="background:#008751"><i class="fa-solid fa-phone"></i> ደውል</a>
-      <button class="btn sm ${isWholesale ? 'wholesale-btn' : ''}" onclick="openModal('${p.id}')"><i class="fa-solid fa-paper-plane"></i> አነጋግር</button>
-     </div>
-     ${currentUser && p.owner === currentUser.email ? `
-      <div style="display:flex;gap:4px;margin-top:6px">
-       <button class="btn sm light" style="flex:1" onclick="editProduct('${p.id}')">አስተካክል</button>
-       <button class="btn sm danger" style="flex:1" onclick="deleteProduct('${p.id}')">አጥፋ</button>
-      </div>` : ''}
-    </div>
-   </div>
-  `;
- }).join('');
-}
-
-function saveProduct(e) {
- e.preventDefault();
- const editId = document.getElementById('editProductId').value;
- 
- const newProd = {
-  id: editId ? editId : Date.now().toString(),
-  tradeType: document.getElementById('tradeType').value,
-  name: document.getElementById('productName').value,
-  price: parseFloat(document.getElementById('productPrice').value),
-  moq: document.getElementById('tradeType').value === 'wholesale' ? parseInt(document.getElementById('productMoq').value) || 2 : undefined,
-  supplierStatus: document.getElementById('tradeType').value === 'wholesale' ? document.getElementById('supplierStatus').value : undefined,
-  quantity: parseInt(document.getElementById('productQuantity').value) || 1,
-  location: document.getElementById('productLocation').value,
-  category: document.getElementById('productCategory').value,
-  phone: document.getElementById('sellerPhone').value,
-  image: document.getElementById('productImageUrl').value,
-  desc: document.getElementById('productDescription').value,
-  owner: currentUser ? currentUser.email : 'guest'
- };
-
- if(editId) {
-  const index = products.findIndex(p => p.id === editId);
-  if(index !== -1) products[index] = newProd;
- } else {
-  products.unshift(newProd);
- }
-
- localStorage.setItem('all_in_one_products', JSON.stringify(products));
- resetForm();
- renderProducts();
- updateStats();
- alert('ዕቃው በተሳካ ሁኔታ ተለጥፏል!');
- window.location.hash = '#products';
-}
-
-function editProduct(id) {
- const p = products.find(item => item.id === id);
- if(!p) return;
-
- document.getElementById('editProductId').value = p.id;
- document.getElementById('tradeType').value = p.tradeType;
- toggleWholesaleFields();
- document.getElementById('productName').value = p.name;
- document.getElementById('productPrice').value = p.price;
- if(p.tradeType === 'wholesale') {
-  document.getElementById('productMoq').value = p.moq || 2;
-  document.getElementById('supplierStatus').value = p.supplierStatus || 'Verified Supplier';
- }
- document.getElementById('productQuantity').value = p.quantity;
- document.getElementById('productLocation').value = p.location;
- document.getElementById('productCategory').value = p.category;
- document.getElementById('sellerPhone').value = p.phone;
- document.getElementById('productImageUrl').value = p.image || '';
- document.getElementById('productDescription').value = p.desc || '';
-
- document.getElementById('saveProductBtn').innerText = 'ለውጡን አስቀምጥ (Update)';
- document.getElementById('cancelEditBtn').classList.remove('hidden');
-
- window.location.hash = '#sell';
-}
-
-function resetForm() {
- document.getElementById('productForm').reset();
- document.getElementById('editProductId').value = '';
- document.getElementById('wholesaleFields').classList.add('hidden');
- document.getElementById('saveProductBtn').innerText = 'ዕቃውን ለጥፍ (Publish)';
- document.getElementById('cancelEditBtn').classList.add('hidden');
- document.getElementById('priceLabel').innerText = 'ዋጋ በብር (Retail Price - ETB)';
-}
-
-function deleteProduct(id) {
- if(confirm('ይህን ዕቃ ማጥፋት ትፈልጋለህ?')) {
-  products = products.filter(p => p.id !== id);
-  localStorage.setItem('all_in_one_products', JSON.stringify(products));
-  renderProducts();
-  updateStats();
- }
-}
-
-function openModal(id) {
- activeModalProduct = products.find(p => p.id === id);
- if(!activeModalProduct) return;
-
- document.getElementById('modalTitle').innerText = activeModalProduct.name;
- document.getElementById('modalSubtitle').innerText = `ዋጋ: ${Number(activeModalProduct.price).toLocaleString()} ETB \vert{} ሻጭ: ${activeModalProduct.phone}`;
- document.getElementById('modalQty').value = activeModalProduct.tradeType === 'wholesale' ? (activeModalProduct.moq || 2) : 1;
- document.getElementById('actionModal').classList.remove('hidden');
-}
-
-function closeModal() {
- document.getElementById('actionModal').classList.add('hidden');
- activeModalProduct = null;
-}
-
-function submitInquiry() {
- const qty = document.getElementById('modalQty').value;
- const msg = document.getElementById('modalMsg').value;
- 
- if(activeModalProduct && activeModalProduct.tradeType === 'wholesale') {
-  const minMoq = activeModalProduct.moq || 2;
-  if(parseInt(qty) < minMoq) {
-   alert(`ለዚህ የጅምላ ዕ
+</body>
+</html>
