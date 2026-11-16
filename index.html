@@ -470,39 +470,125 @@ async function loadMyOrders(){
   $("myOrders").innerHTML=rows.length?rows.map(o=>`<div class="panel"><b>Order ${escapeHtml(o.id)}</b><p>${money(o.total)} ETB</p><p>${escapeHtml(o.paymentMethod||"")} — ${escapeHtml(o.paymentStatus||"pending")}</p><p>Status: ${escapeHtml(o.status||"pending")}</p></div>`).join(""):"<div class='empty'>No orders yet</div>";
  }catch(e){$("myOrders").textContent=e.message}
 }
+
 async function loadAdminDashboard(){
- if(!isAdmin())return;
+ if(!isAdmin()){
+  msg("Admin only","Admin access only");
+  return;
+ }
+
+ $("adminOrders").innerHTML="Loading orders...";
+
  try{
-  const orderSnap=await getDocs(query(collection(db,"orders"),orderBy("createdAt","desc")));
-  const orders=orderSnap.docs.map(d=>({id:d.id,...d.data()}));
-  $("adminOrders").innerHTML=orders.length?orders.map(o=>`<div class="panel">
-   <b>Order:</b> ${escapeHtml(o.id)}
-   <p>Buyer: ${escapeHtml(o.buyerEmail||o.buyerUid||"")}</p>
-   <p>Total: ${money(o.total)} ETB</p>
-   <p>Payment: ${escapeHtml(o.paymentMethod||"")} / ${escapeHtml(o.paymentReference||"")}</p>
-   <p>Status: ${escapeHtml(o.paymentStatus||"pending")}</p>
-   <div class="actions">
-    <button onclick="updateOrderStatus('${o.id}','verified')">Verify Payment</button>
-    <button class="secondary" onclick="updateOrderStatus('${o.id}','completed')">Complete</button>
-    <button class="danger" onclick="updateOrderStatus('${o.id}','cancelled')">Cancel</button>
-   </div></div>`).join(""):"<div class='empty'>No orders</div>";
+  const orderSnap=await getDocs(
+   query(collection(db,"orders"),orderBy("createdAt","desc"))
+  );
+
+  const orders=orderSnap.docs.map(d=>({
+   id:d.id,...d.data()
+  }));
+
+  $("adminOrders").innerHTML=orders.length
+   ?orders.map(o=>`
+    <div class="panel">
+     <b>Order:</b> ${escapeHtml(o.id)}
+     <p>Buyer: ${escapeHtml(o.buyerEmail||"")}</p>
+     <p>Total: ${money(o.total)} ETB</p>
+     <p>Payment: ${escapeHtml(o.paymentMethod||"")} / ${escapeHtml(o.paymentReference||"")}</p>
+     <p>Payment Status: <b>${escapeHtml(o.paymentStatus||"pending")}</b></p>
+     <p>Order Status: <b>${escapeHtml(o.status||"pending")}</b></p>
+
+     <div class="actions">
+      <button
+       onclick="updateOrderStatus('${o.id}','verify')">
+       Verify Payment
+      </button>
+
+      <button class="secondary"
+       onclick="updateOrderStatus('${o.id}','complete')">
+       Complete
+      </button>
+
+      <button class="danger"
+       onclick="updateOrderStatus('${o.id}','cancel')">
+       Cancel
+      </button>
+     </div>
+    </div>
+   `).join("")
+   :'<div class="empty">No orders</div>';
+
   const productSnap=await getDocs(collection(db,"products"));
-  const products=productSnap.docs.map(d=>({id:d.id,...d.data()}));
-  $("adminProducts").innerHTML=products.map(p=>`<div class="panel"><b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB <button class="danger" onclick="adminDeleteProduct('${p.id}')">Delete</button></div>`).join("")||"<div class='empty'>No products</div>";
- }catch(e){$("adminOrders").innerHTML=`<div class="notice">${escapeHtml(e.message)}</div>`}
+  const products=productSnap.docs.map(d=>({
+   id:d.id,...d.data()
+  }));
+
+  $("adminProducts").innerHTML=products.length
+   ?products.map(p=>`
+    <div class="panel">
+     <b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB
+     <button class="danger"
+      onclick="adminDeleteProduct('${p.id}')">
+      Delete
+     </button>
+    </div>
+   `).join("")
+   :'<div class="empty">No products</div>';
+
+ }catch(e){
+  console.error("Admin dashboard error:",e);
+  $("adminOrders").innerHTML=
+   `<div class="notice">${escapeHtml(e.message)}</div>`;
+ }
 }
-window.updateOrderStatus=async function(id,status){
- if(!isAdmin())return msg("Admin only","Admin only");
- try{
-  await updateDoc(doc(db,"orders",id),{
-   status,
-   paymentStatus:status==="verified"?"verified":status,
+
+window.updateOrderStatus=async function(id,action){
+
+ if(!isAdmin()){
+  return msg("Admin only","Admin access only");
+ }
+
+ let changes={};
+
+ if(action==="verify"){
+  changes={
+   paymentStatus:"verified",
    updatedAt:serverTimestamp()
-  });
-  msg("ተሻሽሏል","Updated");loadAdminDashboard();
- }catch(e){msg(e.message,e.message)}
+  };
+ }else if(action==="complete"){
+  changes={
+   status:"completed",
+   updatedAt:serverTimestamp()
+  };
+ }else if(action==="cancel"){
+  changes={
+   status:"cancelled",
+   updatedAt:serverTimestamp()
+  };
+ }else{
+  return;
+ }
+
+ try{
+  await updateDoc(doc(db,"orders",id),changes);
+
+  msg(
+   "ትዕዛዙ በተሳካ ሁኔታ ተሻሽሏል",
+   "Order updated successfully"
+  );
+
+  await loadAdminDashboard();
+
+ }catch(e){
+  console.error("Update order error:",e);
+  msg(
+   "ማሻሻል አልተቻለም: "+e.message,
+   "Update failed: "+e.message
+  );
+ }
 };
-window.adminDeleteProduct=async function(id){
+
+ 
  if(!isAdmin())return;
  if(!confirm("Delete this product?"))return;
  try{await deleteDoc(doc(db,"products",id));await loadProducts();loadAdminDashboard()}
