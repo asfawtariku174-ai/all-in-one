@@ -588,11 +588,18 @@ window.updateOrderStatus=async function(id,action){
  }
 };
 
- 
+ window.adminDeleteProduct=async function(id){
  if(!isAdmin())return;
+
  if(!confirm("Delete this product?"))return;
- try{await deleteDoc(doc(db,"products",id));await loadProducts();loadAdminDashboard()}
- catch(e){msg(e.message,e.message)}
+
+ try{
+  await deleteDoc(doc(db,"products",id));
+  await loadProducts();
+  await loadAdminDashboard();
+ }catch(e){
+  msg(e.message,e.message);
+ }
 };
 
 $("languageSelect").value=language;
