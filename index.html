@@ -395,10 +395,10 @@ window.publishProduct = async function () {
   btn.textContent = "Publishing...";
 
   try {
-    // 1. Upload image to Cloudinary (using cloud name: idnxqboa and preset: ml_default)
+    // 1. Upload image to Cloudinary ( using unsigned preset: phmzv3pr )
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "ml_default");
+    formData.append("upload_preset", "phmzv3pr");
 
     const cloudinaryRes = await fetch("https://api.cloudinary.com/v1_1/idnxqboa/image/upload", {
       method: "POST",
