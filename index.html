@@ -467,7 +467,20 @@ async function loadMyOrders(){
  try{
   const snap=await getDocs(query(collection(db,"orders"),where("buyerUid","==",currentUser.uid)));
   const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
-  $("myOrders").innerHTML=rows.length?rows.map(o=>`<div class="panel"><b>Order ${escapeHtml(o.id)}</b><p>${money(o.total)} ETB</p><p>${escapeHtml(o.paymentMethod||"")} — ${escapeHtml(o.paymentStatus||"pending")}</p><p>Status: ${escapeHtml(o.status||"pending")}</p></div>`).join(""):"<div class='empty'>No orders yet</div>";
+$("myOrders").innerHTML=rows.length
+ ?rows.map(o=>`
+  <div class="panel">
+   <b>Order ${escapeHtml(o.id)}</b>
+   <p>${money(o.total)} ETB</p>
+   <p>Payment: ${escapeHtml(o.paymentStatus||"pending")}</p>
+   <p>Order Status:
+    <b style="color:${o.status==="cancelled"?"#c0392b":o.status==="completed"?"#087b55":"#b8860b"}">
+     ${escapeHtml(o.status||"pending")}
+    </b>
+   </p>
+  </div>
+ `).join("")
+ :"<div class='empty'>No orders yet</div>";
  }catch(e){$("myOrders").textContent=e.message}
 }
 
@@ -484,9 +497,9 @@ async function loadAdminDashboard(){
    query(collection(db,"orders"),orderBy("createdAt","desc"))
   );
 
-  const orders=orderSnap.docs.map(d=>({
-   id:d.id,...d.data()
-  }));
+  const orders=orderSnap.docs
+ .map(d=>({id:d.id,...d.data()}))
+ .filter(o=>o.status!=="cancelled");
 
   $("adminOrders").innerHTML=orders.length
    ?orders.map(o=>`
