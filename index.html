@@ -52,6 +52,37 @@ label{font-weight:bold;font-size:14px}
 .hidden{display:none!important}
 hr{border:0;border-top:1px solid #eee;margin:12px 0}
 
+/* የተስተካከለ የዩዘር ዳሽቦርድ እና የ Log Out አቀማመጥ */
+#userBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 280px; /* ከፍታ በመስጠት Log out ከታች እንዲሆን ያስችለዋል */
+}
+.user-top-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.user-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.user-links button {
+  flex: 1;
+  min-width: 100px;
+}
+.logout-container {
+  margin-top: auto; /* Log Out አዝራሩን ወደ ታች መጨረሻ ይገፋዋል */
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+.logout-container button {
+  width: 100%;
+}
+
 /* የምርት ዝርዝር እና Zoom ማሳያ (Product Detail & Zoom Modal) */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:100;padding:12px;overflow-y:auto}
 .modal.open{display:flex}
@@ -167,12 +198,20 @@ hr{border:0;border-top:1px solid #eee;margin:12px 0}
         <button class="secondary" onclick="registerUser()" data-am="መለያ ፍጠር" data-en="Register">መለያ ፍጠር</button>
       </div>
     </div>
+    
+    <!-- የተስተካከለው የዩዘር ቦክስ (Admin, My Product, My Orders ከላይ ተራርቀው Log out ከታች መጨረሻ ላይ) -->
     <div id="userBox" class="panel hidden">
-      <p id="userEmail"></p>
-      <p class="muted" id="userUid"></p>
-      <div class="actions">
-        <button onclick="showPage('sellerPage')" data-am="የእኔ ምርቶች" data-en="My Products">የእኔ ምርቶች</button>
-        <button onclick="showPage('ordersPage')" data-am="ትዕዛዞቼ" data-en="My Orders">ትዕዛዞቼ</button>
+      <div class="user-top-section">
+        <div>
+          <p id="userEmail" style="font-weight: bold;"></p>
+          <p class="muted" id="userUid"></p>
+        </div>
+        <div class="user-links" id="userLinksContainer">
+          <button onclick="showPage('sellerPage')" data-am="የእኔ ምርቶች" data-en="My Products">የእኔ ምርቶች</button>
+          <button onclick="showPage('ordersPage')" data-am="ትዕዛዞቼ" data-en="My Orders">ትዕዛዞቼ</button>
+        </div>
+      </div>
+      <div class="logout-container">
         <button class="danger" onclick="logoutUser()" data-am="ውጣ" data-en="Logout">ውጣ</button>
       </div>
     </div>
@@ -324,12 +363,20 @@ onAuthStateChanged(auth,user=>{
  if(user){
   $("userEmail").textContent=user.email||"";
   $("userUid").textContent="UID: "+user.uid;
+  
+  const linksContainer = $("userLinksContainer");
+  let adminButton = $("adminShortcut");
+  
   if(isAdmin()){
-   const adminButton=document.createElement("button");
-   adminButton.textContent="🛡️ Admin";
-   adminButton.onclick=()=>showPage("adminPage");
-   adminButton.id="adminShortcut";
-   if(!$("adminShortcut"))$("userBox").appendChild(adminButton);
+   if(!adminButton){
+    adminButton=document.createElement("button");
+    adminButton.textContent="🛡️ Admin";
+    adminButton.onclick=()=>showPage("adminPage");
+    adminButton.id="adminShortcut";
+    linksContainer.appendChild(adminButton);
+   }
+  } else {
+   if(adminButton) adminButton.remove();
   }
  }else{
   const old=$("adminShortcut");if(old)old.remove();
@@ -368,7 +415,6 @@ function productCard(p){
  </article>`;
 }
 
-// ምርቱን ሲነካ ወደ ውስጥ አስገብቶ ዝርዝርና Zoom የሚያሳይ ተግባር
 window.openProductModal=function(id){
  const p=productsData.find(x=>x.id===id);
  if(!p)return;
@@ -501,8 +547,7 @@ window.publishProduct = async function () {
       status: "active"
     });
 
-    ["productName", "productPrice", "productDescription",
-     "sellerPhone"].forEach(id => {
+    ["productName", "productPrice", "productDescription", "sellerPhone"].forEach(id => {
       $(id).value = "";
     });
 
@@ -522,12 +567,10 @@ window.publishProduct = async function () {
 
   } catch (e) {
     console.error("Publish error:", stage, e);
-
     msg(
       stage + " ላይ ችግር ተፈጥሯል: " + (e.code || e.message),
       "Failed during " + stage + ": " + (e.code || e.message)
     );
-
   } finally {
     btn.disabled = false;
     btn.textContent = oldText;
@@ -604,20 +647,20 @@ async function loadMyOrders(){
  try{
   const snap=await getDocs(query(collection(db,"orders"),where("buyerUid","==",currentUser.uid)));
   const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
-$("myOrders").innerHTML=rows.length
- ?rows.map(o=>`
-  <div class="panel">
-   <b>Order ${escapeHtml(o.id)}</b>
-   <p>${money(o.total)} ETB</p>
-   <p>Payment: ${escapeHtml(o.paymentStatus||"pending")}</p>
-   <p>Order Status:
-    <b style="color:${o.status==="cancelled"?"#c0392b":o.status==="completed"?"#087b55":"#b8860b"}">
-     ${escapeHtml(o.status||"pending")}
-    </b>
-   </p>
-  </div>
- `).join("")
- :"<div class='empty'>No orders yet</div>";
+  $("myOrders").innerHTML=rows.length
+   ?rows.map(o=>`
+    <div class="panel">
+     <b>Order ${escapeHtml(o.id)}</b>
+     <p>${money(o.total)} ETB</p>
+     <p>Payment: ${escapeHtml(o.paymentStatus||"pending")}</p>
+     <p>Order Status:
+      <b style="color:${o.status==="cancelled"?"#c0392b":o.status==="completed"?"#087b55":"#b8860b"}">
+       ${escapeHtml(o.status||"pending")}
+      </b>
+     </p>
+    </div>
+   `).join("")
+   :"<div class='empty'>No orders yet</div>";
  }catch(e){$("myOrders").textContent=e.message}
 }
 
@@ -630,13 +673,8 @@ async function loadAdminDashboard(){
  $("adminOrders").innerHTML="Loading orders...";
 
  try{
-  const orderSnap=await getDocs(
-   query(collection(db,"orders"),orderBy("createdAt","desc"))
-  );
-
-  const orders=orderSnap.docs
- .map(d=>({id:d.id,...d.data()}))
- .filter(o=>o.status!=="cancelled");
+  const orderSnap=await getDocs(query(collection(db,"orders"),orderBy("createdAt","desc")));
+  const orders=orderSnap.docs.map(d=>({id:d.id,...d.data()})).filter(o=>o.status!=="cancelled");
 
   $("adminOrders").innerHTML=orders.length
    ?orders.map(o=>`
@@ -649,109 +687,54 @@ async function loadAdminDashboard(){
      <p>Order Status: <b>${escapeHtml(o.status||"pending")}</b></p>
 
      <div class="actions">
-      <button
-       onclick="updateOrderStatus('${o.id}','verify')">
-       Verify Payment
-      </button>
-
-      <button class="secondary"
-       onclick="updateOrderStatus('${o.id}','complete')">
-       Complete
-      </button>
-
-      <button class="danger"
-       onclick="updateOrderStatus('${o.id}','cancel')">
-       Cancel
-      </button>
+      <button onclick="updateOrderStatus('${o.id}','verify')">Verify Payment</button>
+      <button class="secondary" onclick="updateOrderStatus('${o.id}','complete')">Complete</button>
+      <button class="danger" onclick="updateOrderStatus('${o.id}','cancel')">Cancel</button>
      </div>
     </div>
    `).join("")
    :'<div class="empty">No orders</div>';
 
   const productSnap=await getDocs(collection(db,"products"));
-  const products=productSnap.docs.map(d=>({
-   id:d.id,...d.data()
-  }));
+  const products=productSnap.docs.map(d=>({id:d.id,...d.data()}));
 
   $("adminProducts").innerHTML=products.length
    ?products.map(p=>`
     <div class="panel">
      <b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB
-     <button class="danger"
-      onclick="adminDeleteProduct('${p.id}')">
-      Delete
-     </button>
+     <button class="danger" onclick="adminDeleteProduct('${p.id}')">Delete</button>
     </div>
    `).join("")
    :'<div class="empty">No products</div>';
 
  }catch(e){
   console.error("Admin dashboard error:",e);
-  $("adminOrders").innerHTML=
-   `<div class="notice">${escapeHtml(e.message)}</div>`;
+  $("adminOrders").innerHTML=`<div class="notice">${escapeHtml(e.message)}</div>`;
  }
 }
 
 window.updateOrderStatus=async function(id,action){
-
- if(!isAdmin()){
-  return msg("Admin only","Admin access only");
- }
-
- if(action==="cancel"){
-  if(!confirm("ይህን ትዕዛዝ መሰረዝ ይፈልጋሉ?")){
-   return;
-  }
- }
+ if(!isAdmin())return msg("Admin only","Admin access only");
+ if(action==="cancel"&&!confirm("ይህን ትዕዛዝ መሰረዝ ይፈልጋሉ?"))return;
 
  let changes={};
-
- if(action==="verify"){
-  changes={
-   paymentStatus:"verified",
-   updatedAt:serverTimestamp()
-  };
- }
- else if(action==="complete"){
-  changes={
-   status:"completed",
-   updatedAt:serverTimestamp()
-  };
- }
- else if(action==="cancel"){
-  changes={
-   status:"cancelled",
-   updatedAt:serverTimestamp()
-  };
- }
- else{
-  return;
- }
+ if(action==="verify") changes={paymentStatus:"verified",updatedAt:serverTimestamp()};
+ else if(action==="complete") changes={status:"completed",updatedAt:serverTimestamp()};
+ else if(action==="cancel") changes={status:"cancelled",updatedAt:serverTimestamp()};
+ else return;
 
  try{
-
   await updateDoc(doc(db,"orders",id),changes);
-
   await loadAdminDashboard();
-
-  msg(
-   action==="cancel"?
-   "ትዕዛዙ ተሰርዟል":
-   "ትዕዛዙ ተሻሽሏል",
-   action==="cancel"?
-   "Order cancelled successfully":
-   "Order updated successfully"
-  );
-
+  msg(action==="cancel"?"ትዕዛዙ ተሰርዟል":"ትዕዛዙ ተሻሽሏል",action==="cancel"?"Order cancelled successfully":"Order updated successfully");
  }catch(e){
   console.error(e);
   msg("ስህተት: "+e.message,"Error: "+e.message);
  }
 };
 
- window.adminDeleteProduct=async function(id){
+window.adminDeleteProduct=async function(id){
  if(!isAdmin())return;
-
  if(!confirm("Delete this product?"))return;
 
  try{
