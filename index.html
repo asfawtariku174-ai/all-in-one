@@ -548,6 +548,12 @@ window.updateOrderStatus=async function(id,action){
   return msg("Admin only","Admin access only");
  }
 
+ if(action==="cancel"){
+  if(!confirm("ይህን ትዕዛዝ መሰረዝ ይፈልጋሉ?")){
+   return;
+  }
+ }
+
  let changes={};
 
  if(action==="verify"){
@@ -555,36 +561,41 @@ window.updateOrderStatus=async function(id,action){
    paymentStatus:"verified",
    updatedAt:serverTimestamp()
   };
- }else if(action==="complete"){
+ }
+ else if(action==="complete"){
   changes={
    status:"completed",
    updatedAt:serverTimestamp()
   };
- }else if(action==="cancel"){
+ }
+ else if(action==="cancel"){
   changes={
    status:"cancelled",
    updatedAt:serverTimestamp()
   };
- }else{
+ }
+ else{
   return;
  }
 
  try{
-  await updateDoc(doc(db,"orders",id),changes);
 
-  msg(
-   "ትዕዛዙ በተሳካ ሁኔታ ተሻሽሏል",
-   "Order updated successfully"
-  );
+  await updateDoc(doc(db,"orders",id),changes);
 
   await loadAdminDashboard();
 
- }catch(e){
-  console.error("Update order error:",e);
   msg(
-   "ማሻሻል አልተቻለም: "+e.message,
-   "Update failed: "+e.message
+   action==="cancel"?
+   "ትዕዛዙ ተሰርዟል":
+   "ትዕዛዙ ተሻሽሏል",
+   action==="cancel"?
+   "Order cancelled successfully":
+   "Order updated successfully"
   );
+
+ }catch(e){
+  console.error(e);
+  msg("ስህተት: "+e.message,"Error: "+e.message);
  }
 };
 
