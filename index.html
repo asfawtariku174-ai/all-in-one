@@ -1,341 +1,497 @@
+
 <!DOCTYPE html>
 <html lang="am">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#008751">
-<title>ALL IN ONE Marketplace</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087b55">
+<title>JIJI Market - ALL IN ONE</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#f4f7f5;color:#26332c;padding-bottom:78px}
-.header-section{background:#008751;color:#fff;padding:16px}
-.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.brand{font-size:21px;font-weight:bold}
-.lang-btn{background:#fff;color:#008751;border:0;border-radius:8px;padding:9px 12px;font-weight:bold}
-.search-container h2{text-align:center;font-size:18px;margin:8px 0 12px}
-.search-box{display:flex;background:#fff;border-radius:9px;padding:4px}
-.search-box input{border:0;margin:0;min-width:0;flex:1;outline:none}
-.search-box button{border:0;background:#fff;color:#008751;padding:0 12px}
-.quick{display:flex;gap:9px;overflow:auto;background:#fff;padding:11px 14px}
-.pill{white-space:nowrap;text-decoration:none;color:#008751;background:#eff7f2;border:1px solid #d9e8df;padding:8px 12px;border-radius:20px;font-size:13px}
-.container{max-width:850px;margin:auto;padding:14px}
-.section-title{font-size:18px;font-weight:bold;margin:19px 0 11px}
-.panel,.product-card,.order-card,.stat{background:#fff;border-radius:12px;padding:14px;margin-bottom:13px;box-shadow:0 2px 8px #102a1a0c}
-input,textarea,select{width:100%;padding:12px;margin:6px 0 10px;border:1px solid #d7dfda;border-radius:8px;font-size:15px;background:#fff}
-textarea{min-height:75px;resize:vertical}
-label{font-size:13px;font-weight:bold;color:#43544a}
-.btn{border:0;background:#008751;color:#fff;padding:11px 14px;border-radius:8px;font-weight:bold;cursor:pointer;margin:4px 3px 4px 0}
-.btn:disabled{opacity:.55;cursor:not-allowed}
-.btn.secondary{background:#64736a}.btn.danger{background:#bd3030}.btn.light{background:#eaf4ee;color:#006b40}
-.btn.full{width:100%}
-.muted{color:#728078;font-size:13px;line-height:1.5}
-.auth-actions{display:flex;gap:8px}.auth-actions .btn{flex:1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f8;color:#20252c}
+header{background:#087b55;color:white;padding:16px;position:sticky;top:0;z-index:10}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:23px;font-weight:bold}
+button{border:0;padding:11px 15px;border-radius:7px;cursor:pointer;font-weight:bold}
+.primary{background:#087b55;color:white}
+.white{background:white;color:#087b55}
+.search{display:flex;gap:7px;margin-top:14px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:7px;font-size:15px;margin:5px 0}
+.search input{margin:0}
+.categories{display:flex;gap:8px;overflow-x:auto;padding:13px;background:white}
+.categories button{white-space:nowrap;background:#edf4f0;color:#087b55}
+.container{padding:14px;max-width:1100px;margin:auto}
+.heading{font-size:20px;margin:18px 0 12px}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 7px #0001}
+.card img{width:100%;height:145px;object-fit:cover;background:#eee}
+.info{padding:10px}
+.info h3{font-size:15px;margin-bottom:8px}
+.price{color:#087b55;font-size:17px;font-weight:bold}
+.muted{color:#777;font-size:12px;margin:7px 0}
+.actions{display:flex;gap:5px;margin-top:8px}
+.actions button{flex:1;padding:9px 4px;font-size:12px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px 3px;border-top:1px solid #ddd;z-index:20}
+nav button{background:white;color:#444;font-size:11px;padding:7px 4px}
+nav button.active{color:#087b55}
+.page{display:none;padding-bottom:90px}
+.page.active{display:block}
+.panel{background:white;padding:15px;border-radius:10px;margin:12px 0}
+form button{width:100%;margin-top:10px}
 .hidden{display:none!important}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-.product-card{margin:0;overflow:hidden}
-.product-card img{width:100%;height:155px;object-fit:cover;border-radius:8px;background:#edf2ee}
-.product-card h3{color:#007747;font-size:16px;margin:9px 0 6px;overflow-wrap:anywhere}
-.product-card p{font-size:13px;margin:5px 0;overflow-wrap:anywhere}
-.price{font-size:17px!important;font-weight:bold;color:#008751}
-.badge{display:inline-block;background:#e8f5ed;color:#007747;padding:4px 8px;border-radius:20px;font-size:11px;margin:3px 0}
-.order-card h3{font-size:16px;margin-bottom:7px;color:#007747}
-.order-card p{font-size:13px;margin:5px 0;overflow-wrap:anywhere}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.stat strong{display:block;font-size:19px;color:#008751;margin-top:6px}
-.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#fff;display:flex;justify-content:space-around;padding:9px 0;border-top:1px solid #dce4df;z-index:10}
-.nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:#758078;font-size:11px;gap:4px}
-.nav-item i{font-size:18px}.nav-item.active{color:#008751;font-weight:bold}
-hr{border:0;border-top:1px solid #edf0ed;margin:10px 0}
-.notice{padding:10px;background:#fff8e6;border:1px solid #f1dfaa;border-radius:8px;font-size:13px;line-height:1.5;margin:8px 0}
-@media(max-width:390px){.grid{grid-template-columns:1fr 1fr}.product-card img{height:125px}.container{padding:11px}}
+.badge{background:#e6f5ed;color:#087b55;padding:4px 8px;border-radius:20px;font-size:11px}
+footer{text-align:center;padding:25px;color:#777}
+#toast{position:fixed;bottom:75px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:12px 18px;border-radius:8px;display:none;z-index:50}
+@media(min-width:650px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
+
 <body>
-<header class="header-section">
- <div class="top-bar"><div class="brand">🌍 ALL IN ONE</div><button class="lang-btn" onclick="toggleLanguage()" id="languageButton">English</button></div>
- <div class="search-container"><h2 data-am="ምን ይፈልጋሉ?" data-en="What are you looking for?">ምን ይፈልጋሉ?</h2>
-  <div class="search-box"><input id="searchInput" placeholder="ዕቃዎችን ይፈልጉ..." data-placeholder-am="ዕቃዎችን ይፈልጉ..." data-placeholder-en="Search products..."><button onclick="searchProducts()"><i class="fa-solid fa-magnifying-glass"></i></button></div>
+
+<header>
+ <div class="top">
+  <div class="logo">🛍️ JIJI MARKET</div>
+  <button class="white" onclick="showPage('account')">👤 Account</button>
+ </div>
+ <div class="search">
+  <input id="search" placeholder="ምርት ፈልግ / Search..." oninput="loadProducts()">
+  <button class="white" onclick="loadProducts()">🔍</button>
  </div>
 </header>
-<nav class="quick">
- <a class="pill" href="#products">🛒 ገበያ</a><a class="pill" href="#sell">➕ ዕቃ ሽያጭ</a><a class="pill" href="#orders">📦 ትዕዛዞች</a><a class="pill" href="#account">👤 መለያ</a>
-</nav>
+
+<div class="categories">
+ <button onclick="setCategory('ሁሉም')">ሁሉም</button>
+ <button onclick="setCategory('ስልክ')">📱 ስልክ</button>
+ <button onclick="setCategory('ኤሌክትሮኒክስ')">💻 ኤሌክትሮኒክስ</button>
+ <button onclick="setCategory('ልብስ')">👕 ልብስ</button>
+ <button onclick="setCategory('ቤት')">🏠 ቤት</button>
+ <button onclick="setCategory('መኪና')">🚗 መኪና</button>
+ <button onclick="setCategory('ሌሎች')">📦 ሌሎች</button>
+</div>
+
 <main class="container">
- <section id="account">
-  <h2 class="section-title">👤 መለያ / Account</h2>
-  <div class="panel">
-   <p id="authStatus" class="muted">እባክዎ ይግቡ ወይም መለያ ይፍጠሩ።</p>
-   <input id="email" type="email" autocomplete="email" placeholder="Email">
-   <input id="password" type="password" autocomplete="current-password" placeholder="Password (ቢያንስ 6 ፊደል)">
-   <div class="auth-actions"><button class="btn" onclick="signUp()">መለያ ፍጠር</button><button class="btn secondary" onclick="signIn()">ግባ</button></div>
-   <button id="logoutBtn" class="btn danger full hidden" onclick="signOutUser()">ውጣ</button>
-  </div>
- </section>
 
- <section id="sell">
-  <h2 class="section-title">➕ ዕቃ ለመሸጥ / Sell Product</h2>
-  <div class="panel">
-   <p id="sellNotice" class="muted">ዕቃ ለመለጠፍ መጀመሪያ ይግቡ።</p>
-   <form id="productForm">
-    <label>የዕቃው ስም</label><input id="productName" required maxlength="100" placeholder="ለምሳሌ፦ ስልክ">
-    <label>ዋጋ (ብር)</label><input id="productPrice" required type="number" min="0.01" step="0.01" placeholder="ዋጋ">
-    <label>ብዛት</label><input id="productQuantity" required type="number" min="1" step="1" placeholder="ብዛት">
-    <label>ምድብ</label><select id="productCategory" required><option value="">ምድብ ይምረጡ</option><option>Electronics</option><option>Clothes</option><option>Home</option><option>Food</option><option>Beauty</option><option>Other</option></select>
-    <label>የዕቃ ፎቶ ሊንክ (Image URL)</label><input id="productImageUrl" type="url" placeholder="https://example.com/photo.jpg">
-    <textarea id="productDescription" maxlength="1000" placeholder="የዕቃው መግለጫ"></textarea>
-    <button id="saveProductBtn" class="btn full" type="submit">ዕቃውን ለጥፍ</button>
-    <button id="cancelEditBtn" class="btn secondary full hidden" type="button" onclick="cancelEdit()">ማስተካከያውን ተወው</button>
-   </form>
-   <p class="muted">ማስታወሻ፦ Firebase Storage Upgrade ስለሚፈልግ ለጊዜው የፎቶ URL ያስገቡ።</p>
-  </div>
- </section>
+<!-- HOME -->
+<section id="home" class="page active">
+ <div class="panel">
+  <h2>እንኳን ወደ JIJI MARKET በደህና መጡ!</h2>
+  <p class="muted">ግዛ፣ ሽጥ፣ በቀላሉ ተገበያይ።</p>
+  <button class="primary" onclick="showPage('sell')">+ እቃ ሽጥ</button>
+ </div>
+ <h2 class="heading">🔥 የቅርብ ጊዜ ምርቶች</h2>
+ <div id="products" class="products">Loading...</div>
+</section>
 
- <section id="products">
-  <h2 class="section-title">🛍️ የተለጠፉ ዕቃዎች / Products for Sale</h2>
-  <div id="productList" class="grid"><p class="muted">ዕቃዎች በመጫን ላይ...</p></div>
- </section>
+<!-- SELL -->
+<section id="sell" class="page">
+ <h2 class="heading">አዲስ ምርት ለመሸጥ</h2>
+ <div class="panel">
+  <form id="sellForm">
+   <input id="pname" placeholder="የምርት ስም" required>
+   <input id="price" type="number" min="1" placeholder="ዋጋ (ብር)" required>
+   <select id="category" required>
+    <option value="">ምድብ ምረጥ</option>
+    <option>ስልክ</option>
+    <option>ኤሌክትሮኒክስ</option>
+    <option>ልብስ</option>
+    <option>ቤት</option>
+    <option>መኪና</option>
+    <option>ሌሎች</option>
+   </select>
+   <input id="location" placeholder="ከተማ / አካባቢ" required>
+   <textarea id="description" placeholder="የምርቱ መግለጫ" required></textarea>
+   <label>የምርት ፎቶ</label>
+   <input id="photo" type="file" accept="image/*" required>
+   <button class="primary" type="submit">ምርቱን ለጥፍ</button>
+  </form>
+ </div>
+</section>
 
- <section id="orders">
-  <h2 class="section-title">📦 የእኔ ትዕዛዞች / My Orders</h2>
-  <div class="panel"><div id="myOrders"><p class="muted">ትዕዛዞችን ለማየት ይግቡ።</p></div></div>
- </section>
+<!-- FAVORITES -->
+<section id="favorites" class="page">
+ <h2 class="heading">❤️ የምወዳቸው ምርቶች</h2>
+ <div id="favoriteList" class="products"></div>
+</section>
 
- <section id="seller">
-  <h2 class="section-title">🏪 የሻጭ ዳሽቦርድ / Seller Dashboard</h2>
-  <div class="panel"><div id="sellerStats" class="stats"><div class="stat">የእኔ ምርቶች<strong>0</strong></div><div class="stat">የተቀበሉ ትዕዛዞች<strong>0</strong></div></div><div id="sellerOrders"><p class="muted">የሻጭ ትዕዛዞች እዚህ ይታያሉ።</p></div></div>
- </section>
+<!-- CART -->
+<section id="cart" class="page">
+ <h2 class="heading">🛒 Shopping Cart</h2>
+ <div id="cartList"></div>
+ <div class="panel">
+  <h3 id="total">ጠቅላላ: 0 ብር</h3>
+  <button class="primary" onclick="checkout()">ትዕዛዝ ላክ</button>
+ </div>
+</section>
 
- <section id="admin" class="hidden">
-  <h2 class="section-title">🛡️ Admin Dashboard</h2>
-  <div class="panel">
-   <div class="notice">Admin እዚህ የክፍያ ማስረጃዎችን ይመረምራል። ክፍያ በእውነት ከተረጋገጠ ብቻ “ክፍያ አረጋግጥ” ይጫኑ።</div>
-   <div id="adminStats" class="stats"></div><div id="adminOrders"></div>
-  </div>
- </section>
+<!-- CHAT -->
+<section id="chat" class="page">
+ <h2 class="heading">💬 መልዕክቶች</h2>
+ <div class="panel">
+  <p>ከሻጭ ጋር ለመወያየት ከምርቱ ላይ የውይይት ቁልፍን ይጫኑ።</p>
+  <div id="chatList"></div>
+ </div>
+ <div class="panel hidden" id="chatBox">
+  <h3 id="chatTitle">ውይይት</h3>
+  <div id="messages"></div>
+  <form id="messageForm">
+   <input id="messageInput" placeholder="መልዕክት ጻፍ..." required>
+   <button class="primary">ላክ</button>
+  </form>
+ </div>
+</section>
+
+<!-- ACCOUNT -->
+<section id="account" class="page">
+ <h2 class="heading">👤 የእኔ መለያ</h2>
+ <div class="panel" id="authPanel">
+  <h3>Login / Register</h3>
+  <form id="authForm">
+   <input id="email" type="email" placeholder="Email" required>
+   <input id="password" type="password" placeholder="Password (6+)" required minlength="6">
+   <input id="fullname" placeholder="ሙሉ ስም (ለመመዝገብ ብቻ)">
+   <button class="primary" type="submit">Login / Register</button>
+  </form>
+  <button onclick="register()" class="primary">አዲስ መለያ ፍጠር</button>
+ </div>
+ <div class="panel hidden" id="userPanel">
+  <h3 id="userName"></h3>
+  <p id="userEmail"></p>
+  <button class="primary" onclick="showPage('dashboard')">የሻጭ Dashboard</button>
+  <button onclick="logout()">Logout</button>
+ </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page">
+ <h2 class="heading">📊 Seller Dashboard</h2>
+ <div class="panel">
+  <h3>የእኔ ምርቶች</h3>
+  <div id="myProducts"></div>
+ </div>
+</section>
+
 </main>
-<nav class="bottom-nav">
- <a href="#products" class="nav-item active"><i class="fa-solid fa-house"></i><span>መነሻ</span></a>
- <a href="#products" class="nav-item"><i class="fa-solid fa-store"></i><span>ገበያ</span></a>
- <a href="#sell" class="nav-item"><i class="fa-solid fa-square-plus"></i><span>ሽያጭ</span></a>
- <a href="#orders" class="nav-item"><i class="fa-solid fa-box"></i><span>ትዕዛዝ</span></a>
+
+<nav>
+ <button class="active" onclick="showPage('home',this)">🏠<br>Home</button>
+ <button onclick="showPage('sell',this)">➕<br>Sell</button>
+ <button onclick="showPage('favorites',this)">❤️<br>Saved</button>
+ <button onclick="showPage('cart',this)">🛒<br>Cart</button>
+ <button onclick="showPage('chat',this)">💬<br>Chat</button>
+ <button onclick="showPage('account',this)">👤<br>Account</button>
 </nav>
+
+<div id="toast"></div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, serverTimestamp, where, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-/* 1) Firebase project configuration */
-const firebaseConfig = {
- apiKey: "AIzaSyCRQJeoRNKSIdQ0LTCHoBSUUftl2o-dUjQ",
- authDomain: "all-in-one-45d48.firebaseapp.com",
- projectId: "all-in-one-45d48",
- storageBucket: "all-in-one-45d48.firebasestorage.app",
- messagingSenderId: "1023627656415",
- appId: "1:1023627656415:web:0072d483258742a7bbfd6a"
+import {
+ getAuth,onAuthStateChanged,createUserWithEmailAndPassword,
+ signInWithEmailAndPassword,signOut,updateProfile
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+ getFirestore,collection,addDoc,getDocs,doc,deleteDoc,
+ query,where,orderBy,onSnapshot,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+ getStorage,ref,uploadBytes,getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+/* YOUR EXISTING FIREBASE PROJECT */
+const firebaseConfig={
+ apiKey:"AIzaSyCRQJeoRNKSIdQ0LTCHoBSUUftl2o-dUjQ",
+ authDomain:"all-in-one-45d48.firebaseapp.com",
+ projectId:"all-in-one-45d48",
+ storageBucket:"all-in-one-45d48.firebasestorage.app",
+ messagingSenderId:"1023627656415",
+ appId:"1:1023627656415:web:0072d483258742a7bbfd6a"
 };
 
-/* 2) IMPORTANT: Replace this with your own Firebase Authentication UID to enable admin tools.
-   Never use an email address as the only admin security check. */
-const ADMIN_UIDS = ["PUT_YOUR_ADMIN_UID_HERE"];
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const storage=getStorage(app);
 
-/* 3) Replace these demo contact details with your official merchant/payment details. */
-const PAYMENT_DETAILS = {
- telebirr: "የTelebirr ቁጥርዎን እዚህ ያስገቡ",
- cbe: "የCBE ሂሳብ ቁጥርዎን እዚህ ያስገቡ"
+let currentUser=null;
+let selectedCategory="ሁሉም";
+let productsData=[];
+let activeChat=null;
+
+const $=id=>document.getElementById(id);
+const money=n=>Number(n).toLocaleString()+" ብር";
+
+function toast(msg){
+ $("toast").textContent=msg;
+ $("toast").style.display="block";
+ setTimeout(()=>$("toast").style.display="none",2500);
+}
+
+window.showPage=function(id,btn){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ $(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ if(id==="favorites")loadFavorites();
+ if(id==="cart")loadCart();
+ if(id==="dashboard")loadMyProducts();
+ if(id==="chat")loadChats();
 };
-const COMMISSION_RATE = 0.05;
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const $ = id => document.getElementById(id);
-
-let currentUser = null, isAdmin = false, products = [], orders = [], editingId = null, searchTerm = "";
-let unsubProducts = null, unsubBuyerOrders = null, unsubSellerOrders = null, unsubAdminOrders = null;
-
-function money(value){ const n=Number(value || 0); return (Number.isFinite(n)?n:0).toLocaleString("en-US",{maximumFractionDigits:2}); }
-function safeImageUrl(value){ try{const u=new URL(String(value||""));return u.protocol==="https:"?u.href:"";}catch{return "";} }
-function escapeHTML(value){ return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-function showError(error){ console.error(error); alert("ስህተት: " + (error?.message || error)); }
-
-window.signUp = async () => {
- const email=$("email").value.trim(), password=$("password").value;
- if(!email || password.length<6){alert("ትክክለኛ Email እና ቢያንስ 6 ፊደል Password ያስገቡ።");return;}
- try{await createUserWithEmailAndPassword(auth,email,password);alert("መለያዎ ተፈጥሯል!");}catch(e){showError(e);}
+window.setCategory=function(c){
+ selectedCategory=c;
+ showPage("home");
+ loadProducts();
 };
-window.signIn = async () => {
- const email=$("email").value.trim(), password=$("password").value;
- try{await signInWithEmailAndPassword(auth,email,password);alert("በትክክል ገብተዋል!");}catch(e){showError(e);}
-};
-window.signOutUser = async () => { try{await signOut(auth);}catch(e){showError(e);} };
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth,user=>{
  currentUser=user;
- isAdmin=!!user && ADMIN_UIDS.includes(user.uid) && !ADMIN_UIDS.includes("PUT_YOUR_ADMIN_UID_HERE");
- $("authStatus").textContent=user ? "ገብተዋል: "+user.email : "እባክዎ ይግቡ ወይም መለያ ይፍጠሩ።";
- $("logoutBtn").classList.toggle("hidden",!user);
- $("sellNotice").textContent=user ? "ምርትዎን አሁን መለጠፍ ይችላሉ።" : "ዕቃ ለመለጠፍ መጀመሪያ ይግቡ።";
- $("admin").classList.toggle("hidden",!isAdmin);
- listenUserOrders(); renderProducts(); renderSellerDashboard();
- if(isAdmin) listenAdminOrders();
- else { if(unsubAdminOrders) unsubAdminOrders(); unsubAdminOrders=null; orders=[]; $("adminOrders").innerHTML=""; $("adminStats").innerHTML=""; }
-});
-
-function listenProducts(){
- if(unsubProducts) unsubProducts();
- const q=query(collection(db,"products"),orderBy("createdAt","desc"));
- unsubProducts=onSnapshot(q,s=>{
-  products=s.docs.map(d=>({id:d.id,...d.data()}));
-  renderProducts();renderSellerDashboard();
- },e=>{$("productList").textContent="የምርት መረጃ ማምጣት አልተቻለም። "+e.message;});
-}
-
-function renderProducts(){
- const list=$("productList");list.innerHTML="";
- const filtered=products.filter(p=>p.active!==false && [p.name,p.category,p.description].join(" ").toLowerCase().includes(searchTerm.toLowerCase()));
- if(!filtered.length){list.innerHTML="<p class='muted'>የሚታይ ምርት የለም።</p>";return;}
- filtered.forEach(p=>{
-  const own=!!currentUser && currentUser.uid===p.sellerId;
-  const card=document.createElement("article");card.className="product-card";
-  const image=safeImageUrl(p.imageUrl) ? `<img src="${escapeHTML(safeImageUrl(p.imageUrl))}" alt="${escapeHTML(p.name)}" loading="lazy">` : `<div style="height:130px;display:grid;place-items:center;background:#edf2ee;border-radius:8px;font-size:42px">🛍️</div>`;
-  card.innerHTML=`${image}<h3>${escapeHTML(p.name)}</h3><p class="price">${money(p.price)} ብር</p><p>📦 የቀረ: ${Number(p.quantity||0)}</p><span class="badge">${escapeHTML(p.category||"Other")}</span><p>${escapeHTML(p.description||"")}</p><p class="muted">ሻጭ: ${escapeHTML(p.sellerEmail||"")}</p>${own?`<button class="btn light" data-edit="${p.id}">አስተካክል</button><button class="btn danger" data-delete="${p.id}">ሰርዝ</button>`:`<button class="btn full" data-buy="${p.id}" ${Number(p.quantity||0)<1?"disabled":""}>ግዛ / Buy Now</button>`}`;
-  list.appendChild(card);
- });
- list.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));
- list.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>removeProduct(b.dataset.delete));
- list.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>buyProduct(b.dataset.buy));
-}
-
-$("productForm").addEventListener("submit",async event=>{
- event.preventDefault();
- if(!currentUser){alert("መጀመሪያ ይግቡ።");return;}
- const data={name:$("productName").value.trim(),price:Number($("productPrice").value),quantity:Number($("productQuantity").value),category:$("productCategory").value,description:$("productDescription").value.trim()};
- if(!data.name || !Number.isFinite(data.price) || data.price<=0 || !Number.isInteger(data.quantity) || data.quantity<1){alert("የምርት መረጃውን በትክክል ያስገቡ።");return;}
- const rawImageUrl=$("productImageUrl").value.trim();
- const imageUrl=rawImageUrl?safeImageUrl(rawImageUrl):"";
- if(rawImageUrl && !imageUrl){alert("ትክክለኛ https:// የፎቶ URL ያስገቡ።");return;}
- $("saveProductBtn").disabled=true;
- try{
-  if(editingId){
-   const old=products.find(p=>p.id===editingId);
-   if(!old || old.sellerId!==currentUser.uid) throw new Error("ይህን ምርት ማስተካከል አይችሉም።");
-   const patch={...data,imageUrl,updatedAt:serverTimestamp()};
-   await updateDoc(doc(db,"products",editingId),patch);alert("ምርቱ ተስተካክሏል።");
-  }else{
-   await addDoc(collection(db,"products"),{...data,sellerId:currentUser.uid,sellerEmail:currentUser.email,active:true,imageUrl,createdAt:serverTimestamp()});
-   alert("ምርቱ ተለጥፏል።");
-  }
-  cancelEdit();
- }catch(e){showError(e);}finally{$("saveProductBtn").disabled=false;}
-});
-
-window.editProduct=id=>{
- const p=products.find(x=>x.id===id);if(!p||!currentUser||p.sellerId!==currentUser.uid)return;
- editingId=id;$("productName").value=p.name||"";$("productPrice").value=p.price??"";$("productQuantity").value=p.quantity??"";$("productCategory").value=p.category||"";$("productDescription").value=p.description||"";$("productImageUrl").value=p.imageUrl||"";
- $("saveProductBtn").textContent="ለውጡን አስቀምጥ";$("cancelEditBtn").classList.remove("hidden");$("sell").scrollIntoView({behavior:"smooth"});
-};
-window.cancelEdit=()=>{editingId=null;$("productForm").reset();$("saveProductBtn").textContent="ዕቃውን ለጥፍ";$("cancelEditBtn").classList.add("hidden");};
-window.removeProduct=async id=>{
- const p=products.find(x=>x.id===id);if(!p||!currentUser||p.sellerId!==currentUser.uid)return;
- if(!confirm("ይህን ምርት መሰረዝ ይፈልጋሉ?"))return;
- try{await deleteDoc(doc(db,"products",id));alert("ምርቱ ተሰርዟል።");}catch(e){showError(e);}
-};
-
-window.buyProduct=async id=>{
- if(!currentUser){alert("ለመግዛት መጀመሪያ ይግቡ።");return;}
- const p=products.find(x=>x.id===id);if(!p||p.sellerId===currentUser.uid){alert("የራስዎን ምርት መግዛት አይችሉም።");return;}
- const qty=Number(prompt("ስንት ይፈልጋሉ? የቀረው: "+p.quantity,"1"));
- if(!Number.isInteger(qty)||qty<1)return;
- if(qty>Number(p.quantity)){alert("የቀረው ብዛት በቂ አይደለም።");return;}
- const total=Number((p.price*qty).toFixed(2)),commission=Number((total*COMMISSION_RATE).toFixed(2)),sellerNet=Number((total-commission).toFixed(2));
- const method=prompt("የክፍያ ዘዴ ይምረጡ:\n1 = Telebirr\n2 = CBE\n3 = Cash on Delivery");
- const paymentMethod=({"1":"telebirr","2":"cbe","3":"cash"})[method];
- if(!paymentMethod){alert("ትክክለኛ የክፍያ ዘዴ አልመረጡም።");return;}
- let transactionRef="";
- if(paymentMethod!=="cash"){
-  alert((paymentMethod==="telebirr"?"Telebirr: ":"CBE: ")+PAYMENT_DETAILS[paymentMethod]+"\nክፍያውን ከፈጸሙ በኋላ የTransaction ID ያስገቡ።");
-  transactionRef=prompt("የክፍያ Transaction ID / ማስረጃ ቁጥር ያስገቡ:");
-  if(!transactionRef||!transactionRef.trim()){alert("የክፍያ ማስረጃ አልተሞላም።");return;}
+ $("authPanel").classList.toggle("hidden",!!user);
+ $("userPanel").classList.toggle("hidden",!user);
+ if(user){
+  $("userName").textContent="ሰላም "+(user.displayName||"ተጠቃሚ");
+  $("userEmail").textContent=user.email;
  }
- const address=prompt("የማድረሻ አድራሻ ያስገቡ:");
- if(!address||!address.trim()){alert("አድራሻ ያስፈልጋል።");return;}
+});
+
+async function loadProducts(){
  try{
-  const productRef=doc(db,"products",id);
-  const orderRef=doc(collection(db,"orders"));
-  await runTransaction(db,async transaction=>{
-   const fresh=await transaction.get(productRef);
-   if(!fresh.exists()) throw new Error("ይህ ምርት አልተገኘም።");
-   const latest=fresh.data();
-   const available=Number(latest.quantity||0);
-   if(latest.active===false || !Number.isInteger(available) || available<qty) throw new Error("የቀረው የምርት ብዛት በቂ አይደለም።");
-   if(latest.sellerId===currentUser.uid) throw new Error("የራስዎን ምርት መግዛት አይችሉም።");
-   transaction.update(productRef,{quantity:available-qty,updatedAt:serverTimestamp()});
-   transaction.set(orderRef,{productId:id,productName:String(latest.name||p.name),productImage:safeImageUrl(latest.imageUrl),sellerId:latest.sellerId,sellerEmail:latest.sellerEmail||"",buyerId:currentUser.uid,buyerEmail:currentUser.email||"",quantity:qty,unitPrice:Number(latest.price),total,commissionRate:5,commission,sellerNet,paymentMethod,transactionRef:transactionRef.trim(),deliveryAddress:address.trim(),paymentStatus:paymentMethod==="cash"?"cash_on_delivery":"pending_verification",orderStatus:"pending",createdAt:serverTimestamp()});
+  const snap=await getDocs(collection(db,"products"));
+  productsData=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const search=$("search").value.toLowerCase();
+  let filtered=productsData.filter(p=>
+   (selectedCategory==="ሁሉም"||p.category===selectedCategory)&&
+   ((p.name||"").toLowerCase().includes(search)||
+    (p.location||"").toLowerCase().includes(search))
+  );
+  filtered.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  $("products").innerHTML=filtered.length?filtered.map(p=>`
+   <div class="card">
+    <img src="${safe(p.image)}" alt="product">
+    <div class="info">
+     <h3>${safe(p.name)}</h3>
+     <div class="price">${money(p.price)}</div>
+     <div class="muted">📍 ${safe(p.location)}</div>
+     <div class="muted">${safe(p.category)}</div>
+     <div class="actions">
+      <button class="primary" onclick="addCart('${p.id}')">🛒</button>
+      <button onclick="favorite('${p.id}')">❤️</button>
+     </div>
+     <div class="actions">
+      <button class="primary" onclick="contactSeller('${p.id}')">💬 ውይይት</button>
+     </div>
+    </div>
+   </div>`).join(""):"<p>ምርት አልተገኘም።</p>";
+ }catch(e){console.error(e);$("products").textContent="ምርቶችን ለማምጣት አልተቻለም።";}
+}
+function safe(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+$("search").addEventListener("input",loadProducts);
+
+$("sellForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(!currentUser)return toast("መጀመሪያ Login ያድርጉ።");
+ const file=$("photo").files[0];
+ if(!file)return toast("ፎቶ ይምረጡ።");
+ try{
+  toast("ፎቶ በመጫን ላይ...");
+  const path=ref(storage,"products/"+currentUser.uid+"/"+Date.now()+"_"+file.name);
+  await uploadBytes(path,file);
+  const image=await getDownloadURL(path);
+  await addDoc(collection(db,"products"),{
+   name:$("pname").value.trim(),
+   price:Number($("price").value),
+   category:$("category").value,
+   location:$("location").value.trim(),
+   description:$("description").value.trim(),
+   image,
+   sellerId:currentUser.uid,
+   sellerName:currentUser.displayName||currentUser.email,
+   createdAt:serverTimestamp()
   });
-  alert("ትዕዛዝዎ ተመዝግቧል፤ የምርት ብዛትም ተቀንሷል። የክፍያ ማረጋገጫ እስኪደረግ ይጠብቁ።");
- }catch(e){showError(e);}
+  $("sellForm").reset();
+  toast("ምርቱ ተለጥፏል!");
+  showPage("home");
+  loadProducts();
+ }catch(e){console.error(e);toast("ስህተት: "+e.message);}
+});
+
+window.register=async()=>{
+ try{
+  const name=$("fullname").value.trim();
+  if(!name)return toast("ሙሉ ስም ያስገቡ።");
+  const result=await createUserWithEmailAndPassword(auth,$("email").value,$("password").value);
+  await updateProfile(result.user,{displayName:name});
+  toast("መለያ ተፈጥሯል!");
+ }catch(e){toast(e.message);}
 };
 
-function listenUserOrders(){
- if(unsubBuyerOrders)unsubBuyerOrders();if(unsubSellerOrders)unsubSellerOrders();
- if(!currentUser){$("myOrders").innerHTML="<p class='muted'>ትዕዛዞችን ለማየት ይግቡ።</p>";$("sellerOrders").innerHTML="";return;}
- const buyerQ=query(collection(db,"orders"),where("buyerId","==",currentUser.uid));
- unsubBuyerOrders=onSnapshot(buyerQ,s=>{const mine=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));renderBuyerOrders(mine);},e=>{$("myOrders").textContent=e.message;});
- const sellerQ=query(collection(db,"orders"),where("sellerId","==",currentUser.uid));
- unsubSellerOrders=onSnapshot(sellerQ,s=>{const mine=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));renderSellerOrders(mine);renderSellerDashboard(mine);},e=>{$("sellerOrders").textContent=e.message;});
-}
-function orderCard(o,adminMode=false){
- const method={telebirr:"Telebirr",cbe:"CBE",cash:"Cash on Delivery"}[o.paymentMethod]||o.paymentMethod;
- return `<article class="order-card"><h3>${escapeHTML(o.productName)}</h3><p>ብዛት: ${o.quantity} | ጠቅላላ: ${money(o.total)} ብር</p><p>ክፍያ: ${method} | ማረጋገጫ: ${escapeHTML(o.paymentStatus)}</p><p>Transaction ID: ${escapeHTML(o.transactionRef||"—")}</p><p>አድራሻ: ${escapeHTML(o.deliveryAddress)}</p><p>የትዕዛዝ ሁኔታ: ${escapeHTML(o.orderStatus)}</p><p class="muted">ኮሚሽን 5%: ${money(o.commission)} ብር | የሻጭ ድርሻ: ${money(o.sellerNet)} ብር</p>${adminMode && (o.paymentStatus==="pending_verification" || o.paymentStatus==="cash_on_delivery")?`<button class="btn" data-verify="${o.id}">ክፍያ አረጋግጥ / Cash ተቀብል</button><button class="btn danger" data-reject="${o.id}">ክፍያ አልተረጋገጠም</button>`:""}</article>`;
-}
-function renderBuyerOrders(items){$("myOrders").innerHTML=items.length?items.map(o=>orderCard(o)).join(""):"<p class='muted'>ገና ትዕዛዝ የለዎትም።</p>";}
-function renderSellerOrders(items){$("sellerOrders").innerHTML=items.length?items.map(o=>orderCard(o)).join(""):"<p class='muted'>ገና የተቀበሉት ትዕዛዝ የለም።</p>";}
-function renderSellerDashboard(items=[]){
- if(!currentUser){$("sellerStats").innerHTML="";return;}
- const mine=products.filter(p=>p.sellerId===currentUser.uid).length;
- const paid=items.filter(o=>o.paymentStatus==="verified"||o.paymentStatus==="cash_on_delivery").length;
- $("sellerStats").innerHTML=`<div class="stat">የእኔ ምርቶች<strong>${mine}</strong></div><div class="stat">ትዕዛዞች<strong>${paid}</strong></div>`;
-}
-function listenAdminOrders(){
- if(unsubAdminOrders)unsubAdminOrders();
- const q=query(collection(db,"orders"),orderBy("createdAt","desc"));
- unsubAdminOrders=onSnapshot(q,s=>{
-  orders=s.docs.map(d=>({id:d.id,...d.data()}));renderAdmin();
- },e=>{$("adminOrders").textContent=e.message;});
-}
-function renderAdmin(){
- const verified=orders.filter(o=>o.paymentStatus==="verified");
- const commissionTotal=verified.reduce((sum,o)=>sum+Number(o.commission||0),0);
- $("adminStats").innerHTML=`<div class="stat">ጠቅላላ ትዕዛዝ<strong>${orders.length}</strong></div><div class="stat">የተረጋገጠ ኮሚሽን<strong>${money(commissionTotal)} ብር</strong></div>`;
- $("adminOrders").innerHTML=orders.length?orders.map(o=>orderCard(o,true)).join(""):"<p class='muted'>ትዕዛዝ የለም።</p>";
- $("adminOrders").querySelectorAll("[data-verify]").forEach(b=>b.onclick=()=>verifyPayment(b.dataset.verify));
- $("adminOrders").querySelectorAll("[data-reject]").forEach(b=>b.onclick=()=>rejectPayment(b.dataset.reject));
-}
-window.verifyPayment=async id=>{
- if(!isAdmin){alert("Admin ብቻ ይህን ማድረግ ይችላል።");return;}
- if(!confirm("ክፍያውን በእውነት አረጋግጠዋል?"))return;
- try{await updateDoc(doc(db,"orders",id),{paymentStatus:"verified",verifiedBy:currentUser.uid,verifiedAt:serverTimestamp()});alert("ክፍያው ተረጋግጧል።");}catch(e){showError(e);}
-};
-window.rejectPayment=async id=>{
- if(!isAdmin)return;
- if(!confirm("የክፍያ ማስረጃውን ውድቅ ማድረግ ይፈልጋሉ?"))return;
- try{await updateDoc(doc(db,"orders",id),{paymentStatus:"rejected",verifiedBy:currentUser.uid,verifiedAt:serverTimestamp()});alert("ክፍያው ውድቅ ተደርጓል።");}catch(e){showError(e);}
-};
-window.searchProducts=()=>{searchTerm=$("searchInput").value.trim();renderProducts();};
-$("searchInput").addEventListener("input",window.searchProducts);
+$("authForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ try{
+  await signInWithEmailAndPassword(auth,$("email").value,$("password").value);
+  toast("በተሳካ ሁኔታ ገብተዋል!");
+ }catch(e){toast(e.message);}
+});
 
-let currentLanguage=localStorage.getItem("allInOneLanguage")||"am";
-window.setLanguage=lang=>{
- currentLanguage=lang;document.documentElement.lang=lang;localStorage.setItem("allInOneLanguage",lang);
- document.querySelectorAll("[data-am]").forEach(el=>{el.textContent=el.getAttribute(lang==="am"?"data-am":"data-en");});
- document.querySelectorAll("[data-placeholder-am]").forEach(el=>{el.placeholder=el.getAttribute(lang==="am"?"data-placeholder-am":"data-placeholder-en");});
- $("languageButton").textContent=lang==="am"?"English":"አማርኛ";
+window.logout=async()=>{
+ await signOut(auth);
+ toast("ወጥተዋል");
+ showPage("home");
 };
-window.toggleLanguage=()=>setLanguage(currentLanguage==="am"?"en":"am");
-setLanguage(currentLanguage);
-listenProducts();
+
+window.favorite=async id=>{
+ if(!currentUser)return toast("Login ያድርጉ።");
+ try{
+  await addDoc(collection(db,"favorites"),{
+   userId:currentUser.uid,productId:id,createdAt:serverTimestamp()
+  });
+  toast("በFavorites ተጨምሯል!");
+ }catch(e){toast(e.message);}
+};
+
+async function loadFavorites(){
+ if(!currentUser)return $("favoriteList").textContent="Login ያድርጉ።";
+ const snap=await getDocs(query(collection(db,"favorites"),where("userId","==",currentUser.uid)));
+ const ids=[...new Set(snap.docs.map(d=>d.data().productId))];
+ $("favoriteList").innerHTML=productsData.filter(p=>ids.includes(p.id)).map(p=>`
+ <div class="card"><img src="${safe(p.image)}"><div class="info">
+ <h3>${safe(p.name)}</h3><b class="price">${money(p.price)}</b>
+ </div></div>`).join("")||"ምንም የተቀመጠ ምርት የለም።";
+}
+
+window.addCart=id=>{
+ let cart=JSON.parse(localStorage.getItem("cart")||"[]");
+ if(!cart.includes(id))cart.push(id);
+ localStorage.setItem("cart",JSON.stringify(cart));
+ toast("ወደ Cart ተጨምሯል!");
+};
+
+function loadCart(){
+ const cart=JSON.parse(localStorage.getItem("cart")||"[]");
+ const items=productsData.filter(p=>cart.includes(p.id));
+ $("cartList").innerHTML=items.map(p=>`
+ <div class="panel"><b>${safe(p.name)}</b> - ${money(p.price)}
+ <button onclick="removeCart('${p.id}')">❌</button></div>`).join("")||"Cart ባዶ ነው።";
+ $("total").textContent="ጠቅላላ: "+money(items.reduce((s,p)=>s+Number(p.price),0));
+}
+
+window.removeCart=id=>{
+ let cart=JSON.parse(localStorage.getItem("cart")||"[]").filter(x=>x!==id);
+ localStorage.setItem("cart",JSON.stringify(cart));loadCart();
+};
+
+window.checkout=async()=>{
+ if(!currentUser)return toast("Login ያድርጉ።");
+ const cart=JSON.parse(localStorage.getItem("cart")||"[]");
+ const items=productsData.filter(p=>cart.includes(p.id));
+ if(!items.length)return toast("Cart ባዶ ነው።");
+ try{
+  await addDoc(collection(db,"orders"),{
+   buyerId:currentUser.uid,
+   items:items.map(p=>({productId:p.id,name:p.name,price:p.price,sellerId:p.sellerId})),
+   total:items.reduce((s,p)=>s+Number(p.price),0),
+   status:"pending",
+   createdAt:serverTimestamp()
+  });
+  localStorage.removeItem("cart");
+  loadCart();
+  toast("ትዕዛዝ ተልኳል!");
+ }catch(e){toast(e.message);}
+};
+
+window.loadMyProducts=async()=>{
+ if(!currentUser)return $("myProducts").textContent="Login ያድርጉ።";
+ const snap=await getDocs(query(collection(db,"products"),where("sellerId","==",currentUser.uid)));
+ $("myProducts").innerHTML=snap.docs.map(d=>{
+  const p=d.data();
+  return `<div class="panel">${safe(p.name)} - ${money(p.price)}
+  <button onclick="deleteProduct('${d.id}')">Delete</button></div>`;
+ }).join("")||"ገና ምርት አልለጠፉም።";
+};
+
+window.deleteProduct=async id=>{
+ if(!confirm("ምርቱን ማጥፋት ይፈልጋሉ?"))return;
+ try{
+  await deleteDoc(doc(db,"products",id));
+  toast("ተሰርዟል");
+  loadMyProducts();loadProducts();
+ }catch(e){toast(e.message);}
+};
+
+window.contactSeller=async id=>{
+ if(!currentUser)return toast("መጀመሪያ Login ያድርጉ።");
+ const p=productsData.find(x=>x.id===id);
+ if(!p||p.sellerId===currentUser.uid)return toast("የራስዎን ምርት መልዕክት መላክ አይችሉም።");
+ try{
+  const snap=await getDocs(query(collection(db,"chats"),
+   where("members","array-contains",currentUser.uid)));
+  let chat=snap.docs.find(d=>d.data().productId===id&&d.data().members.includes(p.sellerId));
+  if(!chat){
+   const newChat=await addDoc(collection(db,"chats"),{
+    members:[currentUser.uid,p.sellerId],
+    productId:id,
+    productName:p.name,
+    createdAt:serverTimestamp()
+   });
+   activeChat=newChat.id;
+  }else activeChat=chat.id;
+  $("chatTitle").textContent=p.name;
+  $("chatBox").classList.remove("hidden");
+  showPage("chat");
+  loadMessages();
+ }catch(e){toast(e.message);}
+};
+
+async function loadChats(){
+ if(!currentUser)return $("chatList").textContent="Login ያድርጉ።";
+ const snap=await getDocs(query(collection(db,"chats"),
+ where("members","array-contains",currentUser.uid)));
+ $("chatList").innerHTML=snap.docs.map(d=>`
+ <div class="panel"><button class="primary" onclick="openChat('${d.id}','${safe(d.data().productName)}')">${safe(d.data().productName||"Chat")}</button></div>`).join("")||"ውይይት የለም።";
+}
+
+window.openChat=(id,name)=>{
+ activeChat=id;$("chatTitle").textContent=name;
+ $("chatBox").classList.remove("hidden");loadMessages();
+};
+
+function loadMessages(){
+ if(!activeChat)return;
+ onSnapshot(query(collection(db,"chats",activeChat,"messages"),orderBy("createdAt")),
+ snap=>{
+  $("messages").innerHTML=snap.docs.map(d=>{
+   const m=d.data();
+   return `<div class="panel"><b>${safe(m.senderName)}</b><p>${safe(m.text)}</p></div>`;
+  }).join("");
+ });
+}
+
+$("messageForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(!currentUser||!activeChat)return;
+ const textValue=$("messageInput").value.trim();
+ if(!textValue)return;
+ try{
+  await addDoc(collection(db,"chats",activeChat,"messages"),{
+   senderId:currentUser.uid,
+   senderName:currentUser.displayName||currentUser.email,
+   text:textValue,
+   createdAt:serverTimestamp()
+  });
+  $("messageInput").value="";
+ }catch(e){toast(e.message);}
+});
+
+loadProducts();
 </script>
+<footer>JIJI MARKET | ALL IN ONE</footer>
 </body>
 </html>
