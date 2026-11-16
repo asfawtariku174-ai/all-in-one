@@ -44,49 +44,58 @@ label{font-weight:bold;font-size:14px}
 .row{display:flex;gap:8px}
 .row>*{flex:1;min-width:0}
 
-/* የታችኛው ናቪጌሽን (Saved የጠፋበት) */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;align-items:center;padding:6px 2px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 10px #0002;z-index:30}
-.bottom-nav button{background:white;color:#555;border-radius:7px;padding:4px 2px;font-size:10px;flex:1;border:0;cursor:pointer;white-space:nowrap}
+/* Bottom navigation: smaller, consistent labels */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  padding:6px 2px calc(6px + env(safe-area-inset-bottom));
+  box-shadow:0 -2px 10px #0002;
+  z-index:30;
+}
+.bottom-nav button{
+  background:white;
+  color:#555;
+  border-radius:7px;
+  padding:4px 2px;
+  font-size:11px;
+  flex:1;
+  border:0;
+  cursor:pointer;
+  white-space:nowrap;
+}
 .bottom-nav button.active{color:#087b55;font-weight:bold}
-.bottom-nav span{display:block;font-size:17px;margin-bottom:2px}
+.bottom-nav button > span:first-child{
+  display:block;
+  font-size:19px;
+  line-height:1.2;
+  margin-bottom:2px;
+}
+.bottom-nav button > span:last-child{
+  display:block;
+  font-size:11px;
+  line-height:1.2;
+}
 
 .notice{padding:10px;border-radius:8px;background:#fff4d6;color:#745500;margin:10px 0;font-size:13px}
 .empty{text-align:center;color:#777;padding:30px 10px}
 .hidden{display:none!important}
 hr{border:0;border-top:1px solid #eee;margin:12px 0}
 
-/* የተስተካከለ የዩዘር ዳሽቦርድ እና የ Log Out አቀማመጥ */
-#userBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 280px;
-}
-.user-top-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.user-links {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-.user-links button {
-  flex: 1;
-  min-width: 100px;
-}
-.logout-container {
-  margin-top: auto;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-}
-.logout-container button {
-  width: 100%;
-}
+/* User dashboard and logout layout */
+#userBox{display:flex;flex-direction:column;justify-content:space-between;min-height:280px}
+.user-top-section{display:flex;flex-direction:column;gap:12px}
+.user-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.user-links button{flex:1;min-width:100px}
+.logout-container{margin-top:auto;padding-top:15px;border-top:1px solid #eee}
+.logout-container button{width:100%}
 
-/* የምርት ዝርዝር እና Zoom ማሳያ (Product Detail & Zoom Modal) */
+/* Product detail and zoom modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:100;padding:12px;overflow-y:auto}
 .modal.open{display:flex}
 .modal-box{background:white;border-radius:14px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 10px 30px #0005;animation:popIn .2s ease}
@@ -100,7 +109,6 @@ hr{border:0;border-top:1px solid #eee;margin:12px 0}
 .modal-content h2{margin:0 0 6px;color:#222;font-size:21px}
 .modal-desc{margin:10px 0;line-height:1.5;color:#444;font-size:14px;white-space:pre-line}
 .seller-info{background:#f4f7f6;padding:10px;border-radius:8px;font-size:13px;margin:12px 0}
-
 @media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.card img{height:180px}}
 </style>
 </head>
@@ -201,7 +209,6 @@ hr{border:0;border-top:1px solid #eee;margin:12px 0}
         <button class="secondary" onclick="registerUser()" data-am="መለያ ፍጠር" data-en="Register">መለያ ፍጠር</button>
       </div>
     </div>
-    
     <div id="userBox" class="panel hidden">
       <div class="user-top-section">
         <div>
@@ -281,12 +288,10 @@ const firebaseConfig={
  messagingSenderId:"1023627656415",
  appId:"1:1023627656415:web:0072d483258742a7bbfd6a"
 };
-
 const ADMIN_UID="hsmHWK8c74O4wq7GcHQnZr9JFfw1";
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
-
 let currentUser=null;
 let productsData=[];
 let selectedCategory="all";
@@ -294,11 +299,9 @@ let language=localStorage.getItem("allinone_language")||"am";
 let favorites=JSON.parse(localStorage.getItem("allinone_favorites")||"[]");
 let cart=JSON.parse(localStorage.getItem("allinone_cart")||"[]");
 let unsubscribeMessages=null;
-
 const $=id=>document.getElementById(id);
 const isAdmin=()=>currentUser&&currentUser.uid===ADMIN_UID;
 const money=value=>Number(value||0).toLocaleString();
-
 function msg(am,en){alert(language==="am"?am:en)}
 function saveLocal(){
  localStorage.setItem("allinone_favorites",JSON.stringify(favorites));
@@ -314,9 +317,7 @@ window.setLanguage=function(value){
  });
  $("searchInput").placeholder=value==="am"?"ምርት ፈልግ...":"Search products...";
  $("zoomTip").textContent=value==="am"?"🔍 ፎቶውን ለማጉላት ይንኩ":"🔍 Tap image to zoom";
- renderProducts();
- renderFavorites();
- renderCart();
+ renderProducts();renderFavorites();renderCart();
 };
 window.showPage=function(pageId,button){
  if(pageId==="adminPage"&&!isAdmin()){msg("የአስተዳዳሪ ፈቃድ የለዎትም","Admin access only");return}
@@ -337,8 +338,7 @@ window.showPage=function(pageId,button){
 window.setCategory=function(category,button){
  selectedCategory=category;
  document.querySelectorAll("#categoryButtons button").forEach(b=>b.classList.remove("active"));
- button.classList.add("active");
- renderProducts();
+ button.classList.add("active");renderProducts();
 };
 window.loginUser=async function(){
  const email=$("authEmail").value.trim(),password=$("authPassword").value;
@@ -363,10 +363,8 @@ onAuthStateChanged(auth,user=>{
  if(user){
   $("userEmail").textContent=user.email||"";
   $("userUid").textContent="UID: "+user.uid;
-  
-  const linksContainer = $("userLinksContainer");
-  let adminButton = $("adminShortcut");
-  
+  const linksContainer=$("userLinksContainer");
+  let adminButton=$("adminShortcut");
   if(isAdmin()){
    if(!adminButton){
     adminButton=document.createElement("button");
@@ -375,19 +373,15 @@ onAuthStateChanged(auth,user=>{
     adminButton.id="adminShortcut";
     linksContainer.appendChild(adminButton);
    }
-  } else {
-   if(adminButton) adminButton.remove();
-  }
+  }else if(adminButton)adminButton.remove();
  }else{
   const old=$("adminShortcut");if(old)old.remove();
  }
 });
-
 async function loadProducts(){
  try{
   const snap=await getDocs(query(collection(db,"products"),orderBy("createdAt","desc")));
-  productsData=snap.docs.map(d=>({id:d.id,...d.data()}));
-  renderProducts();
+  productsData=snap.docs.map(d=>({id:d.id,...d.data()}));renderProducts();
  }catch(e){
   console.error(e);
   $("productsGrid").innerHTML='<div class="empty">Products could not load. Check Firestore setup and rules.</div>';
@@ -404,7 +398,7 @@ function productCard(p){
    <h3 onclick="openProductModal('${p.id}')">${name}</h3>
    <div class="price">${money(p.price)} ETB</div>
    <p class="muted">${description}</p>
-   <p class="muted">${escapeHtml(p.sellerEmail||"")} </p>
+   <p class="muted">${escapeHtml(p.sellerEmail||"")}</p>
    <div class="actions">
     <button onclick="addToCart('${p.id}')">🛒 ${language==="am"?"ጨምር":"Add"}</button>
     <button class="secondary" onclick="toggleFavorite('${p.id}')">${liked?"❤️":"🤍"}</button>
@@ -414,12 +408,9 @@ function productCard(p){
   </div>
  </article>`;
 }
-
 window.openProductModal=function(id){
- const p=productsData.find(x=>x.id===id);
- if(!p)return;
- const img=$("modalImg");
- img.classList.remove("zoomed");
+ const p=productsData.find(x=>x.id===id);if(!p)return;
+ const img=$("modalImg");img.classList.remove("zoomed");
  img.src=p.imageUrl||"https://placehold.co/600x400?text=ALLIN+ONE";
  $("modalTitle").textContent=p.name||"";
  $("modalPrice").textContent=money(p.price)+" ETB";
@@ -429,28 +420,16 @@ window.openProductModal=function(id){
  $("modalActions").innerHTML=`
   <button style="flex:1" onclick="addToCart('${p.id}')">🛒 ${language==="am"?"ወደ ቅርጫት ጨምር":"Add to Cart"}</button>
   ${p.phone?`<a href="tel:${escapeAttr(p.phone)}" style="text-decoration:none"><button type="button" class="secondary">📞 ${language==="am"?"ደውል":"Call"}</button></a>`:""}
-  <button class="secondary" onclick="closeProductModal();contactSeller('${p.sellerUid||""}')">💬 ${language==="am"?"መልዕክት":"Chat"}</button>
- `;
+  <button class="secondary" onclick="closeProductModal();contactSeller('${p.sellerUid||""}')">💬 ${language==="am"?"መልዕክት":"Chat"}</button>`;
  $("productModal").classList.add("open");
 };
-
-window.closeProductModal=function(){
- $("productModal").classList.remove("open");
- $("modalImg").classList.remove("zoomed");
-};
-
+window.closeProductModal=function(){$("productModal").classList.remove("open");$("modalImg").classList.remove("zoomed")};
 window.contactSeller=function(sellerUid){
  if(!sellerUid)return msg("የሻጭ መረጃ የለም","Seller info unavailable");
  showPage("chatPage");
- if(currentUser){
-  $("chatRecipient").value=sellerUid;
-  $("chatMessage").focus();
- }
+ if(currentUser){$("chatRecipient").value=sellerUid;$("chatMessage").focus()}
 };
-
-function escapeHtml(s){
- return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function escapeAttr(s){return escapeHtml(s)}
 window.renderProducts=function(){
  const term=$("searchInput").value.toLowerCase().trim();
@@ -473,9 +452,7 @@ window.addToCart=function(id){
  if(!cart.includes(id))cart.push(id);
  saveLocal();renderCart();msg("ወደ ቅርጫት ተጨምሯል","Added to cart");
 };
-window.removeFromCart=function(id){
- cart=cart.filter(x=>x!==id);saveLocal();renderCart();
-};
+window.removeFromCart=function(id){cart=cart.filter(x=>x!==id);saveLocal();renderCart()};
 function renderCart(){
  const items=productsData.filter(p=>cart.includes(p.id));
  $("cartItems").innerHTML=items.length?items.map(p=>`<div class="panel">
@@ -484,116 +461,41 @@ function renderCart(){
  </div>`).join(""):`<div class="empty">${language==="am"?"ቅርጫቱ ባዶ ነው":"Your cart is empty"}</div>`;
  $("cartTotal").textContent=money(items.reduce((sum,p)=>sum+Number(p.price||0),0));
 }
-
-window.publishProduct = async function () {
-  if (!currentUser) {
-    return msg("መጀመሪያ ይግቡ", "Please login first");
-  }
-
-  const name = $("productName").value.trim();
-  const price = Number($("productPrice").value);
-  const category = $("productCategory").value;
-  const description = $("productDescription").value.trim();
-  const phone = $("sellerPhone").value.trim();
-  const file = $("productImage").files[0];
-  const btn = $("publishButton");
-
-  if (!name || !Number.isFinite(price) || price <= 0 || !file) {
-    return msg(
-      "ስም፣ ትክክለኛ ዋጋ እና ፎቶ ያስገቡ",
-      "Enter name, valid price and image"
-    );
-  }
-
-  if (file.size > 5 * 1024 * 1024) {
-    return msg("ፎቶው ከ5MB መብለጥ የለበትም", "Image must be under 5MB");
-  }
-
-  let stage = "ፎቶ በመጫን ላይ";
-
-  btn.disabled = true;
-  const oldText = btn.textContent;
-  btn.textContent = "Publishing...";
-
-  try {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "phmzv3pr");
-
-    const cloudinaryRes = await fetch("https://api.cloudinary.com/v1_1/idnxqboa/image/upload", {
-      method: "POST",
-      body: formData
-    });
-
-    const cloudinaryData = await cloudinaryRes.json();
-    if (!cloudinaryRes.ok) {
-      throw new Error(cloudinaryData.error?.message || "Cloudinary upload failed");
-    }
-
-    const imageUrl = cloudinaryData.secure_url;
-
-    stage = "ምርት ወደ Firestore በማስቀመጥ ላይ";
-
-    await addDoc(collection(db, "products"), {
-      name,
-      price,
-      category,
-      description,
-      phone,
-      imageUrl,
-      sellerUid: currentUser.uid,
-      sellerEmail: currentUser.email || "",
-      createdAt: serverTimestamp(),
-      status: "active"
-    });
-
-    ["productName", "productPrice", "productDescription", "sellerPhone"].forEach(id => {
-      $(id).value = "";
-    });
-
-    $("productImage").value = "";
-
-    msg(
-      "ምርቱ በተሳካ ሁኔታ ታትሟል",
-      "Product published successfully"
-    );
-
-    try {
-      await loadProducts();
-      showPage("homePage");
-    } catch (refreshError) {
-      console.error("Product refresh error:", refreshError);
-    }
-
-  } catch (e) {
-    console.error("Publish error:", stage, e);
-    msg(
-      stage + " ላይ ችግር ተፈጥሯል: " + (e.code || e.message),
-      "Failed during " + stage + ": " + (e.code || e.message)
-    );
-  } finally {
-    btn.disabled = false;
-    btn.textContent = oldText;
-  }
+window.publishProduct=async function(){
+ if(!currentUser)return msg("መጀመሪያ ይግቡ","Please login first");
+ const name=$("productName").value.trim(),price=Number($("productPrice").value),category=$("productCategory").value;
+ const description=$("productDescription").value.trim(),phone=$("sellerPhone").value.trim(),file=$("productImage").files[0],btn=$("publishButton");
+ if(!name||!Number.isFinite(price)||price<=0||!file)return msg("ስም፣ ትክክለኛ ዋጋ እና ፎቶ ያስገቡ","Enter name, valid price and image");
+ if(file.size>5*1024*1024)return msg("ፎቶው ከ5MB መብለጥ የለበትም","Image must be under 5MB");
+ let stage="ፎቶ በመጫን ላይ";btn.disabled=true;const oldText=btn.textContent;btn.textContent="Publishing...";
+ try{
+  const formData=new FormData();formData.append("file",file);formData.append("upload_preset","phmzv3pr");
+  const cloudinaryRes=await fetch("https://api.cloudinary.com/v1_1/idnxqboa/image/upload",{method:"POST",body:formData});
+  const cloudinaryData=await cloudinaryRes.json();
+  if(!cloudinaryRes.ok)throw new Error(cloudinaryData.error?.message||"Cloudinary upload failed");
+  const imageUrl=cloudinaryData.secure_url;stage="ምርት ወደ Firestore በማስቀመጥ ላይ";
+  await addDoc(collection(db,"products"),{name,price,category,description,phone,imageUrl,sellerUid:currentUser.uid,sellerEmail:currentUser.email||"",createdAt:serverTimestamp(),status:"active"});
+  ["productName","productPrice","productDescription","sellerPhone"].forEach(id=>$(id).value="");
+  $("productImage").value="";
+  msg("ምርቱ በተሳካ ሁኔታ ታትሟል","Product published successfully");
+  try{await loadProducts();showPage("homePage")}catch(refreshError){console.error("Product refresh error:",refreshError)}
+ }catch(e){
+  console.error("Publish error:",stage,e);
+  msg(stage+" ላይ ችግር ተፈጥሯል: "+(e.code||e.message),"Failed during "+stage+": "+(e.code||e.message));
+ }finally{btn.disabled=false;btn.textContent=oldText}
 };
-
 window.sendMessage=async function(){
  if(!currentUser)return msg("መጀመሪያ ይግቡ","Please login first");
  const toUid=$("chatRecipient").value.trim(),message=$("chatMessage").value.trim();
  if(!toUid||!message)return msg("UID እና መልዕክት ያስገቡ","Enter recipient UID and message");
  try{
-  await addDoc(collection(db,"messages"),{
-   fromUid:currentUser.uid,toUid,message,
-   createdAt:serverTimestamp()
-  });
+  await addDoc(collection(db,"messages"),{fromUid:currentUser.uid,toUid,message,createdAt:serverTimestamp()});
   $("chatMessage").value="";msg("መልዕክቱ ተልኳል","Message sent");loadMessages();
  }catch(e){msg("መልዕክት መላክ አልተቻለም: "+e.message,"Message failed: "+e.message)}
 };
 function loadMessages(){
- if(!currentUser)return;
- if(unsubscribeMessages)unsubscribeMessages();
- const box=$("chatList");
- const q=query(collection(db,"messages"),where("toUid","==",currentUser.uid));
+ if(!currentUser)return;if(unsubscribeMessages)unsubscribeMessages();
+ const box=$("chatList"),q=query(collection(db,"messages"),where("toUid","==",currentUser.uid));
  unsubscribeMessages=onSnapshot(q,snap=>{
   const received=snap.docs.map(d=>({id:d.id,...d.data()}));
   box.innerHTML=received.length?received.map(m=>`<div class="panel"><b>From:</b> ${escapeHtml(m.fromUid)}<p>${escapeHtml(m.message)}</p></div>`).join(""):`<div class="empty">No messages yet</div>`;
@@ -610,24 +512,16 @@ window.checkout=async function(){
  const total=items.reduce((s,p)=>s+Number(p.price||0),0);
  const reference=prompt(language==="am"?"የክፍያ ማረጋገጫ ቁጥር (ካለ)":"Payment reference (if available)","")||"";
  try{
-  await addDoc(collection(db,"orders"),{
-   buyerUid:currentUser.uid,buyerEmail:currentUser.email||"",
-   items:items.map(p=>({productId:p.id,name:p.name,price:Number(p.price),sellerUid:p.sellerUid||""})),
-   total,paymentMethod:payment,paymentReference:reference,
-   paymentStatus:"pending",status:"pending",createdAt:serverTimestamp()
-  });
-  cart=[];saveLocal();renderCart();
-  msg("ትዕዛዝዎ ተመዝግቧል። ክፍያው እስኪረጋገጥ ይጠብቁ።","Order submitted. Payment is pending verification.");
+  await addDoc(collection(db,"orders"),{buyerUid:currentUser.uid,buyerEmail:currentUser.email||"",items:items.map(p=>({productId:p.id,name:p.name,price:Number(p.price),sellerUid:p.sellerUid||""})),total,paymentMethod:payment,paymentReference:reference,paymentStatus:"pending",status:"pending",createdAt:serverTimestamp()});
+  cart=[];saveLocal();renderCart();msg("ትዕዛዝዎ ተመዝግቧል። ክፍያው እስኪረጋገጥ ይጠብቁ።","Order submitted. Payment is pending verification.");
  }catch(e){msg("ትዕዛዝ መመዝገብ አልተቻለም: "+e.message,"Order failed: "+e.message)}
 };
 async function loadSellerDashboard(){
- if(!currentUser)return;
- $("sellerProducts").innerHTML="Loading...";
+ if(!currentUser)return;$("sellerProducts").innerHTML="Loading...";
  try{
   const snap=await getDocs(query(collection(db,"products"),where("sellerUid","==",currentUser.uid)));
   const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
-  $("sellerProducts").innerHTML=rows.length?rows.map(p=>`<div class="panel"><b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB
-   <button class="danger" onclick="deleteOwnProduct('${p.id}')">Delete</button></div>`).join(""):"<div class='empty'>No products</div>";
+  $("sellerProducts").innerHTML=rows.length?rows.map(p=>`<div class="panel"><b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB <button class="danger" onclick="deleteOwnProduct('${p.id}')">Delete</button></div>`).join(""):"<div class='empty'>No products</div>";
   const orderSnap=await getDocs(collection(db,"orders"));
   const orders=orderSnap.docs.map(d=>({id:d.id,...d.data()})).filter(o=>(o.items||[]).some(i=>i.sellerUid===currentUser.uid));
   $("sellerOrders").innerHTML=orders.length?orders.map(o=>`<div class="panel"><b>Order:</b> ${escapeHtml(o.id)}<p>${money(o.total)} ETB — ${escapeHtml(o.status||"pending")}</p></div>`).join(""):"<div class='empty'>No orders</div>";
@@ -636,116 +530,63 @@ async function loadSellerDashboard(){
 window.deleteOwnProduct=async function(id){
  if(!currentUser||!confirm("Delete this product?"))return;
  try{
-  const p=productsData.find(x=>x.id===id);
-  if(p&&p.sellerUid!==currentUser.uid)throw new Error("Not your product");
+  const p=productsData.find(x=>x.id===id);if(p&&p.sellerUid!==currentUser.uid)throw new Error("Not your product");
   await deleteDoc(doc(db,"products",id));await loadProducts();loadSellerDashboard();
  }catch(e){msg(e.message,e.message)}
 };
 async function loadMyOrders(){
- if(!currentUser)return;
- $("myOrders").innerHTML="Loading...";
+ if(!currentUser)return;$("myOrders").innerHTML="Loading...";
  try{
   const snap=await getDocs(query(collection(db,"orders"),where("buyerUid","==",currentUser.uid)));
   const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
-  $("myOrders").innerHTML=rows.length
-   ?rows.map(o=>`
-    <div class="panel">
-     <b>Order ${escapeHtml(o.id)}</b>
-     <p>${money(o.total)} ETB</p>
-     <p>Payment: ${escapeHtml(o.paymentStatus||"pending")}</p>
-     <p>Order Status:
-      <b style="color:${o.status==="cancelled"?"#c0392b":o.status==="completed"?"#087b55":"#b8860b"}">
-       ${escapeHtml(o.status||"pending")}
-      </b>
-     </p>
-    </div>
-   `).join("")
-   :"<div class='empty'>No orders yet</div>";
+  $("myOrders").innerHTML=rows.length?rows.map(o=>`<div class="panel">
+   <b>Order ${escapeHtml(o.id)}</b><p>${money(o.total)} ETB</p>
+   <p>Payment: ${escapeHtml(o.paymentStatus||"pending")}</p>
+   <p>Order Status: <b style="color:${o.status==="cancelled"?"#c0392b":o.status==="completed"?"#087b55":"#b8860b"}">${escapeHtml(o.status||"pending")}</b></p>
+  </div>`).join(""):"<div class='empty'>No orders yet</div>";
  }catch(e){$("myOrders").textContent=e.message}
 }
-
 async function loadAdminDashboard(){
- if(!isAdmin()){
-  msg("Admin only","Admin access only");
-  return;
- }
-
+ if(!isAdmin()){msg("Admin only","Admin access only");return}
  $("adminOrders").innerHTML="Loading orders...";
-
  try{
   const orderSnap=await getDocs(query(collection(db,"orders"),orderBy("createdAt","desc")));
   const orders=orderSnap.docs.map(d=>({id:d.id,...d.data()})).filter(o=>o.status!=="cancelled");
-
-  $("adminOrders").innerHTML=orders.length
-   ?orders.map(o=>`
-    <div class="panel">
-     <b>Order:</b> ${escapeHtml(o.id)}
-     <p>Buyer: ${escapeHtml(o.buyerEmail||"")}</p>
-     <p>Total: ${money(o.total)} ETB</p>
-     <p>Payment: ${escapeHtml(o.paymentMethod||"")} / ${escapeHtml(o.paymentReference||"")}</p>
-     <p>Payment Status: <b>${escapeHtml(o.paymentStatus||"pending")}</b></p>
-     <p>Order Status: <b>${escapeHtml(o.status||"pending")}</b></p>
-
-     <div class="actions">
-      <button onclick="updateOrderStatus('${o.id}','verify')">Verify Payment</button>
-      <button class="secondary" onclick="updateOrderStatus('${o.id}','complete')">Complete</button>
-      <button class="danger" onclick="updateOrderStatus('${o.id}','cancel')">Cancel</button>
-     </div>
-    </div>
-   `).join("")
-   :'<div class="empty">No orders</div>';
-
+  $("adminOrders").innerHTML=orders.length?orders.map(o=>`<div class="panel">
+   <b>Order:</b> ${escapeHtml(o.id)}
+   <p>Buyer: ${escapeHtml(o.buyerEmail||"")}</p><p>Total: ${money(o.total)} ETB</p>
+   <p>Payment: ${escapeHtml(o.paymentMethod||"")} / ${escapeHtml(o.paymentReference||"")}</p>
+   <p>Payment Status: <b>${escapeHtml(o.paymentStatus||"pending")}</b></p>
+   <p>Order Status: <b>${escapeHtml(o.status||"pending")}</b></p>
+   <div class="actions">
+    <button onclick="updateOrderStatus('${o.id}','verify')">Verify Payment</button>
+    <button class="secondary" onclick="updateOrderStatus('${o.id}','complete')">Complete</button>
+    <button class="danger" onclick="updateOrderStatus('${o.id}','cancel')">Cancel</button>
+   </div>
+  </div>`).join(""):'<div class="empty">No orders</div>';
   const productSnap=await getDocs(collection(db,"products"));
   const products=productSnap.docs.map(d=>({id:d.id,...d.data()}));
-
-  $("adminProducts").innerHTML=products.length
-   ?products.map(p=>`
-    <div class="panel">
-     <b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB
-     <button class="danger" onclick="adminDeleteProduct('${p.id}')">Delete</button>
-    </div>
-   `).join("")
-   :'<div class="empty">No products</div>';
-
- }catch(e){
-  console.error("Admin dashboard error:",e);
-  $("adminOrders").innerHTML=`<div class="notice">${escapeHtml(e.message)}</div>`;
- }
+  $("adminProducts").innerHTML=products.length?products.map(p=>`<div class="panel"><b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB <button class="danger" onclick="adminDeleteProduct('${p.id}')">Delete</button></div>`).join(""):'<div class="empty">No products</div>';
+ }catch(e){console.error("Admin dashboard error:",e);$("adminOrders").innerHTML=`<div class="notice">${escapeHtml(e.message)}</div>`}
 }
-
 window.updateOrderStatus=async function(id,action){
  if(!isAdmin())return msg("Admin only","Admin access only");
  if(action==="cancel"&&!confirm("ይህን ትዕዛዝ መሰረዝ ይፈልጋሉ?"))return;
-
  let changes={};
- if(action==="verify") changes={paymentStatus:"verified",updatedAt:serverTimestamp()};
- else if(action==="complete") changes={status:"completed",updatedAt:serverTimestamp()};
- else if(action==="cancel") changes={status:"cancelled",updatedAt:serverTimestamp()};
+ if(action==="verify")changes={paymentStatus:"verified",updatedAt:serverTimestamp()};
+ else if(action==="complete")changes={status:"completed",updatedAt:serverTimestamp()};
+ else if(action==="cancel")changes={status:"cancelled",updatedAt:serverTimestamp()};
  else return;
-
  try{
-  await updateDoc(doc(db,"orders",id),changes);
-  await loadAdminDashboard();
+  await updateDoc(doc(db,"orders",id),changes);await loadAdminDashboard();
   msg(action==="cancel"?"ትዕዛዙ ተሰርዟል":"ትዕዛዙ ተሻሽሏል",action==="cancel"?"Order cancelled successfully":"Order updated successfully");
- }catch(e){
-  console.error(e);
-  msg("ስህተት: "+e.message,"Error: "+e.message);
- }
+ }catch(e){console.error(e);msg("ስህተት: "+e.message,"Error: "+e.message)}
 };
-
 window.adminDeleteProduct=async function(id){
- if(!isAdmin())return;
- if(!confirm("Delete this product?"))return;
-
- try{
-  await deleteDoc(doc(db,"products",id));
-  await loadProducts();
-  await loadAdminDashboard();
- }catch(e){
-  msg(e.message,e.message);
- }
+ if(!isAdmin())return;if(!confirm("Delete this product?"))return;
+ try{await deleteDoc(doc(db,"products",id));await loadProducts();await loadAdminDashboard()}
+ catch(e){msg(e.message,e.message)}
 };
-
 $("languageSelect").value=language;
 window.setLanguage(language);
 loadProducts();
