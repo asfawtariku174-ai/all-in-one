@@ -26,10 +26,11 @@ h3{margin-bottom:8px}
 .categories button{white-space:nowrap;background:#e1eee9;color:#087b55}
 .categories button.active{background:#087b55;color:white}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #00000010}
-.card img{width:100%;height:145px;object-fit:cover;background:#eee}
+.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #00000010;transition:transform .15s}
+.card:active{transform:scale(0.98)}
+.card img{width:100%;height:145px;object-fit:cover;background:#eee;cursor:pointer}
 .card-body{padding:10px}
-.card-body h3{font-size:16px;overflow-wrap:anywhere}
+.card-body h3{font-size:16px;overflow-wrap:anywhere;cursor:pointer}
 .price{font-weight:bold;color:#087b55;margin:7px 0}
 .muted{color:#777;font-size:13px}
 .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
@@ -50,6 +51,22 @@ label{font-weight:bold;font-size:14px}
 .empty{text-align:center;color:#777;padding:30px 10px}
 .hidden{display:none!important}
 hr{border:0;border-top:1px solid #eee;margin:12px 0}
+
+/* የምርት ዝርዝር እና Zoom ማሳያ (Product Detail & Zoom Modal) */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:100;padding:12px;overflow-y:auto}
+.modal.open{display:flex}
+.modal-box{background:white;border-radius:14px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 10px 30px #0005;animation:popIn .2s ease}
+@keyframes popIn{from{transform:scale(0.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.65);color:white;border-radius:50%;width:36px;height:36px;font-size:18px;padding:0;z-index:5;display:flex;align-items:center;justify-content:center}
+.zoom-wrap{background:#111;overflow:hidden;position:relative;text-align:center}
+.zoom-wrap img{width:100%;max-height:340px;object-fit:contain;transition:transform .25s ease;cursor:zoom-in;display:block;margin:auto}
+.zoom-wrap img.zoomed{transform:scale(1.85);cursor:zoom-out}
+.zoom-tip{background:#000a;color:#fff;font-size:11px;padding:4px 10px;position:absolute;bottom:8px;right:8px;border-radius:20px;pointer-events:none}
+.modal-content{padding:16px}
+.modal-content h2{margin:0 0 6px;color:#222;font-size:21px}
+.modal-desc{margin:10px 0;line-height:1.5;color:#444;font-size:14px;white-space:pre-line}
+.seller-info{background:#f4f7f6;padding:10px;border-radius:8px;font-size:13px;margin:12px 0}
+
 @media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.card img{height:180px}}
 </style>
 </head>
@@ -182,6 +199,27 @@ hr{border:0;border-top:1px solid #eee;margin:12px 0}
   </section>
 </main>
 
+<!-- የምርት ዝርዝር እና Zoom ማሳያ (Modal) -->
+<div id="productModal" class="modal" onclick="if(event.target===this)closeProductModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeProductModal()">✕</button>
+    <div class="zoom-wrap">
+      <img id="modalImg" src="" alt="Product" onclick="this.classList.toggle('zoomed')">
+      <span class="zoom-tip" id="zoomTip">🔍 ፎቶውን ለማጉላት ይንኩ</span>
+    </div>
+    <div class="modal-content">
+      <h2 id="modalTitle"></h2>
+      <div class="price" id="modalPrice" style="font-size:19px"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="seller-info">
+        <p id="modalEmail"></p>
+        <p id="modalPhone" style="margin-top:4px;font-weight:bold;color:#087b55"></p>
+      </div>
+      <div class="actions" id="modalActions"></div>
+    </div>
+  </div>
+</div>
+
 <nav class="bottom-nav">
   <button class="active" onclick="showPage('homePage',this)"><span>🏠</span><span data-am="ቤት" data-en="Home">ቤት</span></button>
   <button onclick="showPage('sellPage',this)"><span>➕</span><span data-am="ሽያጭ" data-en="Sell">ሽያጭ</span></button>
@@ -236,6 +274,7 @@ window.setLanguage=function(value){
   el.textContent=value==="am"?el.dataset.am:el.dataset.en;
  });
  $("searchInput").placeholder=value==="am"?"ምርት ፈልግ...":"Search products...";
+ $("zoomTip").textContent=value==="am"?"🔍 ፎቶውን ለማጉላት ይንኩ":"🔍 Tap image to zoom";
  renderProducts();
  renderFavorites();
  renderCart();
@@ -313,9 +352,9 @@ function productCard(p){
  const name=escapeHtml(p.name||"Product");
  const description=escapeHtml(p.description||"");
  return `<article class="card">
-  <img src="${escapeAttr(image)}" alt="${name}" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=No+Image'">
+  <img src="${escapeAttr(image)}" alt="${name}" loading="lazy" onclick="openProductModal('${p.id}')" onerror="this.src='https://placehold.co/600x400?text=No+Image'">
   <div class="card-body">
-   <h3>${name}</h3>
+   <h3 onclick="openProductModal('${p.id}')">${name}</h3>
    <div class="price">${money(p.price)} ETB</div>
    <p class="muted">${description}</p>
    <p class="muted">${escapeHtml(p.sellerEmail||"")} </p>
@@ -323,10 +362,46 @@ function productCard(p){
     <button onclick="addToCart('${p.id}')">🛒 ${language==="am"?"ጨምር":"Add"}</button>
     <button class="secondary" onclick="toggleFavorite('${p.id}')">${liked?"❤️":"🤍"}</button>
     <button class="secondary" onclick="contactSeller('${p.sellerUid||""}')">💬</button>
+    <button class="secondary" onclick="openProductModal('${p.id}')">🔍</button>
    </div>
   </div>
  </article>`;
 }
+
+// ምርቱን ሲነካ ወደ ውስጥ አስገብቶ ዝርዝርና Zoom የሚያሳይ ተግባር
+window.openProductModal=function(id){
+ const p=productsData.find(x=>x.id===id);
+ if(!p)return;
+ const img=$("modalImg");
+ img.classList.remove("zoomed");
+ img.src=p.imageUrl||"https://placehold.co/600x400?text=ALLIN+ONE";
+ $("modalTitle").textContent=p.name||"";
+ $("modalPrice").textContent=money(p.price)+" ETB";
+ $("modalDesc").textContent=p.description||"";
+ $("modalEmail").textContent=p.sellerEmail?("📧 "+p.sellerEmail):"";
+ $("modalPhone").textContent=p.phone?("📞 "+p.phone):"";
+ $("modalActions").innerHTML=`
+  <button style="flex:1" onclick="addToCart('${p.id}')">🛒 ${language==="am"?"ወደ ቅርጫት ጨምር":"Add to Cart"}</button>
+  ${p.phone?`<a href="tel:${escapeAttr(p.phone)}" style="text-decoration:none"><button type="button" class="secondary">📞 ${language==="am"?"ደውል":"Call"}</button></a>`:""}
+  <button class="secondary" onclick="closeProductModal();contactSeller('${p.sellerUid||""}')">💬 ${language==="am"?"መልዕክት":"Chat"}</button>
+ `;
+ $("productModal").classList.add("open");
+};
+
+window.closeProductModal=function(){
+ $("productModal").classList.remove("open");
+ $("modalImg").classList.remove("zoomed");
+};
+
+window.contactSeller=function(sellerUid){
+ if(!sellerUid)return msg("የሻጭ መረጃ የለም","Seller info unavailable");
+ showPage("chatPage");
+ if(currentUser){
+  $("chatRecipient").value=sellerUid;
+  $("chatMessage").focus();
+ }
+};
+
 function escapeHtml(s){
  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
@@ -395,7 +470,6 @@ window.publishProduct = async function () {
   btn.textContent = "Publishing...";
 
   try {
-    // 1. Upload image to Cloudinary ( using unsigned preset: phmzv3pr )
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "phmzv3pr");
@@ -412,7 +486,6 @@ window.publishProduct = async function () {
 
     const imageUrl = cloudinaryData.secure_url;
 
-    // 2. Save product to Firestore
     stage = "ምርት ወደ Firestore በማስቀመጥ ላይ";
 
     await addDoc(collection(db, "products"), {
@@ -428,7 +501,6 @@ window.publishProduct = async function () {
       status: "active"
     });
 
-    // 3. Clear form after successful save
     ["productName", "productPrice", "productDescription",
      "sellerPhone"].forEach(id => {
       $(id).value = "";
@@ -441,7 +513,6 @@ window.publishProduct = async function () {
       "Product published successfully"
     );
 
-    // Refresh products separately
     try {
       await loadProducts();
       showPage("homePage");
