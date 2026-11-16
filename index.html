@@ -366,37 +366,98 @@ function renderCart(){
  </div>`).join(""):`<div class="empty">${language==="am"?"ቅርጫቱ ባዶ ነው":"Your cart is empty"}</div>`;
  $("cartTotal").textContent=money(items.reduce((sum,p)=>sum+Number(p.price||0),0));
 }
-window.publishProduct=async function(){
- if(!currentUser)return msg("መጀመሪያ ይግቡ","Please login first");
- const name=$("productName").value.trim();
- const price=Number($("productPrice").value);
- const category=$("productCategory").value;
- const description=$("productDescription").value.trim();
- const phone=$("sellerPhone").value.trim();
- const file=$("productImage").files[0];
- if(!name||!price||price<=0||!file)return msg("ስም፣ ትክክለኛ ዋጋ እና ፎቶ ያስገቡ","Enter name, valid price and image");
- if(file.size>5*1024*1024)return msg("ፎቶው ከ5MB መብለጥ የለበትም","Image must be under 5MB");
- $("publishButton").disabled=true;
- try{
-  const path=ref(storage,`productImages/${currentUser.uid}/${Date.now()}_${file.name}`);
-  await uploadBytes(path,file);
-  const imageUrl=await getDownloadURL(path);
-  await addDoc(collection(db,"products"),{
-   name,price,category,description,phone,imageUrl,
-   sellerUid:currentUser.uid,sellerEmail:currentUser.email||"",
-   createdAt:serverTimestamp(),status:"active"
-  });
-  ["productName","productPrice","productDescription","sellerPhone","productImage"].forEach(id=>$(id).value="");
-  msg("ምርቱ በተሳካ ሁኔታ ታትሟል","Product published successfully");
-  await loadProducts();showPage("homePage");
- }catch(e){msg("ማተም አልተቻለም: "+e.message,"Publish failed: "+e.message)}
- finally{$("publishButton").disabled=false}
+
+window.publishProduct = async function () {
+  if (!currentUser) {
+    return msg("መጀመሪያ ይግቡ", "Please login first");
+  }
+
+  const name = $("productName").value.trim();
+  const price = Number($("productPrice").value);
+  const category = $("productCategory").value;
+  const description = $("productDescription").value.trim();
+  const phone = $("sellerPhone").value.trim();
+  const file = $("productImage").files[0];
+  const btn = $("publishButton");
+
+  if (!name || !Number.isFinite(price) || price <= 0 || !file) {
+    return msg(
+      "ስም፣ ትክክለኛ ዋጋ እና ፎቶ ያስገቡ",
+      "Enter name, valid price and image"
+    );
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    return msg("ፎቶው ከ5MB መብለጥ የለበትም", "Image must be under 5MB");
+  }
+
+  let stage = "ፎቶ በመጫን ላይ";
+
+  btn.disabled = true;
+  const oldText = btn.textContent;
+  btn.textContent = "Publishing...";
+
+  try {
+    // 1. Upload image to Firebase Storage
+    const path = ref(
+      storage,
+      `productImages/${currentUser.uid}/${Date.now()}_${file.name}`
+    );
+
+    await uploadBytes(path, file);
+    const imageUrl = await getDownloadURL(path);
+
+    // 2. Save product to Firestore
+    stage = "ምርት ወደ Firestore በማስቀመጥ ላይ";
+
+    await addDoc(collection(db, "products"), {
+      name,
+      price,
+      category,
+      description,
+      phone,
+      imageUrl,
+      sellerUid: currentUser.uid,
+      sellerEmail: currentUser.email || "",
+      createdAt: serverTimestamp(),
+      status: "active"
+    });
+
+    // 3. Clear form after successful save
+    ["productName", "productPrice", "productDescription",
+     "sellerPhone"].forEach(id => {
+      $(id).value = "";
+    });
+
+    $("productImage").value = "";
+
+    msg(
+      "ምርቱ በተሳካ ሁኔታ ታትሟል",
+      "Product published successfully"
+    );
+
+    // Refresh products separately
+    try {
+      await loadProducts();
+      showPage("homePage");
+    } catch (refreshError) {
+      console.error("Product refresh error:", refreshError);
+    }
+
+  } catch (e) {
+    console.error("Publish error:", stage, e);
+
+    msg(
+      stage + " ላይ ችግር ተፈጥሯል: " + (e.code || e.message),
+      "Failed during " + stage + ": " + (e.code || e.message)
+    );
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = oldText;
+  }
 };
-window.contactSeller=function(uid){
- if(!currentUser)return msg("መጀመሪያ ይግቡ","Please login first");
- if(!uid||uid===currentUser.uid)return msg("የሻጩ UID አልተገኘም","Seller UID unavailable");
- $("chatRecipient").value=uid;showPage("chatPage");
-};
+
 window.sendMessage=async function(){
  if(!currentUser)return msg("መጀመሪያ ይግቡ","Please login first");
  const toUid=$("chatRecipient").value.trim(),message=$("chatMessage").value.trim();
