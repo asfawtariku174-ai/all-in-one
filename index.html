@@ -185,17 +185,29 @@ hr{border:0;border-top:1px solid #eee;margin:12px 0}
     </div>
   </section>
 
-  <section id="chatPage" class="page">
-    <h2 data-am="መልዕክቶች" data-en="Messages">መልዕክቶች</h2>
-    <div id="chatList"></div>
-    <div class="form-box">
-      <label data-am="የሚላክለት UID" data-en="Recipient UID">የሚላክለት UID</label>
-      <input id="chatRecipient" placeholder="Seller UID">
-      <label data-am="መልዕክት" data-en="Message">መልዕክት</label>
-      <textarea id="chatMessage" placeholder="መልዕክብህን ጻፍ"></textarea>
-      <button onclick="sendMessage()" style="width:100%" data-am="ላክ" data-en="Send">ላክ</button>
+ 
+<section id="chatPage" class="page">
+  <h2>💬 የግል ውይይቶች</h2>
+
+  <div class="panel">
+    <h3>የውይይት ዝርዝር</h3>
+    <div id="chatList">
+      <div class="empty">Loading...</div>
     </div>
-  </section>
+  </div>
+
+  <div class="panel">
+    <h3 id="chatTitle">ውይይት ይምረጡ</h3>
+    <div id="chatThread" style="max-height:350px;overflow-y:auto">
+      <div class="empty">ሻጭ ወይም ገዢ ይምረጡ</div>
+    </div>
+
+    <input id="chatRecipient" type="hidden">
+
+    <textarea id="chatMessage" placeholder="መልዕክብህን ጻፍ..."></textarea>
+    <button onclick="sendMessage()" style="width:100%">📨 ላክ</button>
+  </div>
+</section>
 
   <section id="accountPage" class="page">
     <h2 data-am="መለያ" data-en="Account">መለያ</h2>
