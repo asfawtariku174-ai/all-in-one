@@ -256,9 +256,13 @@ function productCard(p){
   </div></article>`;
 }
 window.renderProducts=function(){
- const term=$("searchInput").value.toLowerCase().trim();
- const list=productsData.filter(p=>(selectedCategory==="all"||p.category===selectedCategory)&&((p.name||"").toLowerCase().includes(term)||(p.description||"").toLowerCase().includes(term)));
- $("productsGrid").innerHTML=list.length?list.map(productCard).join(""):'<div class="empty">ምርት አልተገኘም</div>';
+ const list=productsData.filter(p=>
+  selectedCategory==="all" || p.category===selectedCategory
+ );
+
+ $("productsGrid").innerHTML=list.length
+  ?list.map(productCard).join("")
+  :`<div class="empty">${language==="am"?"ምርት አልተገኘም":"No products found"}</div>`;
 };
 window.openProductModal=function(id){
  const p=productsData.find(x=>x.id===id);if(!p)return;
