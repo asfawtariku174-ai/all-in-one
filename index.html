@@ -356,13 +356,41 @@ async function loadProducts(){
  catch(e){console.error(e);$("productsGrid").innerHTML='<div class="empty">Products could not load. Check Firestore rules.</div>'}
 }
 function productCard(p){
- const liked=favorites.includes(p.id),image=p.imageUrl||"https://placehold.co/600x400?text=ALLIN+ONE";
- return `<article class="card"><img src="${escapeAttr(image)}" alt="${escapeHtml(p.name)}" loading="lazy" onclick="openProductModal('${p.id}')" onerror="this.src='https://placehold.co/600x400?text=No+Image'">
-  <div class="card-body"><h3 onclick="openProductModal('${p.id}')">${escapeHtml(p.name||"Product")}</h3><div class="price">${money(p.price)} ETB</div><p class="muted">${escapeHtml(p.description||"")}</p><p class="muted">${escapeHtml(p.sellerEmail||"")}</p>
-   <div class="actions"><button onclick="addToCart('${p.id}')">🛒 Add</button><button class="secondary" onclick="toggleFavorite('${p.id}')">${liked?"❤️":"🤍"}</button><button class="secondary" onclick="contactSeller('${escapeAttr(p.sellerUid||"")}')">💬 Chat</button></div>
-  </div></article>`;
-}
+ const image=p.imageUrl||"https://placehold.co/600x400?text=ALLIN+ONE";
+ const phone=String(p.phone||"").replace(/[^\d+]/g,"");
 
+ return `<article class="card">
+  <img src="${escapeAttr(image)}"
+   alt="${escapeHtml(p.name)}"
+   loading="lazy"
+   onclick="openProductModal('${p.id}')"
+   onerror="this.src='https://placehold.co/600x400?text=No+Image'">
+
+  <div class="card-body">
+   <h3 onclick="openProductModal('${p.id}')">
+    ${escapeHtml(p.name||"Product")}
+   </h3>
+
+   <div class="price">${money(p.price)} ETB</div>
+
+   <p class="muted">${escapeHtml(p.description||"")}</p>
+   <p class="muted">${escapeHtml(p.sellerEmail||"")}</p>
+
+   <div class="actions">
+    <button onclick="addToCart('${p.id}')">🛒 Add</button>
+
+    ${phone
+     ? `<a class="call-button" href="tel:${escapeAttr(phone)}">📞 Call</a>`
+     : ""}
+
+    <button class="secondary"
+     onclick="contactSeller('${escapeAttr(p.sellerUid||"")}')">
+     💬 Chat
+    </button>
+   </div>
+  </div>
+ </article>`;
+}
 window.renderProducts=function(){
  const search=$("searchInput").value.trim().toLowerCase();
 
