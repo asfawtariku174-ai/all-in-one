@@ -480,6 +480,10 @@ if(!allowed.includes(normalizedPayment))
 const paymentMethod =
   normalizedPayment==="telebirr" ? "Telebirr" : "CBE Birr";
  const reference=prompt("የክፍያ ማረጋገጫ ቁጥር","")||"";
+
+if(!reference.trim())
+  return msg("የክፍያ ማረጋገጫ ቁጥር ያስገቡ",
+             "Enter payment reference");
  const orderItems=items.map(p=>{
   const price=roundBirr(Number(p.price||0)),sellerCommission=sellerFee(price),buyerCommissionForItem=buyerFee(price);
   return {productId:p.id,name:p.name,price,sellerUid:p.sellerUid||"",sellerCommission,buyerCommission:buyerCommissionForItem,sellerNet:roundBirr(price-sellerCommission)};
