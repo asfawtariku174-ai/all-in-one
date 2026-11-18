@@ -212,15 +212,114 @@ function calculateCart(){
  return {items,subtotal,buyerCommission,buyerTotal:roundBirr(subtotal+buyerCommission)};
 }
 
+
+const translations = {
+"ሁሉም":"All",
+"ስልክ":"Phones",
+"ኤሌክትሮኒክስ":"Electronics",
+"ልብስ":"Clothes",
+"የቤት እቃ":"Home Items",
+"መኪና":"Cars",
+"ሌሎች":"Others",
+"የቅርብ ጊዜ ምርቶች":"Latest Products",
+"ምርት ለመሸጥ":"Sell Product",
+"የምርት ስም":"Product Name",
+"ዋጋ (ብር)":"Price (ETB)",
+"ምድብ":"Category",
+"የምርት መግለጫ":"Product Description",
+"ስልክ ቁጥር":"Phone Number",
+"የምርት ፎቶ":"Product Photo",
+"ምርቱን አሳትም":"Publish Product",
+"የወደድኳቸው":"Favorites",
+"የግዢ ቅርጫት":"Shopping Cart",
+"ጠቅላላ የሚከፈል":"Total Payment",
+"ትዕዛዝ አስገባ":"Place Order",
+"የግል ውይይቶች":"Private Chats",
+"ውይይት ይምረጡ":"Select Conversation",
+"መልእክትዎን እዚህ ይጻፉ...":"Write your message here...",
+"ላክ":"Send",
+"መለያ":"Account",
+"የይለፍ ቃል":"Password",
+"ግባ":"Login",
+"መለያ ፍጠር":"Create Account",
+"የእኔ ምርቶች":"My Products",
+"ትዕዛዞቼ":"My Orders",
+"ውጣ":"Logout",
+"የሻጭ ዳሽቦርድ":"Seller Dashboard",
+"የተቀበልኳቸው ትዕዛዞች":"Received Orders",
+"ቤት":"Home",
+"ሽያጭ":"Sell",
+"ቅርጫት":"Cart",
+"ቻት":"Chat",
+"ምርት አልተገኘም":"No products found",
+"ቅርጫቱ ባዶ ነው":"Your cart is empty",
+"አስወግድ":"Remove",
+"የምርቶች ድምር":"Subtotal",
+"የገዢ Commission (2%)":"Buyer Commission (2%)",
+"የሻጭ 3% Commission":"Seller Commission (3%)",
+"የገዢ 2% Commission":"Buyer Commission (2%)",
+"የአስተዳዳሪ ፈቃድ የለዎትም":"Admin access only",
+"እባክዎ መጀመሪያ ይግቡ":"Please login first",
+"ምርቱ ታትሟል":"Product published successfully",
+"የሻጭ መረጃ የለም":"Seller information unavailable",
+"ገና ውይይት አልተጀመረም":"No conversation started yet",
+"የላኩት":"Sent",
+"የደረሰዎት":"Received",
+"የሚደርስዎ":"Your Net Earnings",
+"የALLIN ONE ገቢ":"ALLIN ONE Revenue"
+};
+
+const reverseTranslations = Object.fromEntries(
+ Object.entries(translations).map(([am,en])=>[en,am])
+);
+
+function translateText(text,lang){
+ const dictionary=lang==="en"?translations:reverseTranslations;
+ let result=text;
+ Object.entries(dictionary)
+ .sort((a,b)=>b[0].length-a[0].length)
+ .forEach(([from,to])=>{
+  result=result.split(from).join(to);
+ });
+ return result;
+}
+
+function translatePage(){
+ document.querySelectorAll("body *").forEach(el=>{
+  if(el.children.length===0 && el.tagName!=="SCRIPT" && el.tagName!=="STYLE"){
+   if(el.childNodes.length){
+    el.childNodes.forEach(node=>{
+     if(node.nodeType===3){
+      node.textContent=translateText(node.textContent,language);
+     }
+    });
+   }
+  }
+
+  ["placeholder","title"].forEach(attr=>{
+   if(el.hasAttribute(attr)){
+    el.setAttribute(attr,translateText(el.getAttribute(attr),language));
+   }
+  });
+ });
+}
+
 window.setLanguage=function(value){
  language=value;
  localStorage.setItem("allinone_language",value);
  $("languageSelect").value=value;
  document.documentElement.lang=value;
+ translatePage();
  renderProducts();
  renderFavorites();
  renderCart();
 };
+
+window.addEventListener("DOMContentLoaded",()=>{
+ $("languageSelect").value=language;
+ translatePage();
+});
+
 window.showPage=function(pageId,button){
  if(pageId==="adminPage"&&!isAdmin()){msg("የአስተዳዳሪ ፈቃድ የለዎትም","Admin access only");return}
  if(["sellPage","sellerPage","ordersPage","chatPage"].includes(pageId)&&!currentUser){msg("እባክዎ መጀመሪያ ይግቡ","Please login first");pageId="accountPage"}
