@@ -463,8 +463,22 @@ function renderChatList(){if(currentUser)loadMessages()}
 window.checkout=async function(){
  if(!currentUser)return msg("ትዕዛዝ ለማስገባት ይግቡ","Login first");
  const {items,subtotal,buyerCommission,buyerTotal}=calculateCart();if(!items.length)return msg("ቅርጫቱ ባዶ ነው","Cart is empty");
- const payment=prompt("የክፍያ ዘዴ: Telebirr, CBE Birr, Cash","Telebirr");if(!payment)return;
- const allowed=["telebirr","cbe birr","cash"];if(!allowed.includes(payment.toLowerCase().trim()))return msg("Telebirr፣ CBE Birr ወይም Cash ብቻ ይጠቀሙ","Choose a valid payment method");
+ const payment=prompt(
+  "የክፍያ ዘዴ: Telebirr or CBE Birr",
+  "Telebirr"
+);
+if(!payment)return;
+
+const normalizedPayment=payment.toLowerCase().trim();
+
+const allowed=["telebirr","cbe birr"];
+
+if(!allowed.includes(normalizedPayment))
+  return msg("Telebirr ወይም CBE Birr ብቻ ይጠቀሙ",
+             "Choose Telebirr or CBE Birr");
+
+const paymentMethod =
+  normalizedPayment==="telebirr" ? "Telebirr" : "CBE Birr";
  const reference=prompt("የክፍያ ማረጋገጫ ቁጥር","")||"";
  const orderItems=items.map(p=>{
   const price=roundBirr(Number(p.price||0)),sellerCommission=sellerFee(price),buyerCommissionForItem=buyerFee(price);
