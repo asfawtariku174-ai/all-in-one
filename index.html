@@ -362,15 +362,32 @@ function productCard(p){
    <div class="actions"><button onclick="addToCart('${p.id}')">🛒 Add</button><button class="secondary" onclick="toggleFavorite('${p.id}')">${liked?"❤️":"🤍"}</button><button class="secondary" onclick="contactSeller('${escapeAttr(p.sellerUid||"")}')">💬 Chat</button><button class="secondary" onclick="openProductModal('${p.id}')">🔍</button></div>
   </div></article>`;
 }
+
 window.renderProducts=function(){
- const list=productsData.filter(p=>
-  selectedCategory==="all" || p.category===selectedCategory
- );
+ const search=$("searchInput").value.trim().toLowerCase();
+
+ const list=productsData.filter(p=>{
+  const categoryMatch=
+   selectedCategory==="all" ||
+   p.category===selectedCategory;
+
+  const searchMatch=[
+   p.name,
+   p.description,
+   p.category,
+   p.sellerEmail
+  ].some(value=>
+   String(value||"").toLowerCase().includes(search)
+  );
+
+  return categoryMatch && searchMatch;
+ });
 
  $("productsGrid").innerHTML=list.length
   ?list.map(productCard).join("")
   :`<div class="empty">${language==="am"?"ምርት አልተገኘም":"No products found"}</div>`;
 };
+
 window.openProductModal=function(id){
  const p=productsData.find(x=>x.id===id);if(!p)return;
  $("modalImg").classList.remove("zoomed");$("modalImg").src=p.imageUrl||"https://placehold.co/600x400";$("modalTitle").textContent=p.name||"";$("modalPrice").textContent=money(p.price)+" ETB";$("modalDesc").textContent=p.description||"";$("modalEmail").textContent=p.sellerEmail||"";$("modalPhone").textContent=p.phone||"";
