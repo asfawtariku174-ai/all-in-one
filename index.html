@@ -212,7 +212,15 @@ function calculateCart(){
  return {items,subtotal,buyerCommission,buyerTotal:roundBirr(subtotal+buyerCommission)};
 }
 
-window.setLanguage=function(value){language=value;localStorage.setItem("allinone_language",value);$("languageSelect").value=value;document.documentElement.lang=value;renderProducts();renderFavorites();renderCart()};
+window.setLanguage=function(value){
+ language=value;
+ localStorage.setItem("allinone_language",value);
+ $("languageSelect").value=value;
+ document.documentElement.lang=value;
+ renderProducts();
+ renderFavorites();
+ renderCart();
+};
 window.showPage=function(pageId,button){
  if(pageId==="adminPage"&&!isAdmin()){msg("የአስተዳዳሪ ፈቃድ የለዎትም","Admin access only");return}
  if(["sellPage","sellerPage","ordersPage","chatPage"].includes(pageId)&&!currentUser){msg("እባክዎ መጀመሪያ ይግቡ","Please login first");pageId="accountPage"}
