@@ -389,9 +389,34 @@ window.renderProducts=function(){
 };
 
 window.openProductModal=function(id){
- const p=productsData.find(x=>x.id===id);if(!p)return;
- $("modalImg").classList.remove("zoomed");$("modalImg").src=p.imageUrl||"https://placehold.co/600x400";$("modalTitle").textContent=p.name||"";$("modalPrice").textContent=money(p.price)+" ETB";$("modalDesc").textContent=p.description||"";$("modalEmail").textContent=p.sellerEmail||"";$("modalPhone").textContent=p.phone||"";
- $("modalActions").innerHTML=`<button onclick="addToCart('${p.id}')">🛒 Add to Cart</button><button class="secondary" onclick="closeProductModal();contactSeller('${escapeAttr(p.sellerUid||"")}')">💬 Chat Seller</button>${p.phone?`<a href="tel:${escapeAttr(p.phone)}"><button class="secondary">📞 Call</button></a>`:""}`;
+ const p=productsData.find(x=>x.id===id);
+ if(!p)return;
+
+ const phone=String(p.phone||"").replace(/[^\d+]/g,"");
+
+ $("modalImg").classList.remove("zoomed");
+ $("modalImg").src=p.imageUrl||"https://placehold.co/600x400";
+ $("modalTitle").textContent=p.name||"";
+ $("modalPrice").textContent=money(p.price)+" ETB";
+ $("modalDesc").textContent=p.description||"";
+ $("modalEmail").textContent=p.sellerEmail||"";
+ $("modalPhone").textContent=p.phone||"";
+
+ $("modalActions").innerHTML=`
+  <button onclick="addToCart('${p.id}')">
+   🛒 Add to Cart
+  </button>
+
+  ${phone
+   ? `<a class="call-button" href="tel:${escapeAttr(phone)}">📞 Call Seller</a>`
+   : ""}
+
+  <button class="secondary"
+   onclick="closeProductModal();contactSeller('${escapeAttr(p.sellerUid||"")}')">
+   💬 Chat Seller
+  </button>
+ `;
+
  $("productModal").classList.add("open");
 };
 window.closeProductModal=function(){$("productModal").classList.remove("open");$("modalImg").classList.remove("zoomed")};
