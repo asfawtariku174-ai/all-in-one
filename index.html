@@ -545,10 +545,21 @@ if(!reference.trim())
  const platformCommissionTotal=roundBirr(sellerCommissionTotal+buyerCommission);
  try{
   await addDoc(collection(db,"orders"),{
-   buyerUid:currentUser.uid,buyerEmail:currentUser.email||"",items:orderItems,
-   subtotal,buyerCommission,sellerCommission:sellerCommissionTotal,platformCommission:platformCommissionTotal,
-   total:buyerTotal,paymentMethod:paymentMethod,,paymentReference:reference,paymentStatus:"pending",
-   status:"pending",commissionStatus:"pending",createdAt:serverTimestamp()
+   buyerUid:currentUser.uid,
+buyerEmail:currentUser.email||"",
+items:orderItems,
+sellerUids:[...new Set(orderItems.map(i=>i.sellerUid).filter(Boolean))],
+subtotal,
+buyerCommission,
+sellerCommission:sellerCommissionTotal,
+platformCommission:platformCommissionTotal,
+total:buyerTotal,
+paymentMethod:paymentMethod,
+paymentReference:reference,
+paymentStatus:"pending",
+status:"pending",
+commissionStatus:"pending",
+createdAt:serverTimestamp() status:"pending",commissionStatus:"pending",createdAt:serverTimestamp()
   });
   cart=[];saveLocal();renderCart();msg("ትዕዛዝዎ ተመዝግቧል። 2% የገዢ Commission ተጨምሮ ተቆጥሯል።","Order submitted. Buyer 2% fee included."); 
  }catch(e){msg(e.message,e.message)}
