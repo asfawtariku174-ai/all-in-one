@@ -176,7 +176,13 @@ hr{border:0;border-top:1px solid #eee;margin:12px 0}
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,collection,addDoc,getDocs,query,where,orderBy,onSnapshot,doc,getDoc,deleteDoc,updateDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getFirestore,collection,addDoc,getDocs,query,where,
+ orderBy,onSnapshot,doc,getDoc,deleteDoc,updateDoc,
+ serverTimestamp,setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 const firebaseConfig={
  apiKey:"AIzaSyCRQJeoRNKSIdQ0LTCHoBSUUftl2o-dUjQ",
