@@ -333,8 +333,28 @@ window.loginUser=async function(){
  try{await signInWithEmailAndPassword(auth,email,password);msg("በተሳካ ሁኔታ ገብተዋል","Login successful")}catch(e){msg("መግባት አልተቻለም: "+e.message,"Login failed: "+e.message)}
 };
 window.registerUser=async function(){
- const email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||password.length<6)return msg("ትክክለኛ Email እና ቢያንስ 6 ፊደል ያለው password ያስገቡ","Enter valid email and password");
- try{await createUserWithEmailAndPassword(auth,email,password);msg("መለያዎ ተፈጥሯል","Account created")}catch(e){msg(e.message,e.message)}
+ const email=$("authEmail").value.trim();
+ const password=$("authPassword").value;
+
+ if(!email||password.length<6)
+  return msg("ትክክለኛ Email እና ቢያንስ 6 ፊደል ያለው password ያስገቡ","Enter valid email and password");
+
+ try{
+  const credential=await createUserWithEmailAndPassword(auth,email,password);
+
+  await setDoc(doc(db,"users",credential.user.uid),{
+   uid:credential.user.uid,
+   email:credential.user.email||email,
+   displayName:email.split("@")[0],
+   role:"user",
+   isBlocked:false,
+   createdAt:serverTimestamp()
+  });
+
+  msg("መለያዎ ተፈጥሯል","Account created");
+ }catch(e){
+  msg(e.message,e.message);
+ }
 };
 window.logoutUser=async function(){try{await signOut(auth);msg("ወጥተዋል","Logged out");showPage("homePage")}catch(e){msg(e.message,e.message)}};
 onAuthStateChanged(auth,user=>{
