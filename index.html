@@ -560,7 +560,12 @@ async function loadSellerDashboard(){
  try{
   const snap=await getDocs(query(collection(db,"products"),where("sellerUid","==",currentUser.uid))),rows=snap.docs.map(d=>({id:d.id,...d.data()}));
   $("sellerProducts").innerHTML=rows.length?rows.map(p=>`<div class="panel"><b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB <button class="danger" onclick="deleteOwnProduct('${p.id}')">Delete</button></div>`).join(""):'<div class="empty">No products</div>';
-  const orderSnap=await getDocs(collection(db,"orders")),orders=orderSnap.docs.map(d=>({id:d.id,...d.data()})).filter(o=>(o.items||[]).some(i=>i.sellerUid===currentUser.uid));
+  const orderSnap=await getDocs(
+  query(
+    collection(db,"orders"),
+    where("sellerUids","array-contains",currentUser.uid)
+  )
+);orders=orderSnap.docs.map(d=>({id:d.id,...d.data()})).filter(o=>(o.items||[]).some(i=>i.sellerUid===currentUser.uid));
   $("sellerOrders").innerHTML=orders.length?orders.map(o=>{
    const mine=(o.items||[]).filter(i=>i.sellerUid===currentUser.uid),gross=roundBirr(mine.reduce((s,i)=>s+Number(i.price||0),0)),fee=roundBirr(mine.reduce((s,i)=>s+Number(i.sellerCommission??sellerFee(i.price)),0)),net=roundBirr(gross-fee);
    return `<div class="panel"><b>Order:</b> ${escapeHtml(o.id)}<p>የእቃዎች ድምር: ${money(gross)} ETB</p><p>የሻጭ 3% Commission: ${money(fee)} ETB</p><p><b>የሚደርስዎ: ${money(net)} ETB</b></p><p>Order Status: ${escapeHtml(o.status||"pending")}</p><button class="secondary" onclick="contactSeller('${escapeAttr(o.buyerUid||"")}')">💬 Buyer Chat</button></div>`;
