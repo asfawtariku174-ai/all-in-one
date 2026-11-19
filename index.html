@@ -565,7 +565,7 @@ async function loadSellerDashboard(){
     collection(db,"orders"),
     where("sellerUids","array-contains",currentUser.uid)
   )
-);orders=orderSnap.docs.map(d=>({id:d.id,...d.data()})).filter(o=>(o.items||[]).some(i=>i.sellerUid===currentUser.uid));
+);const orders=orderSnap.docs.map(d=>({id:d.id,...d.data()})).filter(o=>(o.items||[]).some(i=>i.sellerUid===currentUser.uid));
   $("sellerOrders").innerHTML=orders.length?orders.map(o=>{
    const mine=(o.items||[]).filter(i=>i.sellerUid===currentUser.uid),gross=roundBirr(mine.reduce((s,i)=>s+Number(i.price||0),0)),fee=roundBirr(mine.reduce((s,i)=>s+Number(i.sellerCommission??sellerFee(i.price)),0)),net=roundBirr(gross-fee);
    return `<div class="panel"><b>Order:</b> ${escapeHtml(o.id)}<p>የእቃዎች ድምር: ${money(gross)} ETB</p><p>የሻጭ 3% Commission: ${money(fee)} ETB</p><p><b>የሚደርስዎ: ${money(net)} ETB</b></p><p>Order Status: ${escapeHtml(o.status||"pending")}</p><button class="secondary" onclick="contactSeller('${escapeAttr(o.buyerUid||"")}')">💬 Buyer Chat</button></div>`;
