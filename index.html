@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="am">
 <head>
@@ -548,56 +549,109 @@ function loadMessages(){
 function renderChatList(){if(currentUser)loadMessages()}
 
 /* CHECKOUT: buyer pays item subtotal + 2%; seller receives item price - 3% */
+
+/* CHECKOUT: buyer pays subtotal + 2%; seller pays 3% */
 window.checkout=async function(){
  if(!currentUser)return msg("ትዕዛዝ ለማስገባት ይግቡ","Login first");
- const {items,subtotal,buyerCommission,buyerTotal}=calculateCart();if(!items.length)return msg("ቅርጫቱ ባዶ ነው","Cart is empty");
+
+ const {items,subtotal,buyerCommission,buyerTotal}=calculateCart();
+
+ if(!items.length)return msg("ቅርጫቱ ባዶ ነው","Cart is empty");
+
  const payment=prompt(
-  "የክፍያ ዘዴ: Telebirr or CBE Birr",
+  "የክፍያ ዘዴ ይምረጡ:\n1. Telebirr\n2. CBE Birr",
   "Telebirr"
-);
-if(!payment)return;
+ );
 
-const normalizedPayment=payment.toLowerCase().trim();
+ if(!payment)return;
 
-const allowed=["telebirr","cbe birr"];
+ const normalizedPayment=payment.toLowerCase().trim();
 
-if(!allowed.includes(normalizedPayment))
+ if(!["telebirr","cbe birr"].includes(normalizedPayment))
   return msg("Telebirr ወይም CBE Birr ብቻ ይጠቀሙ",
              "Choose Telebirr or CBE Birr");
 
-const paymentMethod =
-  normalizedPayment==="telebirr" ? "Telebirr" : "CBE Birr";
- const reference=prompt("የክፍያ ማረጋገጫ ቁጥር","")||"";
+ const paymentMethod=
+  normalizedPayment==="telebirr"?"Telebirr":"CBE Birr";
 
-if(!reference.trim())
+ const paymentNumber=
+  paymentMethod==="Telebirr"?"0919111081":"1000576622728";
+
+ alert(
+  "ALLIN ONE - የክፍያ መረጃ\n\n"+
+  "የክፍያ ዘዴ: "+paymentMethod+"\n"+
+  "የሂሳብ ቁጥር: "+paymentNumber+"\n"+
+  "የመለያ ስም: ታሪኩ አስፋው ኃይሉ\n\n"+
+  "ጠቅላላ ክፍያ: "+money(buyerTotal)+" ETB\n\n"+
+  "እባክዎ ክፍያውን ወደዚህ ቁጥር ይላኩ።"
+ );
+
+ const reference=prompt(
+  "ክፍያውን ከፈጸሙ በኋላ የክፍያ ማረጋገጫ ቁጥሩን ያስገቡ:"
+ );
+
+ if(!reference||!reference.trim())
   return msg("የክፍያ ማረጋገጫ ቁጥር ያስገቡ",
              "Enter payment reference");
+
  const orderItems=items.map(p=>{
-  const price=roundBirr(Number(p.price||0)),sellerCommission=sellerFee(price),buyerCommissionForItem=buyerFee(price);
-  return {productId:p.id,name:p.name,price,sellerUid:p.sellerUid||"",sellerCommission,buyerCommission:buyerCommissionForItem,sellerNet:roundBirr(price-sellerCommission)};
+  const price=roundBirr(Number(p.price||0));
+  const sellerCommission=sellerFee(price);
+
+  return {
+   productId:p.id,
+   name:p.name,
+   price,
+   sellerUid:p.sellerUid||"",
+   sellerCommission,
+   buyerCommission:buyerFee(price),
+   sellerNet:roundBirr(price-sellerCommission)
+  };
  });
- const sellerCommissionTotal=roundBirr(orderItems.reduce((s,i)=>s+i.sellerCommission,0));
- const platformCommissionTotal=roundBirr(sellerCommissionTotal+buyerCommission);
+
+ const sellerCommissionTotal=roundBirr(
+  orderItems.reduce((s,i)=>s+i.sellerCommission,0)
+ );
+
+ const platformCommissionTotal=roundBirr(
+  sellerCommissionTotal+buyerCommission
+ );
+
  try{
   await addDoc(collection(db,"orders"),{
    buyerUid:currentUser.uid,
-buyerEmail:currentUser.email||"",
-items:orderItems,
-sellerUids:[...new Set(orderItems.map(i=>i.sellerUid).filter(Boolean))],
-subtotal,
-buyerCommission,
-sellerCommission:sellerCommissionTotal,
-platformCommission:platformCommissionTotal,
-total:buyerTotal,
-paymentMethod:paymentMethod,
-paymentReference:reference,
-paymentStatus:"pending",
-status:"pending" ,
-commissionStatus:"pending",
-createdAt:serverTimestamp() });
-  cart=[];saveLocal();renderCart();msg("ትዕዛዝዎ ተመዝግቧል። 2% የገዢ Commission ተጨምሮ ተቆጥሯል።","Order submitted. Buyer 2% fee included."); 
- }catch(e){msg(e.message,e.message)}
+   buyerEmail:currentUser.email||"",
+   items:orderItems,
+   sellerUids:[...new Set(orderItems.map(i=>i.sellerUid).filter(Boolean))],
+   subtotal,
+   buyerCommission,
+   sellerCommission:sellerCommissionTotal,
+   platformCommission:platformCommissionTotal,
+   total:buyerTotal,
+   paymentMethod,
+   paymentNumber,
+   paymentAccountName:"ታሪኩ አስፋው ኃይሉ",
+   paymentReference:reference.trim(),
+   paymentStatus:"pending",
+   status:"pending",
+   commissionStatus:"pending",
+   createdAt:serverTimestamp()
+  });
+
+  cart=[];
+  saveLocal();
+  renderCart();
+
+  msg(
+   "ትዕዛዝዎ ተመዝግቧል። አስተዳዳሪው ክፍያውን ካረጋገጠ በኋላ ይጸድቃል።",
+   "Order submitted. Payment is pending admin verification."
+  );
+
+ }catch(e){
+  msg(e.message,e.message);
+ }
 };
+
 
 /* SELLER DASHBOARD */
 async function loadSellerDashboard(){
