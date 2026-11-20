@@ -695,9 +695,31 @@ async function loadAdminDashboard(){
   const sellerFees=roundBirr(completed.reduce((s,o)=>s+Number(o.sellerCommission??(o.items||[]).reduce((a,i)=>a+Number(i.sellerCommission??sellerFee(i.price)),0)),0));
   const totalFees=roundBirr(buyerFees+sellerFees);
   $("adminCommissionSummary").innerHTML=`<div class="panel"><h3>💰 ALLIN ONE Commission Summary</h3><div class="fee-line"><span>የሻጭ 3% Commission</span><b>${money(sellerFees)} ETB</b></div><div class="fee-line"><span>የገዢ 2% Commission</span><b>${money(buyerFees)} ETB</b></div><hr><div class="fee-line fee-total"><span>ጠቅላላ የALLIN ONE ገቢ</span><span>${money(totalFees)} ETB</span></div><p class="muted">Completed የሆኑ ትዕዛዞች ብቻ ተቆጥረዋል።</p></div>`;
-  $("adminOrders").innerHTML=orders.length?orders.map(o=>`<div class="panel"><b>Order:</b> ${escapeHtml(o.id)}<p>Buyer: ${escapeHtml(o.buyerEmail||"")}</p><p>የምርቶች ድምር: ${money(o.subtotal??o.total)} ETB</p><p>የገዢ 2%: ${money(o.buyerCommission||0)} ETB</p><p>የሻጭ 3%: ${money(o.sellerCommission??0)} ETB</p><p>የገዢ ጠቅላላ ክፍያ: ${money(o.total)} ETB</p><p>Payment: ${escapeHtml(o.paymentMethod||"")} / ${escapeHtml(o.paymentReference||"")}</p><p>Payment Status: ${escapeHtml(o.paymentStatus||"pending")}</p><p>Order Status: ${escapeHtml(o.status||"pending")}</p>
-${o.status==="cancelled" ? '<p class="muted">Cancelled order — no actions available</p>' : '<div class="actions">' + "<button onclick=\"updateOrderStatus('" + o.id + "', 'verify')\">Verify Payment</button>" + "<button class=\"secondary\" onclick=\"updateOrderStatus('" + o.id + "', 'complete')\">Complete</button>" + "<button class=\"danger\" onclick=\"updateOrderStatus('" + o.id + "', 'cancel')\">Cancel</button>" + '</div>'}
-.join(""):'<div class="empty">No orders</div>';
+ 
+$("adminOrders").innerHTML = orders.length
+ ? orders.map(o => `
+  <div class="panel">
+   <b>Order:</b> ${escapeHtml(o.id)}
+   <p>Buyer: ${escapeHtml(o.buyerEmail || "")}</p>
+   <p>የምርቶች ድምር: ${money(o.subtotal ?? o.total)} ETB</p>
+   <p>የገዢ 2%: ${money(o.buyerCommission || 0)} ETB</p>
+   <p>የሻጭ 3%: ${money(o.sellerCommission ?? 0)} ETB</p>
+   <p>የገዢ ጠቅላላ ክፍያ: ${money(o.total)} ETB</p>
+   <p>Payment: ${escapeHtml(o.paymentMethod || "")} / ${escapeHtml(o.paymentReference || "")}</p>
+   <p>Payment Status: ${escapeHtml(o.paymentStatus || "pending")}</p>
+   <p>Order Status: ${escapeHtml(o.status || "pending")}</p>
+
+   ${o.status === "cancelled"
+    ? '<p class="muted">Cancelled order — no actions available</p>'
+    : '<div class="actions">' +
+      "<button onclick=\"updateOrderStatus('" + o.id + "', 'verify')\">Verify Payment</button>" +
+      "<button class=\"secondary\" onclick=\"updateOrderStatus('" + o.id + "', 'complete')\">Complete</button>" +
+      "<button class=\"danger\" onclick=\"updateOrderStatus('" + o.id + "', 'cancel')\">Cancel</button>" +
+      '</div>'}
+  </div>
+ `).join("")
+ : '<div class="empty">No orders</div>';
+
   const productSnap=await getDocs(collection(db,"products")),products=productSnap.docs.map(d=>({id:d.id,...d.data()}));
   $("adminProducts").innerHTML=products.length?products.map(p=>`<div class="panel"><b>${escapeHtml(p.name)}</b> — ${money(p.price)} ETB <button class="danger" onclick="adminDeleteProduct('${p.id}')">Delete</button></div>`).join(""):'<div class="empty">No products</div>';
  }catch(e){console.error(e);$("adminOrders").textContent=e.message}
