@@ -314,3 +314,240 @@ main{padding:10px}
 }
 </style>
 </head>
+<body>
+
+<header>
+  <div class="top">
+    <div class="logo">ALLIN ONE</div>
+    <select id="languageSelect">
+      <option value="am">አማርኛ</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <div class="search-area">
+    <input type="search" id="searchInput"
+      placeholder="ምርት ፈልግ...">
+    <button onclick="searchProducts()">ፈልግ</button>
+  </div>
+</header>
+
+<main>
+
+<!-- HOME PAGE -->
+<section id="homePage" class="page active">
+  <h2>እንኳን ወደ ALLIN ONE በደህና መጡ</h2>
+
+  <div class="categories">
+    <button class="active" onclick="filterCategory('all',this)">ሁሉም</button>
+    <button onclick="filterCategory('electronics',this)">ኤሌክትሮኒክስ</button>
+    <button onclick="filterCategory('vehicles',this)">መኪና</button>
+    <button onclick="filterCategory('property',this)">ቤት</button>
+    <button onclick="filterCategory('fashion',this)">ልብስ</button>
+    <button onclick="filterCategory('other',this)">ሌሎች</button>
+  </div>
+
+  <div id="productGrid" class="grid">
+    <div class="empty">ምርቶች እየተጫኑ ነው...</div>
+  </div>
+</section>
+
+<!-- PRODUCT DETAILS -->
+<section id="productPage" class="page">
+  <button class="secondary" onclick="showPage('homePage')">
+    ← ተመለስ
+  </button>
+  <div id="productDetails" class="panel"></div>
+</section>
+
+<!-- SELL PAGE -->
+<section id="sellPage" class="page">
+  <h2>ምርትህን ሽጥ</h2>
+
+  <div class="form-box">
+    <label>የምርት ስም</label>
+    <input id="sellTitle" placeholder="የምርት ስም">
+
+    <label>ምድብ</label>
+    <select id="sellCategory">
+      <option value="electronics">ኤሌክትሮኒክስ</option>
+      <option value="vehicles">መኪና</option>
+      <option value="property">ቤት</option>
+      <option value="fashion">ልብስ</option>
+      <option value="other">ሌሎች</option>
+    </select>
+
+    <label>ዋጋ (ብር)</label>
+    <input id="sellPrice" type="number" placeholder="ዋጋ">
+
+    <label>ስልክ ቁጥር</label>
+    <input id="sellPhone" type="tel" placeholder="09xxxxxxxx">
+
+    <label>አካባቢ</label>
+    <input id="sellLocation" placeholder="ከተማ / አካባቢ">
+
+    <label>የምርት ፎቶ</label>
+    <input id="sellImage" type="file" accept="image/*">
+
+    <label>ዝርዝር መግለጫ</label>
+    <textarea id="sellDescription"
+      placeholder="ስለ ምርቱ ይግለጹ..."></textarea>
+
+    <button onclick="submitProduct()" style="width:100%">
+      ምርት አስገባ
+    </button>
+  </div>
+</section>
+
+<!-- FAVORITES -->
+<section id="favoritesPage" class="page">
+  <h2>የምወዳቸው ምርቶች ❤️</h2>
+  <div id="favoritesGrid" class="grid"></div>
+</section>
+
+<!-- PROFILE -->
+<section id="profilePage" class="page">
+  <h2>የእኔ መለያ</h2>
+
+  <div class="form-box">
+    <label>ሙሉ ስም</label>
+    <input id="profileName" placeholder="ስም">
+
+    <label>ስልክ ቁጥር</label>
+    <input id="profilePhone" placeholder="09xxxxxxxx">
+
+    <label>ኢሜይል</label>
+    <input id="profileEmail" type="email" placeholder="Email">
+
+    <button onclick="saveProfile()">አስቀምጥ</button>
+  </div>
+
+  <div class="user-links">
+    <button class="secondary" onclick="showPage('myProductsPage')">
+      የእኔ ምርቶች
+    </button>
+    <button class="secondary" onclick="showPage('chatPage')">
+      መልዕክቶች
+    </button>
+  </div>
+
+  <div class="logout-container">
+    <button class="danger" onclick="logout()">ውጣ</button>
+  </div>
+</section>
+
+<!-- MY PRODUCTS -->
+<section id="myProductsPage" class="page">
+  <h2>የእኔ ምርቶች</h2>
+  <div id="myProductsGrid" class="grid"></div>
+</section>
+
+<!-- CHAT -->
+<section id="chatPage" class="page">
+  <h2>መልዕክቶች 💬</h2>
+  <div class="panel">
+    <p class="muted">የውይይት ክፍል</p>
+    <div id="chatList"></div>
+  </div>
+</section>
+
+<!-- ADMIN PAGE -->
+<section id="adminPage" class="page">
+
+  <div class="admin-header">
+    <h2>ALLIN ONE ADMIN</h2>
+    <p>የመድረኩ አስተዳደር ዳሽቦርድ</p>
+  </div>
+
+  <div class="admin-menu">
+    <button onclick="adminTab('overview')">📊 Overview</button>
+    <button onclick="adminTab('products')">📦 Products</button>
+    <button onclick="adminTab('users')">👥 Users</button>
+    <button onclick="adminTab('orders')">🛒 Orders</button>
+    <button onclick="adminTab('payments')">💳 Payments</button>
+  </div>
+
+  <div id="adminOverview" class="admin-section">
+    <div class="admin-stats">
+      <div class="admin-stat">
+        <div class="stat-icon">📦</div>
+        <h3 id="adminProductCount">0</h3>
+        <p>ምርቶች</p>
+      </div>
+
+      <div class="admin-stat">
+        <div class="stat-icon">👥</div>
+        <h3 id="adminUserCount">0</h3>
+        <p>ተጠቃሚዎች</p>
+      </div>
+
+      <div class="admin-stat">
+        <div class="stat-icon">🛒</div>
+        <h3 id="adminOrderCount">0</h3>
+        <p>ትዕዛዞች</p>
+      </div>
+
+      <div class="admin-stat">
+        <div class="stat-icon">💰</div>
+        <h3 id="adminRevenue">0</h3>
+        <p>ገቢ (ብር)</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminProducts" class="admin-content hidden">
+    <h3>የምርት አስተዳደር</h3>
+    <div id="adminProductList"></div>
+  </div>
+
+  <div id="adminUsers" class="admin-content hidden">
+    <h3>የተጠቃሚ አስተዳደር</h3>
+    <div id="adminUserList"></div>
+  </div>
+
+  <div id="adminOrders" class="admin-content hidden">
+    <h3>ትዕዛዞች</h3>
+    <div id="adminOrderList"></div>
+  </div>
+
+  <div id="adminPayments" class="admin-content hidden">
+    <h3>የክፍያ አስተዳደር</h3>
+    <div id="adminPaymentList"></div>
+  </div>
+
+</section>
+
+</main>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+  <button class="active" onclick="showPage('homePage',this)">
+    <span>🏠</span><span>ቤት</span>
+  </button>
+
+  <button onclick="showPage('sellPage',this)">
+    <span>➕</span><span>ሽጥ</span>
+  </button>
+
+  <button onclick="showPage('favoritesPage',this)">
+    <span>❤️</span><span>የወደድኩት</span>
+  </button>
+
+  <button onclick="showPage('chatPage',this)">
+    <span>💬</span><span>ቻት</span>
+  </button>
+
+  <button onclick="showPage('profilePage',this)">
+    <span>👤</span><span>መለያ</span>
+  </button>
+</nav>
+
+<!-- PRODUCT MODAL -->
+<div class="modal" id="productModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
