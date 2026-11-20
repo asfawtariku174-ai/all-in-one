@@ -1,328 +1,3 @@
-/* ALLIN ONE APPLICATION LOGIC */
-
-let products = JSON.parse(localStorage.getItem("allin_products") || "[]");
-let favorites = JSON.parse(localStorage.getItem("allin_favorites") || "[]");
-let orders = JSON.parse(localStorage.getItem("allin_orders") || "[]");
-
-let currentUser = JSON.parse(localStorage.getItem("allin_user") || "null");
-
-function saveData(){
-  localStorage.setItem("allin_products",JSON.stringify(products));
-  localStorage.setItem("allin_favorites",JSON.stringify(favorites));
-  localStorage.setItem("allin_orders",JSON.stringify(orders));
-}
-
-function showPage(pageId,button){
-  document.querySelectorAll(".page").forEach(page=>{
-    page.classList.remove("active");
-  });
-
-  const page=document.getElementById(pageId);
-  if(page) page.classList.add("active");
-
-  document.querySelectorAll(".bottom-nav button").forEach(btn=>{
-    btn.classList.remove("active");
-  });
-
-  if(button) button.classList.add("active");
-
-  if(pageId==="homePage") renderProducts();
-  if(pageId==="favoritesPage") renderFavorites();
-  if(pageId==="myProductsPage") renderMyProducts();
-  if(pageId==="adminPage") updateAdmin();
-}
-
-function submitProduct(){
-  const title=document.getElementById("sellTitle").value.trim();
-  const category=document.getElementById("sellCategory").value;
-  const price=Number(document.getElementById("sellPrice").value);
-  const phone=document.getElementById("sellPhone").value.trim();
-  const location=document.getElementById("sellLocation").value.trim();
-  const description=document.getElementById("sellDescription").value.trim();
-  const imageFile=document.getElementById("sellImage").files[0];
-
-  if(!title || !price || !phone || !location || !imageFile){
-    alert("እባክዎ አስፈላጊ መረጃዎችን ይሙሉ።");
-    return;
-  }
-
-  if(price<=0){
-    alert("ትክክለኛ ዋጋ ያስገቡ።");
-    return;
-  }
-
-  if(imageFile.size>2*1024*1024){
-    alert("ፎቶው ከ2MB መብለጥ የለበትም።");
-    return;
-  }
-
-  const reader=new FileReader();
-
-  reader.onload=function(){
-    products.push({
-      id:Date.now(),
-      title,
-      category,
-      price,
-      phone,
-      location,
-      description,
-      image:reader.result,
-      status:"pending",
-      owner:currentUser?.phone || phone,
-      date:new Date().toISOString()
-    });
-
-    saveData();
-    alert("ምርትዎ ተመዝግቧል። የአድሚን ማጽደቅ ይጠብቁ።");
-
-    document.querySelectorAll("#sellPage input").forEach(el=>el.value="");
-    document.getElementById("sellDescription").value="";
-
-    showPage("myProductsPage");
-  };
-
-  reader.readAsDataURL(imageFile);
-}
-
-function renderProducts(){
-  const grid=document.getElementById("productGrid");
-  const approved=products.filter(p=>p.status==="approved");
-
-  if(!approved.length){
-    grid.innerHTML='<div class="empty">እስካሁን የተፈቀዱ ምርቶች የሉም።</div>';
-    return;
-  }
-
-  grid.innerHTML=approved.map(p=>`
-    <div class="card">
-      <img src="${p.image}" alt="${escapeHTML(p.title)}"
-        onclick="openProduct(${p.id})">
-      <div class="card-body">
-        <h3 onclick="openProduct(${p.id})">${escapeHTML(p.title)}</h3>
-        <div class="price">${Number(p.price).toLocaleString()} ብር</div>
-        <p class="muted">📍 ${escapeHTML(p.location)}</p>
-        <div class="actions">
-          <button onclick="toggleFavorite(${p.id})">❤️</button>
-          <a class="call-button" href="tel:${encodeURIComponent(p.phone)}">ደውል</a>
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
-
-function escapeHTML(value){
-  return String(value??"").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#39;"
-  })[c]);
-}
-
-function openProduct(id){
-  const p=products.find(item=>item.id===id);
-  if(!p)return;
-
-  document.getElementById("productDetails").innerHTML=`
-    <img src="${p.image}" style="width:100%;max-height:300px;object-fit:contain">
-    <h2>${escapeHTML(p.title)}</h2>
-    <div class="price">${Number(p.price).toLocaleString()} ብር</div>
-    <p>${escapeHTML(p.description)}</p>
-    <p class="muted">📍 ${escapeHTML(p.location)}</p>
-    <a class="call-button" style="padding:12px;display:block;text-align:center"
-      href="tel:${encodeURIComponent(p.phone)}">ሻጩን ደውል</a>
-  `;
-
-  showPage("productPage");
-}
-
-function toggleFavorite(id){
-  favorites=favorites.includes(id)
-    ? favorites.filter(x=>x!==id)
-    : [...favorites,id];
-
-  saveData();
-  renderProducts();
-}
-
-function renderFavorites(){
-  const grid=document.getElementById("favoritesGrid");
-  const items=products.filter(p=>
-    favorites.includes(p.id)&&p.status==="approved"
-  );
-
-  grid.innerHTML=items.length?items.map(p=>`
-    <div class="card">
-      <img src="${p.image}" onclick="openProduct(${p.id})">
-      <div class="card-body">
-        <h3>${escapeHTML(p.title)}</h3>
-        <div class="price">${Number(p.price).toLocaleString()} ብር</div>
-        <button class="danger" onclick="toggleFavorite(${p.id})">አስወግድ</button>
-      </div>
-    </div>
-  `).join(""):'<div class="empty">የተወደዱ ምርቶች የሉም።</div>';
-}
-
-function renderMyProducts(){
-  const grid=document.getElementById("myProductsGrid");
-  const phone=currentUser?.phone;
-
-  const items=products.filter(p=>p.owner===phone);
-
-  grid.innerHTML=items.length?items.map(p=>`
-    <div class="card">
-      <img src="${p.image}">
-      <div class="card-body">
-        <h3>${escapeHTML(p.title)}</h3>
-        <div class="price">${Number(p.price).toLocaleString()} ብር</div>
-        <span class="admin-badge ${p.status==="pending"?"pending":""}">
-          ${p.status==="approved"?"ተፈቅዷል":p.status==="pending"?"በመጠባበቅ ላይ":"ተሰርዟል"}
-        </span>
-      </div>
-    </div>
-  `).join(""):'<div class="empty">ምርቶች አልጨመርክም።</div>';
-}
-
-function filterCategory(category,button){
-  document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));
-  button.classList.add("active");
-
-  const items=products.filter(p=>
-    p.status==="approved"&&(category==="all"||p.category===category)
-  );
-
-  const grid=document.getElementById("productGrid");
-
-  grid.innerHTML=items.length?items.map(p=>`
-    <div class="card">
-      <img src="${p.image}" onclick="openProduct(${p.id})">
-      <div class="card-body">
-        <h3 onclick="openProduct(${p.id})">${escapeHTML(p.title)}</h3>
-        <div class="price">${Number(p.price).toLocaleString()} ብር</div>
-      </div>
-    </div>
-  `).join(""):'<div class="empty">ምርት አልተገኘም።</div>';
-}
-
-function searchProducts(){
-  const q=document.getElementById("searchInput").value.toLowerCase().trim();
-
-  const items=products.filter(p=>
-    p.status==="approved"&&
-    (p.title.toLowerCase().includes(q)||
-     p.location.toLowerCase().includes(q))
-  );
-
-  const grid=document.getElementById("productGrid");
-
-  grid.innerHTML=items.length?items.map(p=>`
-    <div class="card">
-      <img src="${p.image}" onclick="openProduct(${p.id})">
-      <div class="card-body">
-        <h3>${escapeHTML(p.title)}</h3>
-        <div class="price">${Number(p.price).toLocaleString()} ብር</div>
-      </div>
-    </div>
-  `).join(""):'<div class="empty">ምንም አልተገኘም።</div>';
-}
-
-function saveProfile(){
-  const name=document.getElementById("profileName").value.trim();
-  const phone=document.getElementById("profilePhone").value.trim();
-  const email=document.getElementById("profileEmail").value.trim();
-
-  if(!name||!phone){
-    alert("ስምና ስልክ ያስፈልጋሉ።");
-    return;
-  }
-
-  currentUser={name,phone,email};
-  localStorage.setItem("allin_user",JSON.stringify(currentUser));
-  alert("መረጃዎ ተቀምጧል።");
-}
-
-function logout(){
-  if(confirm("ከመለያዎ መውጣት ይፈልጋሉ?")){
-    currentUser=null;
-    localStorage.removeItem("allin_user");
-    alert("ወጥተዋል።");
-    showPage("homePage");
-  }
-}
-
-function closeModal(){
-  document.getElementById("productModal").classList.remove("open");
-}
-
-/* ADMIN DASHBOARD */
-
-function adminTab(tab){
-  document.querySelectorAll(".admin-section,.admin-content").forEach(el=>{
-    el.classList.add("hidden");
-  });
-
-  const target=document.getElementById("admin"+tab.charAt(0).toUpperCase()+tab.slice(1));
-  if(target)target.classList.remove("hidden");
-
-  updateAdmin();
-}
-
-function updateAdmin(){
-  document.getElementById("adminProductCount").textContent=products.length;
-  document.getElementById("adminUserCount").textContent=0;
-  document.getElementById("adminOrderCount").textContent=orders.length;
-
-  document.getElementById("adminRevenue").textContent=
-    orders.reduce((sum,o)=>sum+Number(o.total||0),0).toLocaleString();
-
-  document.getElementById("adminProductList").innerHTML=
-    products.length?products.map(p=>`
-      <div class="panel">
-        <strong>${escapeHTML(p.title)}</strong>
-        <p>${Number(p.price).toLocaleString()} ብር</p>
-        <span class="admin-badge ${p.status==="pending"?"pending":""}">
-          ${p.status}
-        </span>
-        <div class="admin-actions">
-          <button onclick="approveProduct(${p.id})">አጽድቅ</button>
-          <button class="danger" onclick="deleteProduct(${p.id})">ሰርዝ</button>
-        </div>
-      </div>
-    `).join(""):'ምርት የለም';
-
-  document.getElementById("adminUserList").innerHTML=
-    "<p>የተጠቃሚ መረጃ ከመለያ ስርዓት ጋር ሲገናኝ ይታያል።</p>";
-
-  document.getElementById("adminOrderList").innerHTML=
-    orders.length?JSON.stringify(orders):"ትዕዛዝ የለም።";
-
-  document.getElementById("adminPaymentList").innerHTML=
-    "<p>የክፍያ መረጃ ከክፍያ ስርዓት ጋር ሲገናኝ ይታያል።</p>";
-}
-
-function approveProduct(id){
-  const p=products.find(x=>x.id===id);
-  if(!p)return;
-
-  p.status="approved";
-  saveData();
-  updateAdmin();
-  alert("ምርቱ ጸድቋል።");
-}
-
-function deleteProduct(id){
-  if(!confirm("ይህን ምርት ለማጥፋት እርግጠኛ ነዎት?"))return;
-
-  products=products.filter(p=>p.id!==id);
-  favorites=favorites.filter(x=>x!==id);
-
-  saveData();
-  updateAdmin();
-  renderProducts();
-}
-
-document.addEventListener("DOMContentLoaded",()=>{
-  renderProducts();
-});
 <!DOCTYPE html>
 <html lang="am">
 <head>
@@ -356,13 +31,11 @@ border:0;border-radius:9px;padding:11px 15px;
 background:var(--green);color:white;
 font-weight:600;cursor:pointer;
 }
-button:disabled{opacity:.5}
 button.secondary{background:#e8f2ed;color:var(--green)}
 button.danger{background:#ffe8e8;color:#bd2929}
 header{
-background:white;padding:14px;
-position:sticky;top:0;z-index:50;
-box-shadow:0 2px 10px #0000000c;
+background:white;padding:14px;position:sticky;
+top:0;z-index:50;box-shadow:0 2px 10px #0000000c;
 }
 .top{
 display:flex;justify-content:space-between;
@@ -370,13 +43,8 @@ align-items:center;gap:10px;flex-wrap:wrap;
 max-width:1200px;margin:auto;
 }
 .logo{font-size:24px;font-weight:800;color:var(--green)}
-#languageSelect{
-padding:10px;border:1px solid var(--border);
-border-radius:8px;background:white;
-}
 .search-area{
-display:flex;gap:8px;
-max-width:1200px;margin:14px auto 0;
+display:flex;gap:8px;max-width:1200px;margin:14px auto 0;
 }
 .search-area input{flex:1}
 input,textarea,select{
@@ -396,47 +64,31 @@ main{max-width:1200px;margin:auto;padding:14px}
 display:flex;gap:9px;overflow-x:auto;
 padding:12px 0;scrollbar-width:none;
 }
-.categories::-webkit-scrollbar{display:none}
 .categories button{
-white-space:nowrap;background:white;
-color:#34443b;border:1px solid var(--border);
+white-space:nowrap;background:white;color:#34443b;
+border:1px solid var(--border);
 }
-.categories button.active{
-background:var(--green);color:white;
-}
+.categories button.active{background:var(--green);color:white}
 .grid{
-display:grid;
-grid-template-columns:repeat(4,minmax(0,1fr));
+display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
 gap:16px;
 }
 .card{
 background:white;border:1px solid var(--border);
 border-radius:13px;overflow:hidden;
-box-shadow:0 3px 12px #00000008;
-min-width:0;
+box-shadow:0 3px 12px #00000008;min-width:0;
 }
 .card>img{
 width:100%;height:190px;display:block;
-object-fit:cover;background:#f0f2f0;
-cursor:pointer;
+object-fit:cover;background:#f0f2f0;cursor:pointer;
 }
 .card-body{padding:13px}
-.card-body h3{
-font-size:16px;margin-bottom:9px;
-cursor:pointer;overflow-wrap:anywhere;
-}
-.price{
-color:var(--green);font-weight:800;
-font-size:18px;margin:8px 0;
-}
-.muted{
-font-size:12px;color:var(--muted);
-margin:7px 0;overflow-wrap:anywhere;
-}
+.card-body h3{font-size:16px;margin-bottom:9px;overflow-wrap:anywhere}
+.price{color:var(--green);font-weight:800;font-size:18px;margin:8px 0}
+.muted{font-size:12px;color:var(--muted);margin:7px 0;overflow-wrap:anywhere}
 .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
 .actions button,.actions a{
-flex:1;text-align:center;font-size:12px;
-padding:10px 7px;
+flex:1;text-align:center;font-size:12px;padding:10px 7px;
 }
 .call-button{
 display:inline-block;text-decoration:none;
@@ -449,118 +101,37 @@ padding:17px;border-radius:13px;margin:12px 0;
 box-shadow:0 2px 9px #00000008;
 }
 .form-box label{
-display:block;font-size:14px;
-font-weight:600;margin:13px 0 6px;
+display:block;font-size:14px;font-weight:600;margin:13px 0 6px;
 }
 .form-box textarea{min-height:100px;resize:vertical}
 .form-box button{margin-top:13px}
 .row{display:flex;gap:10px}
-.row button{flex:1}
 .hidden{display:none!important}
 .empty{
-background:white;padding:30px 15px;
-border-radius:12px;color:var(--muted);
-text-align:center;grid-column:1/-1;
+background:white;padding:30px 15px;border-radius:12px;
+color:var(--muted);text-align:center;grid-column:1/-1;
 }
-.fee-line{
-display:flex;justify-content:space-between;
-gap:10px;padding:10px 0;font-size:14px;
-}
-.fee-total{font-size:18px;font-weight:bold;color:var(--green)}
-.chat-window{
-background:white;border-radius:12px;
-overflow:hidden;border:1px solid var(--border);
-margin-top:15px;
-}
-.chat-header{
-padding:15px;background:var(--green);
-color:white;font-weight:bold;
-}
-.chat-thread{
-min-height:260px;max-height:400px;
-overflow-y:auto;padding:14px;
-}
-.chat-bubble{
-max-width:80%;padding:11px;
-border-radius:12px;margin:9px 0;
-overflow-wrap:anywhere;
-}
-.chat-sent{background:#dff5e8;margin-left:auto}
-.chat-received{background:#f0f2f0}
-.chat-time{font-size:10px;color:#718078;margin-top:6px}
-.chat-compose{
-display:flex;gap:8px;padding:10px;
-border-top:1px solid var(--border);
-}
-.chat-compose textarea{resize:none;min-height:45px}
-.chat-item{
-padding:13px;border-bottom:1px solid var(--border);
-cursor:pointer;
-}
-.chat-item.active{background:var(--light)}
-.chat-user{font-weight:bold}
-.chat-preview{font-size:12px;color:var(--muted);margin-top:5px}
-.user-top-section{overflow-wrap:anywhere}
 .user-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
 .logout-container{margin-top:15px}
-.modal{
-display:none;position:fixed;inset:0;z-index:100;
-background:#000b;padding:15px;overflow-y:auto;
-}
-.modal.open{
-display:flex;align-items:center;justify-content:center;
-}
-.modal-box{
-width:100%;max-width:550px;
-background:white;border-radius:15px;
-overflow:hidden;position:relative;
-}
-.modal-close{
-position:absolute;right:10px;top:10px;
-z-index:2;background:#ffffffed;color:#222;
-border-radius:50%;
-}
-.zoom-wrap{overflow:hidden;background:#f1f1f1}
-.zoom-wrap img{
-width:100%;max-height:350px;
-object-fit:contain;display:block;
-}
-.zoom-wrap img.zoomed{transform:scale(1.8)}
-.modal-content{padding:17px}
 .bottom-nav{
-position:fixed;bottom:0;left:0;right:0;
-height:68px;background:white;
-border-top:1px solid var(--border);
-display:flex;justify-content:space-around;
-align-items:center;z-index:80;
-padding-bottom:env(safe-area-inset-bottom);
+position:fixed;bottom:0;left:0;right:0;height:68px;
+background:white;border-top:1px solid var(--border);
+display:flex;justify-content:space-around;align-items:center;
+z-index:80;padding-bottom:env(safe-area-inset-bottom);
 }
 .bottom-nav button{
-background:transparent;color:#77847c;
-padding:7px 5px;flex:1;border-radius:0;
-display:flex;flex-direction:column;
+background:transparent;color:#77847c;padding:7px 5px;
+flex:1;border-radius:0;display:flex;flex-direction:column;
 align-items:center;gap:3px;font-size:11px;
 }
 .bottom-nav button span:first-child{font-size:20px}
-.bottom-nav button.active{
-color:var(--green);background:var(--light);
-}
-.notice{
-padding:12px;background:#fff1ce;
-border-radius:8px;color:#805800;
-}
-
-/* ADMIN DASHBOARD */
-#adminPage{max-width:1200px;margin:auto}
+.bottom-nav button.active{color:var(--green);background:var(--light)}
 .admin-header{
 background:linear-gradient(120deg,#005b42,#00a65a);
 color:white;padding:25px;border-radius:15px;margin:12px 0;
 }
 .admin-header h2{color:white;font-size:25px}
-.admin-header p{margin-top:8px}
-.admin-menu{
-display:flex;gap:8px;overflow-x:auto;padding:12px 0;
-}
+.admin-menu{display:flex;gap:8px;overflow-x:auto;padding:12px 0}
 .admin-menu button{white-space:nowrap}
 .admin-stats{
 display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
@@ -568,13 +139,11 @@ gap:12px;margin:12px 0;
 }
 .admin-stat{
 background:white;padding:18px;border-radius:13px;
-box-shadow:0 2px 9px #00000010;
-border:1px solid var(--border);
+box-shadow:0 2px 9px #00000010;border:1px solid var(--border);
 }
 .admin-stat .stat-icon{font-size:27px}
 .admin-stat h3{font-size:25px;margin:9px 0;color:#10233f}
 .admin-stat p{color:#666;font-size:13px}
-.admin-stat small{color:#078747;font-weight:bold}
 .admin-content{
 background:white;padding:16px;border-radius:13px;
 margin:12px 0;box-shadow:0 2px 9px #0000000c;
@@ -582,35 +151,18 @@ overflow-x:auto;
 }
 .admin-content h3{color:#10233f;margin-bottom:14px}
 .admin-badge{
-display:inline-block;padding:5px 10px;
-border-radius:20px;background:#d9f6e6;
-color:#087b55;font-size:12px;font-weight:bold;
+display:inline-block;padding:5px 10px;border-radius:20px;
+background:#d9f6e6;color:#087b55;font-size:12px;font-weight:bold;
 }
 .admin-badge.pending{background:#fff1ce;color:#986500}
 .admin-badge.cancelled{background:#ffe0e0;color:#b32626}
-.admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+.admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .admin-actions button{font-size:11px;padding:8px}
-.admin-chart{
-height:150px;display:flex;align-items:end;
-gap:12px;padding:15px 5px 0;
-border-bottom:1px solid #ddd;
+.admin-section{margin-top:12px}
+.notice{
+padding:12px;background:#fff1ce;border-radius:8px;color:#805800;
+margin:10px 0;font-size:13px;
 }
-.admin-bar{
-flex:1;min-width:12px;
-background:linear-gradient(#00b968,#087b55);
-border-radius:7px 7px 0 0;position:relative;
-}
-.admin-bar span{
-position:absolute;bottom:-23px;left:50%;
-transform:translateX(-50%);
-font-size:10px;color:#777;
-}
-.admin-shortcut{
-display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;margin:12px 0;
-}
-.admin-shortcut button{padding:18px 8px;font-size:14px}
-
 @media(max-width:900px){
 .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 .admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -624,8 +176,6 @@ main{padding:10px}
 .card-body{padding:10px}
 .card-body h3{font-size:14px}
 .card .price{font-size:16px}
-.actions{gap:5px}
-.actions button,.actions a{font-size:11px}
 .admin-header{padding:18px}
 .admin-header h2{font-size:20px}
 .admin-stat{padding:13px}
@@ -638,256 +188,505 @@ main{padding:10px}
 }
 </style>
 </head>
+
 <body>
 
 <header>
-  <div class="top">
-    <div class="logo">ALLIN ONE</div>
-    <select id="languageSelect">
-      <option value="am">አማርኛ</option>
-      <option value="en">English</option>
-    </select>
-  </div>
-
-  <div class="search-area">
-    <input type="search" id="searchInput"
-      placeholder="ምርት ፈልግ...">
-    <button onclick="searchProducts()">ፈልግ</button>
-  </div>
+<div class="top">
+<div class="logo">ALLIN ONE</div>
+<select id="languageSelect" onchange="changeLanguage()">
+<option value="am">አማርኛ</option>
+<option value="en">English</option>
+</select>
+</div>
+<div class="search-area">
+<input type="search" id="searchInput" placeholder="ምርት ፈልግ..."
+onkeydown="if(event.key==='Enter')searchProducts()">
+<button onclick="searchProducts()">ፈልግ</button>
+</div>
 </header>
 
 <main>
 
-<!-- HOME PAGE -->
+<!-- HOME -->
 <section id="homePage" class="page active">
-  <h2>እንኳን ወደ ALLIN ONE በደህና መጡ</h2>
-
-  <div class="categories">
-    <button class="active" onclick="filterCategory('all',this)">ሁሉም</button>
-    <button onclick="filterCategory('electronics',this)">ኤሌክትሮኒክስ</button>
-    <button onclick="filterCategory('vehicles',this)">መኪና</button>
-    <button onclick="filterCategory('property',this)">ቤት</button>
-    <button onclick="filterCategory('fashion',this)">ልብስ</button>
-    <button onclick="filterCategory('other',this)">ሌሎች</button>
-  </div>
-
-  <div id="productGrid" class="grid">
-    <div class="empty">ምርቶች እየተጫኑ ነው...</div>
-  </div>
+<h2>እንኳን ወደ ALLIN ONE በደህና መጡ</h2>
+<div class="categories">
+<button class="active" onclick="filterCategory('all',this)">ሁሉም</button>
+<button onclick="filterCategory('electronics',this)">ኤሌክትሮኒክስ</button>
+<button onclick="filterCategory('vehicles',this)">መኪና</button>
+<button onclick="filterCategory('property',this)">ቤት</button>
+<button onclick="filterCategory('fashion',this)">ልብስ</button>
+<button onclick="filterCategory('other',this)">ሌሎች</button>
+</div>
+<div id="productGrid" class="grid">
+<div class="empty">ምርቶች እየተጫኑ ነው...</div>
+</div>
 </section>
 
 <!-- PRODUCT DETAILS -->
 <section id="productPage" class="page">
-  <button class="secondary" onclick="showPage('homePage')">
-    ← ተመለስ
-  </button>
-  <div id="productDetails" class="panel"></div>
+<button class="secondary" onclick="showPage('homePage')">← ተመለስ</button>
+<div id="productDetails" class="panel"></div>
 </section>
 
-<!-- SELL PAGE -->
+<!-- SELL -->
 <section id="sellPage" class="page">
-  <h2>ምርትህን ሽጥ</h2>
-
-  <div class="form-box">
-    <label>የምርት ስም</label>
-    <input id="sellTitle" placeholder="የምርት ስም">
-
-    <label>ምድብ</label>
-    <select id="sellCategory">
-      <option value="electronics">ኤሌክትሮኒክስ</option>
-      <option value="vehicles">መኪና</option>
-      <option value="property">ቤት</option>
-      <option value="fashion">ልብስ</option>
-      <option value="other">ሌሎች</option>
-    </select>
-
-    <label>ዋጋ (ብር)</label>
-    <input id="sellPrice" type="number" placeholder="ዋጋ">
-
-    <label>ስልክ ቁጥር</label>
-    <input id="sellPhone" type="tel" placeholder="09xxxxxxxx">
-
-    <label>አካባቢ</label>
-    <input id="sellLocation" placeholder="ከተማ / አካባቢ">
-
-    <label>የምርት ፎቶ</label>
-    <input id="sellImage" type="file" accept="image/*">
-
-    <label>ዝርዝር መግለጫ</label>
-    <textarea id="sellDescription"
-      placeholder="ስለ ምርቱ ይግለጹ..."></textarea>
-
-    <button onclick="submitProduct()" style="width:100%">
-      ምርት አስገባ
-    </button>
-  </div>
+<h2>ምርትህን ሽጥ</h2>
+<div class="form-box">
+<label>የምርት ስም</label>
+<input id="sellTitle" placeholder="የምርት ስም">
+<label>ምድብ</label>
+<select id="sellCategory">
+<option value="electronics">ኤሌክትሮኒክስ</option>
+<option value="vehicles">መኪና</option>
+<option value="property">ቤት</option>
+<option value="fashion">ልብስ</option>
+<option value="other">ሌሎች</option>
+</select>
+<label>ዋጋ (ብር)</label>
+<input id="sellPrice" type="number" min="1" placeholder="ዋጋ">
+<label>ስልክ ቁጥር</label>
+<input id="sellPhone" type="tel" placeholder="09xxxxxxxx">
+<label>አካባቢ</label>
+<input id="sellLocation" placeholder="ከተማ / አካባቢ">
+<label>የምርት ፎቶ</label>
+<input id="sellImage" type="file" accept="image/*">
+<label>ዝርዝር መግለጫ</label>
+<textarea id="sellDescription" placeholder="ስለ ምርቱ ይግለጹ..."></textarea>
+<button onclick="submitProduct()" style="width:100%">ምርት አስገባ</button>
+</div>
 </section>
 
 <!-- FAVORITES -->
 <section id="favoritesPage" class="page">
-  <h2>የምወዳቸው ምርቶች ❤️</h2>
-  <div id="favoritesGrid" class="grid"></div>
+<h2>የምወዳቸው ምርቶች ❤️</h2>
+<div id="favoritesGrid" class="grid"></div>
 </section>
 
 <!-- PROFILE -->
 <section id="profilePage" class="page">
-  <h2>የእኔ መለያ</h2>
-
-  <div class="form-box">
-    <label>ሙሉ ስም</label>
-    <input id="profileName" placeholder="ስም">
-
-    <label>ስልክ ቁጥር</label>
-    <input id="profilePhone" placeholder="09xxxxxxxx">
-
-    <label>ኢሜይል</label>
-    <input id="profileEmail" type="email" placeholder="Email">
-
-    <button onclick="saveProfile()">አስቀምጥ</button>
-  </div>
-
-  <div class="user-links">
-    <button class="secondary" onclick="showPage('myProductsPage')">
-      የእኔ ምርቶች
-    </button>
-    <button class="secondary" onclick="showPage('chatPage')">
-      መልዕክቶች
-    </button>
-  </div>
-
-  <div class="logout-container">
-    <button class="danger" onclick="logout()">ውጣ</button>
-  </div>
+<h2>የእኔ መለያ</h2>
+<div class="form-box">
+<label>ሙሉ ስም</label>
+<input id="profileName" placeholder="ስም">
+<label>ስልክ ቁጥር</label>
+<input id="profilePhone" type="tel" placeholder="09xxxxxxxx">
+<label>ኢሜይል</label>
+<input id="profileEmail" type="email" placeholder="Email">
+<button onclick="saveProfile()">አስቀምጥ</button>
+</div>
+<div class="user-links">
+<button class="secondary" onclick="showPage('myProductsPage')">የእኔ ምርቶች</button>
+<button class="secondary" onclick="showPage('chatPage')">መልዕክቶች</button>
+<button class="secondary" onclick="openAdmin()">Admin Dashboard</button>
+</div>
+<div class="logout-container">
+<button class="danger" onclick="logout()">ውጣ</button>
+</div>
 </section>
 
 <!-- MY PRODUCTS -->
 <section id="myProductsPage" class="page">
-  <h2>የእኔ ምርቶች</h2>
-  <div id="myProductsGrid" class="grid"></div>
+<h2>የእኔ ምርቶች</h2>
+<div id="myProductsGrid" class="grid"></div>
 </section>
 
 <!-- CHAT -->
 <section id="chatPage" class="page">
-  <h2>መልዕክቶች 💬</h2>
-  <div class="panel">
-    <p class="muted">የውይይት ክፍል</p>
-    <div id="chatList"></div>
-  </div>
+<h2>መልዕክቶች 💬</h2>
+<div class="panel">
+<p>የውይይት ክፍል</p>
+<div class="notice">የቀጥታ ቻት ለመስራት የServer ወይም Firebase ግንኙነት ያስፈልጋል።</div>
+</div>
 </section>
 
-<!-- ADMIN PAGE -->
+<!-- ADMIN -->
 <section id="adminPage" class="page">
+<div class="admin-header">
+<h2>ALLIN ONE ADMIN</h2>
+<p>የመድረኩ አስተዳደር ዳሽቦርድ</p>
+</div>
 
-  <div class="admin-header">
-    <h2>ALLIN ONE ADMIN</h2>
-    <p>የመድረኩ አስተዳደር ዳሽቦርድ</p>
-  </div>
+<div class="notice">
+ይህ የLocalStorage የሙከራ Admin ነው። ለቀጥታ ድረገፅ የAdmin ፈቃድ በServer/Firebase መጠበቅ አለበት።
+</div>
 
-  <div class="admin-menu">
-    <button onclick="adminTab('overview')">📊 Overview</button>
-    <button onclick="adminTab('products')">📦 Products</button>
-    <button onclick="adminTab('users')">👥 Users</button>
-    <button onclick="adminTab('orders')">🛒 Orders</button>
-    <button onclick="adminTab('payments')">💳 Payments</button>
-  </div>
+<div class="admin-menu">
+<button onclick="adminTab('overview')">📊 Overview</button>
+<button onclick="adminTab('products')">📦 Products</button>
+<button onclick="adminTab('users')">👥 Users</button>
+<button onclick="adminTab('orders')">🛒 Orders</button>
+<button onclick="adminTab('payments')">💳 Payments</button>
+</div>
 
-  <div id="adminOverview" class="admin-section">
-    <div class="admin-stats">
-      <div class="admin-stat">
-        <div class="stat-icon">📦</div>
-        <h3 id="adminProductCount">0</h3>
-        <p>ምርቶች</p>
-      </div>
+<div id="adminOverview" class="admin-section">
+<div class="admin-stats">
+<div class="admin-stat"><div class="stat-icon">📦</div><h3 id="adminProductCount">0</h3><p>ምርቶች</p></div>
+<div class="admin-stat"><div class="stat-icon">👥</div><h3 id="adminUserCount">0</h3><p>ተጠቃሚዎች</p></div>
+<div class="admin-stat"><div class="stat-icon">🛒</div><h3 id="adminOrderCount">0</h3><p>ትዕዛዞች</p></div>
+<div class="admin-stat"><div class="stat-icon">💰</div><h3 id="adminRevenue">0</h3><p>ገቢ (ብር)</p></div>
+</div>
+</div>
 
-      <div class="admin-stat">
-        <div class="stat-icon">👥</div>
-        <h3 id="adminUserCount">0</h3>
-        <p>ተጠቃሚዎች</p>
-      </div>
+<div id="adminProducts" class="admin-content hidden">
+<h3>የምርት አስተዳደር</h3>
+<div id="adminProductList"></div>
+</div>
 
-      <div class="admin-stat">
-        <div class="stat-icon">🛒</div>
-        <h3 id="adminOrderCount">0</h3>
-        <p>ትዕዛዞች</p>
-      </div>
+<div id="adminUsers" class="admin-content hidden">
+<h3>የተጠቃሚ አስተዳደር</h3>
+<div id="adminUserList"></div>
+</div>
 
-      <div class="admin-stat">
-        <div class="stat-icon">💰</div>
-        <h3 id="adminRevenue">0</h3>
-        <p>ገቢ (ብር)</p>
-      </div>
-    </div>
-  </div>
+<div id="adminOrders" class="admin-content hidden">
+<h3>ትዕዛዞች</h3>
+<div id="adminOrderList"></div>
+</div>
 
-  <div id="adminProducts" class="admin-content hidden">
-    <h3>የምርት አስተዳደር</h3>
-    <div id="adminProductList"></div>
-  </div>
+<div id="adminPayments" class="admin-content hidden">
+<h3>የክፍያ አስተዳደር</h3>
+<div id="adminPaymentList"></div>
+</div>
 
-  <div id="adminUsers" class="admin-content hidden">
-    <h3>የተጠቃሚ አስተዳደር</h3>
-    <div id="adminUserList"></div>
-  </div>
-
-  <div id="adminOrders" class="admin-content hidden">
-    <h3>ትዕዛዞች</h3>
-    <div id="adminOrderList"></div>
-  </div>
-
-  <div id="adminPayments" class="admin-content hidden">
-    <h3>የክፍያ አስተዳደር</h3>
-    <div id="adminPaymentList"></div>
-  </div>
-
+<button class="secondary" onclick="showPage('profilePage')">← ወደ Profile ተመለስ</button>
 </section>
 
 </main>
 
-<!-- BOTTOM NAVIGATION -->
+<!-- NAVIGATION -->
 <nav class="bottom-nav">
-  <button class="active" onclick="showPage('homePage',this)">
-    <span>🏠</span><span>ቤት</span>
-  </button>
-
-  <button onclick="showPage('sellPage',this)">
-    <span>➕</span><span>ሽጥ</span>
-  </button>
-
-  <button onclick="showPage('favoritesPage',this)">
-    <span>❤️</span><span>የወደድኩት</span>
-  </button>
-
-  <button onclick="showPage('chatPage',this)">
-    <span>💬</span><span>ቻት</span>
-  </button>
-
-  <button onclick="showPage('profilePage',this)">
-    <span>👤</span><span>መለያ</span>
-  </button>
+<button class="active" onclick="showPage('homePage',this)"><span>🏠</span><span>ቤት</span></button>
+<button onclick="showPage('sellPage',this)"><span>➕</span><span>ሽጥ</span></button>
+<button onclick="showPage('favoritesPage',this)"><span>❤️</span><span>የወደድኩት</span></button>
+<button onclick="showPage('chatPage',this)"><span>💬</span><span>ቻት</span></button>
+<button onclick="showPage('profilePage',this)"><span>👤</span><span>መለያ</span></button>
 </nav>
 
-<!-- PRODUCT MODAL -->
-<div class="modal" id="productModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
 <script>
-// ALLIN ONE FIREBASE CONNECTION
+/* ALLIN ONE APPLICATION LOGIC */
 
-// Firebase SDK ከመጫን በፊት
-// የFirebase Console ውስጥ Web App ፍጠር።
+let products = loadData("allin_products",[]);
+let favorites = loadData("allin_favorites",[]);
+let orders = loadData("allin_orders",[]);
+let users = loadData("allin_users",[]);
+let currentUser = loadData("allin_user",null);
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.firebasestorage.app",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+function loadData(key,fallback){
+try{
+const data=localStorage.getItem(key);
+return data===null?fallback:JSON.parse(data);
+}catch(error){
+console.error("Storage error:",key,error);
+return fallback;
+}
+}
+
+function saveData(){
+try{
+localStorage.setItem("allin_products",JSON.stringify(products));
+localStorage.setItem("allin_favorites",JSON.stringify(favorites));
+localStorage.setItem("allin_orders",JSON.stringify(orders));
+localStorage.setItem("allin_users",JSON.stringify(users));
+}catch(error){
+alert("የማስቀመጫ ቦታ ተሞልቷል። የፎቶ መጠን ይቀንሱ።");
+}
+}
+
+function showPage(pageId,button){
+document.querySelectorAll(".page").forEach(page=>page.classList.remove("active"));
+const page=document.getElementById(pageId);
+if(page)page.classList.add("active");
+
+document.querySelectorAll(".bottom-nav button").forEach(btn=>btn.classList.remove("active"));
+if(button)button.classList.add("active");
+
+if(pageId==="homePage")renderProducts();
+if(pageId==="favoritesPage")renderFavorites();
+if(pageId==="myProductsPage")renderMyProducts();
+if(pageId==="profilePage")loadProfile();
+if(pageId==="adminPage")updateAdmin();
+window.scrollTo(0,0);
+}
+
+function loadProfile(){
+if(!currentUser)return;
+document.getElementById("profileName").value=currentUser.name||"";
+document.getElementById("profilePhone").value=currentUser.phone||"";
+document.getElementById("profileEmail").value=currentUser.email||"";
+}
+
+function submitProduct(){
+const title=document.getElementById("sellTitle").value.trim();
+const category=document.getElementById("sellCategory").value;
+const price=Number(document.getElementById("sellPrice").value);
+const phone=document.getElementById("sellPhone").value.trim();
+const location=document.getElementById("sellLocation").value.trim();
+const description=document.getElementById("sellDescription").value.trim();
+const imageFile=document.getElementById("sellImage").files[0];
+
+if(!title||!price||!phone||!location||!imageFile){
+alert("እባክዎ አስፈላጊ መረጃዎችን ይሙሉ።");
+return;
+}
+if(price<=0){
+alert("ትክክለኛ ዋጋ ያስገቡ።");
+return;
+}
+if(imageFile.size>2*1024*1024){
+alert("ፎቶው ከ2MB መብለጥ የለበትም።");
+return;
+}
+if(!imageFile.type.startsWith("image/")){
+alert("እባክዎ የምርት ፎቶ ይምረጡ።");
+return;
+}
+
+const reader=new FileReader();
+reader.onload=function(){
+const product={
+id:Date.now(),
+title,category,price,phone,location,description,
+image:reader.result,
+status:"pending",
+owner:currentUser?.phone||phone,
+date:new Date().toISOString()
 };
+products.push(product);
+saveData();
 
-// እዚህ ላይ የFirebase ትክክለኛ Config
-// መረጃህን አስገባ።
+alert("ምርትዎ ተመዝግቧል። የአድሚን ማጽደቅ ይጠብቁ።");
+
+["sellTitle","sellPrice","sellPhone","sellLocation","sellImage","sellDescription"].forEach(id=>{
+document.getElementById(id).value="";
+});
+showPage("myProductsPage");
+};
+reader.onerror=()=>alert("ፎቶውን ማንበብ አልተቻለም።");
+reader.readAsDataURL(imageFile);
+}
+
+function escapeHTML(value){
+return String(value??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+})[c]);
+}
+
+function renderCard(p){
+return `
+<div class="card">
+<img src="${p.image}" alt="${escapeHTML(p.title)}" onclick="openProduct(${p.id})">
+<div class="card-body">
+<h3 onclick="openProduct(${p.id})">${escapeHTML(p.title)}</h3>
+<div class="price">${Number(p.price).toLocaleString()} ብር</div>
+<p class="muted">📍 ${escapeHTML(p.location)}</p>
+<div class="actions">
+<button onclick="toggleFavorite(${p.id})">❤️</button>
+<a class="call-button" href="tel:${escapeHTML(p.phone)}">ደውል</a>
+</div>
+</div>
+</div>`;
+}
+
+function renderProducts(){
+const grid=document.getElementById("productGrid");
+const approved=products.filter(p=>p.status==="approved");
+grid.innerHTML=approved.length?
+approved.map(renderCard).join(""):
+'<div class="empty">እስካሁን የተፈቀዱ ምርቶች የሉም።</div>';
+}
+
+function openProduct(id){
+const p=products.find(item=>item.id===id);
+if(!p||p.status!=="approved")return;
+
+document.getElementById("productDetails").innerHTML=`
+<img src="${p.image}" alt="${escapeHTML(p.title)}"
+style="width:100%;max-height:300px;object-fit:contain">
+<h2>${escapeHTML(p.title)}</h2>
+<div class="price">${Number(p.price).toLocaleString()} ብር</div>
+<p>${escapeHTML(p.description)}</p>
+<p class="muted">📍 ${escapeHTML(p.location)}</p>
+<p class="muted">📞 ${escapeHTML(p.phone)}</p>
+<a class="call-button" style="padding:12px;display:block;text-align:center"
+href="tel:${escapeHTML(p.phone)}">ሻጩን ደውል</a>
+<button style="width:100%;margin-top:10px" onclick="toggleFavorite(${p.id})">❤️ ወደ ተወዳጆች ጨምር</button>
+`;
+showPage("productPage");
+}
+
+function toggleFavorite(id){
+favorites=favorites.includes(id)?
+favorites.filter(x=>x!==id):[...favorites,id];
+saveData();
+renderProducts();
+}
+
+function renderFavorites(){
+const grid=document.getElementById("favoritesGrid");
+const items=products.filter(p=>favorites.includes(p.id)&&p.status==="approved");
+grid.innerHTML=items.length?items.map(p=>`
+<div class="card">
+<img src="${p.image}" onclick="openProduct(${p.id})">
+<div class="card-body">
+<h3>${escapeHTML(p.title)}</h3>
+<div class="price">${Number(p.price).toLocaleString()} ብር</div>
+<button class="danger" onclick="toggleFavorite(${p.id});renderFavorites()">አስወግድ</button>
+</div></div>`).join(""):'<div class="empty">የተወደዱ ምርቶች የሉም።</div>';
+}
+
+function renderMyProducts(){
+const grid=document.getElementById("myProductsGrid");
+if(!currentUser){
+grid.innerHTML='<div class="empty">እባክዎ መጀመሪያ Profile ይሙሉ።</div>';
+return;
+}
+const items=products.filter(p=>p.owner===currentUser.phone);
+grid.innerHTML=items.length?items.map(p=>`
+<div class="card">
+<img src="${p.image}">
+<div class="card-body">
+<h3>${escapeHTML(p.title)}</h3>
+<div class="price">${Number(p.price).toLocaleString()} ብር</div>
+<span class="admin-badge ${p.status==="pending"?"pending":""}">
+${p.status==="approved"?"ተፈቅዷል":p.status==="pending"?"በመጠባበቅ ላይ":"ተሰርዟል"}
+</span>
+</div></div>`).join(""):'<div class="empty">ምርቶች አልጨመርክም።</div>';
+}
+
+function filterCategory(category,button){
+document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));
+button.classList.add("active");
+const items=products.filter(p=>p.status==="approved"&&(category==="all"||p.category===category));
+document.getElementById("productGrid").innerHTML=items.length?
+items.map(renderCard).join(""):'<div class="empty">ምርት አልተገኘም።</div>';
+}
+
+function searchProducts(){
+const q=document.getElementById("searchInput").value.toLowerCase().trim();
+const items=products.filter(p=>p.status==="approved"&&
+(p.title.toLowerCase().includes(q)||
+p.location.toLowerCase().includes(q)||
+(p.description||"").toLowerCase().includes(q)));
+document.getElementById("productGrid").innerHTML=items.length?
+items.map(renderCard).join(""):'<div class="empty">ምንም አልተገኘም።</div>';
+}
+
+function saveProfile(){
+const name=document.getElementById("profileName").value.trim();
+const phone=document.getElementById("profilePhone").value.trim();
+const email=document.getElementById("profileEmail").value.trim();
+
+if(!name||!phone){
+alert("ስምና ስልክ ያስፈልጋሉ።");
+return;
+}
+
+const oldPhone=currentUser?.phone;
+currentUser={name,phone,email};
+
+if(oldPhone&&oldPhone!==phone){
+products.forEach(p=>{
+if(p.owner===oldPhone)p.owner=phone;
+});
+}
+if(!users.some(u=>u.phone===phone))users.push({name,phone,email});
+else users=users.map(u=>u.phone===phone?{name,phone,email}:u);
+
+localStorage.setItem("allin_user",JSON.stringify(currentUser));
+saveData();
+alert("መረጃዎ ተቀምጧል።");
+}
+
+function logout(){
+if(!confirm("ከመለያዎ መውጣት ይፈልጋሉ?"))return;
+currentUser=null;
+localStorage.removeItem("allin_user");
+alert("ወጥተዋል።");
+showPage("homePage");
+}
+
+function openAdmin(){
+const password=prompt("የAdmin ይለፍ ቃል ያስገቡ።");
+if(password===null)return;
+alert("የይለፍ ቃል ማረጋገጫ በዚህ የDemo ስሪት አልተዘጋጀም። ለትክክለኛ Admin ደህንነት Firebase Authentication ያስፈልጋል።");
+}
+
+function adminTab(tab){
+document.querySelectorAll(".admin-section,.admin-content").forEach(el=>el.classList.add("hidden"));
+const target=document.getElementById("admin"+tab.charAt(0).toUpperCase()+tab.slice(1));
+if(target)target.classList.remove("hidden");
+updateAdmin();
+}
+
+function updateAdmin(){
+document.getElementById("adminProductCount").textContent=products.length;
+document.getElementById("adminUserCount").textContent=users.length;
+document.getElementById("adminOrderCount").textContent=orders.length;
+
+document.getElementById("adminRevenue").textContent=
+orders.reduce((sum,o)=>sum+Number(o.total||0),0).toLocaleString();
+
+document.getElementById("adminProductList").innerHTML=
+products.length?products.map(p=>`
+<div class="panel">
+<strong>${escapeHTML(p.title)}</strong>
+<p>${Number(p.price).toLocaleString()} ብር</p>
+<p class="muted">${escapeHTML(p.phone)} | ${escapeHTML(p.location)}</p>
+<span class="admin-badge ${p.status==="pending"?"pending":""}">${escapeHTML(p.status)}</span>
+<div class="admin-actions">
+${p.status!=="approved"?`<button onclick="approveProduct(${p.id})">አጽድቅ</button>`:""}
+<button class="danger" onclick="deleteProduct(${p.id})">ሰርዝ</button>
+</div>
+</div>`).join(""):'ምርት የለም።';
+
+document.getElementById("adminUserList").innerHTML=
+users.length?users.map(u=>`
+<div class="panel"><strong>${escapeHTML(u.name)}</strong>
+<p>${escapeHTML(u.phone)}</p><p>${escapeHTML(u.email||"")}</p></div>
+`).join(""):"ተጠቃሚ የለም።";
+
+document.getElementById("adminOrderList").innerHTML=
+orders.length?orders.map(o=>`
+<div class="panel">ትዕዛዝ #${escapeHTML(o.id)}
+<p>${Number(o.total||0).toLocaleString()} ብር</p></div>
+`).join(""):"ትዕዛዝ የለም።";
+
+document.getElementById("adminPaymentList").innerHTML=
+"<p>የክፍያ መረጃ ከክፍያ ስርዓት ጋር ሲገናኝ ይታያል።</p>";
+}
+
+function approveProduct(id){
+const p=products.find(x=>x.id===id);
+if(!p)return;
+p.status="approved";
+saveData();
+updateAdmin();
+alert("ምርቱ ጸድቋል።");
+}
+
+function deleteProduct(id){
+if(!confirm("ይህን ምርት ለማጥፋት እርግጠኛ ነዎት?"))return;
+products=products.filter(p=>p.id!==id);
+favorites=favorites.filter(x=>x!==id);
+saveData();
+updateAdmin();
+renderProducts();
+}
+
+function changeLanguage(){
+const lang=document.getElementById("languageSelect").value;
+if(lang==="en"){
+alert("English translation will be added in the next update.");
+document.getElementById("languageSelect").value="am";
+}
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+renderProducts();
+loadProfile();
+});
+</script>
+
+</body>
+</html>
