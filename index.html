@@ -8,95 +8,34 @@
 <meta name="description" content="ALLIN ONE - Buy, Sell and Connect">
 <title>ALLIN ONE</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f4f7f6;color:#222;padding-bottom:75px}
-header{background:#087b55;color:white;padding:13px 15px;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px #0002}
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.logo{font-size:22px;font-weight:bold}
-#languageSelect{padding:9px;border:0;border-radius:8px;background:white;color:#087b55;font-weight:bold;max-width:135px}
-.search-area{display:flex;gap:7px;margin-top:12px}
-.search-area input{flex:1;min-width:0;padding:11px;border:0;border-radius:8px;font-size:15px} 
-button{border:0;border-radius:8px;padding:10px 13px;background:#087b55;color:white;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.5}
-main{max-width:900px;margin:auto;padding:14px}
-.page{display:none}
-.page.active{display:block}
-h2{font-size:20px;margin:10px 0 14px;color:#087b55}
-h3{margin-bottom:8px}
-.categories{display:flex;gap:8px;overflow:auto;padding:12px 0}
-.categories button{white-space:nowrap;background:#e1eee9;color:#087b55}
-.categories button.active{background:#087b55;color:white}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #00000010}
-.card img{width:100%;height:145px;object-fit:cover;background:#eee;cursor:pointer}
-.card-body{padding:10px}
-.card-body h3{font-size:16px;overflow-wrap:anywhere;cursor:pointer}
-.price{font-weight:bold;color:#087b55;margin:7px 0}
-.muted{color:#777;font-size:13px}
-.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
-.actions button{font-size:12px;padding:8px}
-.secondary{background:#e7efeb;color:#087b55}
-.danger{background:#c0392b}
-.call-button{
- display:inline-block;
- background:#087b55;
- color:white;
- text-decoration:none;
- border-radius:8px;
- padding:8px;
- font-size:12px;
- font-weight:bold;
-}
-.form-box,.panel{background:white;padding:15px;border-radius:12px;margin:12px 0;box-shadow:0 2px 8px #0000000c}
-input,textarea,select{width:100%;padding:11px;border:1px solid #d6ded9;border-radius:8px;margin:6px 0 12px;font-size:15px}
-textarea{min-height:90px;resize:vertical}
-label{font-weight:bold;font-size:14px}
-.row{display:flex;gap:8px}
-.row>*{flex:1;min-width:0}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;align-items:center;padding:6px 2px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 10px #0002;z-index:30}
-.bottom-nav button{background:white;color:#555;border-radius:7px;padding:4px 2px;font-size:11px;flex:1;border:0;white-space:nowrap}
-.bottom-nav button.active{color:#087b55;font-weight:bold}
-.bottom-nav button>span:first-child{display:block;font-size:19px;line-height:1.2;margin-bottom:2px}
-.bottom-nav button>span:last-child{display:block;font-size:11px;line-height:1.2}
-.notice{padding:10px;border-radius:8px;background:#fff4d6;color:#745500;margin:10px 0;font-size:13px}
-.empty{text-align:center;color:#777;padding:30px 10px}
-.hidden{display:none!important}
-hr{border:0;border-top:1px solid #eee;margin:12px 0}
-#userBox{display:flex;flex-direction:column;justify-content:space-between;min-height:280px}
-.user-top-section{display:flex;flex-direction:column;gap:12px}
-.user-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.user-links button{flex:1;min-width:100px}
-.logout-container{margin-top:auto;padding-top:15px;border-top:1px solid #eee}
-.logout-container button{width:100%}
-.modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;z-index:100;padding:12px;overflow-y:auto}
-.modal.open{display:flex}
-.modal-box{background:white;border-radius:14px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;position:relative}
-.modal-close{position:absolute;top:10px;right:10px;background:#000a;color:white;border-radius:50%;width:36px;height:36px;padding:0;z-index:5}
-.zoom-wrap{background:#111;text-align:center}
-.zoom-wrap img{width:100%;max-height:340px;object-fit:contain;cursor:zoom-in}
-.zoom-wrap img.zoomed{transform:scale(1.5)}
-.modal-content{padding:16px}
-.modal-content h2{margin:0 0 6px;color:#222}
-.modal-desc{margin:10px 0;line-height:1.5;white-space:pre-line}
-.seller-info{background:#f4f7f6;padding:10px;border-radius:8px;margin:12px 0}
-.chat-item{background:white;padding:13px;border-radius:10px;margin:8px 0;cursor:pointer;border:1px solid #e4ebe7}
-.chat-item.active{border:2px solid #087b55;background:#effaf4}
-.chat-item:active{background:#e7efeb}
-.chat-user{font-weight:bold;color:#087b55;overflow-wrap:anywhere}
-.chat-preview{font-size:13px;color:#777;margin-top:5px;overflow-wrap:anywhere}
-.chat-window{background:white;border-radius:12px;overflow:hidden;margin-top:12px}
-.chat-header{background:#087b55;color:white;padding:13px;font-weight:bold;overflow-wrap:anywhere}
-.chat-thread{padding:12px;height:350px;overflow-y:auto;background:#f4f7f6;display:flex;flex-direction:column}
-.chat-bubble{padding:11px;margin:6px 0;border-radius:12px;max-width:85%;overflow-wrap:anywhere;white-space:pre-wrap;font-size:14px}
-.chat-sent{background:#d8f5e5;align-self:flex-end;border-bottom-right-radius:3px}
-.chat-received{background:white;align-self:flex-start;border-bottom-left-radius:3px}
-.chat-time{font-size:10px;color:#777;margin-top:5px;text-align:right}
-.chat-compose{padding:10px;display:flex;gap:7px;align-items:flex-end}
-.chat-compose textarea{flex:1;min-width:0;margin:0;min-height:45px;max-height:100px}
-.chat-compose button{height:45px}
-.fee-line{display:flex;justify-content:space-between;gap:12px;margin:8px 0;font-size:14px}
-.fee-total{font-weight:bold;color:#087b55;font-size:17px}
-@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.card img{height:180px}}
+
+/* ALLIN ONE ADMIN DASHBOARD */
+#adminPage{max-width:1200px;margin:auto}
+.admin-header{background:linear-gradient(120deg,#005b42,#00a65a);color:white;padding:25px;border-radius:15px;margin:12px 0}
+.admin-header h2{color:white;font-size:25px}
+.admin-header p{margin-top:8px}
+.admin-menu{display:flex;gap:8px;overflow-x:auto;padding:12px 0}
+.admin-menu button{white-space:nowrap;min-width:max-content}
+.admin-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0}
+.admin-stat{background:white;padding:18px;border-radius:13px;box-shadow:0 2px 9px #00000010;border:1px solid #e7eee9}
+.admin-stat .stat-icon{font-size:27px}
+.admin-stat h3{font-size:25px;margin:9px 0;color:#10233f}
+.admin-stat p{color:#666;font-size:13px}
+.admin-stat small{color:#078747;font-weight:bold}
+.admin-content{background:white;padding:16px;border-radius:13px;margin:12px 0;box-shadow:0 2px 9px #0000000c;overflow-x:auto}
+.admin-content h3{color:#10233f;margin-bottom:14px}
+.admin-badge{display:inline-block;padding:5px 10px;border-radius:20px;background:#d9f6e6;color:#087b55;font-size:12px;font-weight:bold}
+.admin-badge.pending{background:#fff1ce;color:#986500}
+.admin-badge.cancelled{background:#ffe0e0;color:#b32626}
+.admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+.admin-actions button{font-size:11px;padding:8px}
+.admin-chart{height:150px;display:flex;align-items:end;gap:12px;padding:15px 5px 0;border-bottom:1px solid #ddd}
+.admin-bar{flex:1;min-width:12px;background:linear-gradient(#00b968,#087b55);border-radius:7px 7px 0 0;position:relative}
+.admin-bar span{position:absolute;bottom:-23px;left:50%;transform:translateX(-50%);font-size:10px;color:#777}
+.admin-shortcut{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.admin-shortcut button{padding:18px 8px;font-size:14px}
+@media(max-width:700px){.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-stat{padding:13px}.admin-stat h3{font-size:21px}.admin-header h2{font-size:21px}}
+
 </style>
 </head>
 <body>
