@@ -106,8 +106,28 @@
 <section id="sellerPage" class="page"><h2>የሻጭ ዳሽቦርድ</h2><div id="sellerProducts"></div><h2>የተቀበልኳቸው ትዕዛዞች</h2><div id="sellerOrders"></div></section>
 <section id="ordersPage" class="page"><h2>ትዕዛዞቼ</h2><div id="myOrders"></div></section>
 <section id="adminPage" class="page">
- <h2>Admin Dashboard</h2><div class="notice">የአስተዳዳሪ ገጽ — የCommission ስሌት በCompleted ትዕዛዞች ላይ ብቻ ይቆጠራል።</div>
- <div id="adminCommissionSummary"></div><div id="adminOrders"></div><h2>ሁሉም ምርቶች</h2><div id="adminProducts"></div>
+
+ <div class="admin-header">
+  <h2>🛡️ ALLIN ONE Admin Dashboard</h2>
+  <p>እንኳን ወደ አስተዳዳሪ ገጽ በደህና መጡ</p>
+  <p>የገቢ፣ የትዕዛዝ እና የምርት አስተዳደር</p>
+ </div>
+
+ <div class="admin-content">
+  <h3>💰 Commission Summary</h3>
+  <div id="adminCommissionSummary"></div>
+ </div>
+
+ <div class="admin-content">
+  <h3>📦 ሁሉም ትዕዛዞች</h3>
+  <div id="adminOrders"></div>
+ </div>
+
+ <div class="admin-content">
+  <h3>🛍️ ሁሉም ምርቶች</h3>
+  <div id="adminProducts"></div>
+ </div>
+
 </section>
 </main>
 <div id="productModal" class="modal" onclick="if(event.target===this)closeProductModal()">
