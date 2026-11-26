@@ -1,18 +1,19 @@
+
 <!DOCTYPE html>
 <html lang="am">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#087b55">
 <meta name="description" content="ALLIN ONE - Buy, Sell and Connect">
 <title>ALLIN ONE | Buy & Sell</title>
 <style>
-:root{--green:#087b55;--green2:#006747;--light:#e9f6ef;--bg:#f4f6f5;--ink:#17251e;--muted:#748078;--line:#e5ebe7;--white:#fff;--orange:#ffb22c;--shadow:0 5px 22px #152b2010}
+:root{--green:#087b55;--green2:#006747;--light:#e9f6ef;--bg:#f4f6f5;--ink:#17251e;--muted:#748078;--line:#e5ebe7;--shadow:0 5px 22px #152b2010}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,"Noto Sans Ethiopic",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:82px;overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 button{border:0;cursor:pointer;border-radius:10px;padding:11px 15px;background:var(--green);color:#fff;font-weight:700}
-button:active{transform:scale(.98)}
+button:disabled{opacity:.6;cursor:wait}
 button.secondary{background:var(--light);color:var(--green)}
 button.danger{background:#fff0f0;color:#b52a2a}
 button.outline{background:#fff;color:var(--green);border:1px solid #cfe2d7}
@@ -23,22 +24,15 @@ header{position:sticky;top:0;z-index:50;background:#fff;box-shadow:0 2px 12px #0
 .topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .logo{font-size:25px;font-weight:900;letter-spacing:-.7px;color:var(--green)}
 .logo small{font-size:10px;display:block;letter-spacing:2px;color:#829087;font-weight:700}
-.header-tools{display:flex;gap:8px;align-items:center}
 .header-tools select{width:auto;max-width:115px;padding:8px}
-.icon-btn{background:#f2f6f3;color:var(--green);padding:9px 11px;font-size:18px}
-.search-row{display:flex;gap:8px;margin-top:12px}
-.search-row input{flex:1;min-width:0;background:#f7faf8}
-.search-row button{min-width:82px}
 main{max-width:1180px;margin:auto;padding:15px}
-.page{display:none}.page.active{display:block}
+.page{display:none}.page.active{display:block}.hidden{display:none!important}
 .hero{background:linear-gradient(115deg,#005b42,#0c9365);color:#fff;border-radius:17px;padding:22px 20px;margin:4px 0 17px;position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#ffffff12;right:-45px;top:-60px}
-.hero h1{font-size:23px;line-height:1.45;max-width:650px;position:relative;z-index:1}
-.hero p{font-size:14px;opacity:.9;margin-top:8px;position:relative;z-index:1}
-.hero button{margin-top:15px;background:#fff;color:var(--green);position:relative;z-index:1}
+.hero h1{font-size:23px;line-height:1.45;max-width:650px}
+.hero p{font-size:14px;opacity:.9;margin-top:8px}
+.hero button{margin-top:15px;background:#fff;color:var(--green)}
 .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:19px 0 9px}
-.section-head h2{font-size:19px}
-.section-head button{font-size:12px;padding:8px 11px}
+.section-head h2{font-size:19px}.section-head button{font-size:12px;padding:8px 11px}
 .categories{display:flex;gap:9px;overflow:auto;padding:6px 0 12px;scrollbar-width:none}
 .categories::-webkit-scrollbar{display:none}
 .categories button{white-space:nowrap;background:#fff;color:#34443b;border:1px solid var(--line);padding:10px 14px;border-radius:22px;font-size:13px}
@@ -47,13 +41,10 @@ main{max-width:1180px;margin:auto;padding:15px}
 .toolbar span{font-size:13px;color:var(--muted)}
 .toolbar select{width:auto;max-width:160px;padding:9px;font-size:12px}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.card{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:0;box-shadow:var(--shadow);position:relative}
-.card-img-wrap{height:175px;background:#eef2ef;position:relative;cursor:pointer}
+.card{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:0;box-shadow:var(--shadow)}
+.card-img-wrap{height:175px;background:#eef2ef;cursor:pointer}
 .card-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-.fav-float{position:absolute;right:9px;top:9px;width:34px;height:34px;border-radius:50%;padding:0;background:#ffffffed;color:#53645a;font-size:17px}
-.fav-float.saved{color:#e33b61}
-.card-body{padding:11px}
-.card-title{font-size:14px;line-height:1.4;min-height:39px;overflow-wrap:anywhere;cursor:pointer}
+.card-body{padding:11px}.card-title{font-size:14px;line-height:1.4;min-height:39px;overflow-wrap:anywhere;cursor:pointer}
 .price{font-size:17px;color:var(--green);font-weight:900;margin:7px 0}
 .card-meta{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:5px}
 .card-actions{display:flex;gap:6px;margin-top:10px}
@@ -65,7 +56,7 @@ main{max-width:1180px;margin:auto;padding:15px}
 .form-box label{display:block;font-size:13px;font-weight:700;margin:13px 0 6px}
 .form-box textarea{min-height:95px;resize:vertical}
 .form-box button{margin-top:13px}
-.form-box .hint{font-size:11px;color:var(--muted);margin-top:6px}
+.hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
 .page-title{font-size:22px;margin:12px 0 15px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#d9f6e6;color:#087b55;font-size:11px;font-weight:800}
@@ -81,7 +72,8 @@ main{max-width:1180px;margin:auto;padding:15px}
 .admin-menu button{white-space:nowrap;font-size:12px}
 .admin-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
 .admin-stat{background:#fff;padding:15px;border-radius:12px;border:1px solid var(--line)}
-.admin-stat .stat-icon{font-size:23px}.admin-stat h3{font-size:23px;margin:8px 0;color:#10233f}.admin-stat p{font-size:12px;color:#66736b}
+.admin-stat .stat-icon{font-size:23px}.admin-stat h3{font-size:23px;margin:8px 0;color:#10233f}
+.admin-stat p{font-size:12px;color:#66736b}
 .admin-content{background:#fff;padding:15px;border-radius:13px;margin:12px 0;overflow-x:auto}
 .admin-content h3{margin-bottom:12px}
 .admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
@@ -91,7 +83,8 @@ main{max-width:1180px;margin:auto;padding:15px}
 .admin-item strong{overflow-wrap:anywhere}
 .muted{color:var(--muted);font-size:12px;margin:6px 0}
 .detail-img{width:100%;max-height:360px;object-fit:contain;background:#f0f3f1;border-radius:12px}
-.detail-actions{display:flex;gap:9px;margin-top:15px}.detail-actions>*{flex:1;text-align:center;text-decoration:none}
+.detail-actions{display:flex;gap:9px;margin-top:15px}
+.detail-actions>*{flex:1;text-align:center;text-decoration:none}
 .toast{position:fixed;left:50%;bottom:85px;transform:translateX(-50%);background:#17251e;color:#fff;padding:11px 16px;border-radius:25px;font-size:13px;z-index:200;display:none;max-width:90%;text-align:center}
 @media(max-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){main{padding:10px}.logo{font-size:22px}.hero{padding:19px 16px}.hero h1{font-size:20px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card-img-wrap{height:145px}.card-body{padding:9px}.card-title{font-size:13px;min-height:36px}.price{font-size:16px}.toolbar select{max-width:135px}.page-title{font-size:20px}.admin-header{padding:18px}.admin-stats{gap:8px}.admin-stat{padding:12px}.admin-stat h3{font-size:20px}}
@@ -104,16 +97,15 @@ main{max-width:1180px;margin:auto;padding:15px}
   <div class="topline">
    <div class="logo">ALLIN ONE<small>BUY • SELL • CONNECT</small></div>
    <div class="header-tools">
-    <button class="icon-btn" onclick="showPage('favoritesPage')" aria-label="Favorites">♡</button>
-    <select id="languageSelect" onchange="changeLanguage()"><option value="am">አማርኛ</option><option value="en">English</option></select>
+    <select id="languageSelect" onchange="changeLanguage()">
+     <option value="am">አማርኛ</option>
+     <option value="en">English</option>
+    </select>
    </div>
-  </div>
-  <div class="search-row">
-   <input id="searchInput" type="search" placeholder="ምርት፣ አካባቢ ፈልግ..." onkeydown="if(event.key==='Enter')searchProducts()">
-   <button onclick="searchProducts()">ፈልግ</button>
   </div>
  </div>
 </header>
+
 <main>
 <section id="homePage" class="page active">
  <div class="hero">
@@ -130,8 +122,18 @@ main{max-width:1180px;margin:auto;padding:15px}
   <button data-cat="fashion" onclick="filterCategory('fashion',this)">👕 ልብስ</button>
   <button data-cat="other" onclick="filterCategory('other',this)">📦 ሌሎች</button>
  </div>
- <div class="section-head"><h2 id="listingHeading">አዳዲስ ምርቶች</h2><button class="outline" onclick="resetFilters()">ሁሉንም አሳይ</button></div>
- <div class="toolbar"><span id="resultCount">0 ምርቶች</span><select id="sortSelect" onchange="renderProducts()"><option value="new">አዲስ መጀመሪያ</option><option value="low">ዋጋ: ከዝቅተኛ</option><option value="high">ዋጋ: ከከፍተኛ</option></select></div>
+ <div class="section-head">
+  <h2 id="listingHeading">አዳዲስ ምርቶች</h2>
+  <button class="outline" onclick="resetFilters()">ሁሉንም አሳይ</button>
+ </div>
+ <div class="toolbar">
+  <span id="resultCount">0 ምርቶች</span>
+  <select id="sortSelect" onchange="renderProducts()">
+   <option value="new">አዲስ መጀመሪያ</option>
+   <option value="low">ዋጋ: ከዝቅተኛ</option>
+   <option value="high">ዋጋ: ከከፍተኛ</option>
+  </select>
+ </div>
  <div id="productGrid" class="grid"></div>
 </section>
 
@@ -143,21 +145,30 @@ main{max-width:1180px;margin:auto;padding:15px}
 <section id="sellPage" class="page">
  <h2 class="page-title">ምርትህን ሽጥ</h2>
  <div class="form-box">
-  <label>የምርት ስም *</label><input id="sellTitle" maxlength="90" placeholder="ምሳሌ፦ Samsung Galaxy">
-  <label>ምድብ *</label><select id="sellCategory"><option value="electronics">ኤሌክትሮኒክስ</option><option value="vehicles">መኪና</option><option value="property">ቤት</option><option value="fashion">ልብስ</option><option value="other">ሌሎች</option></select>
+  <label>የምርት ስም *</label>
+  <input id="sellTitle" maxlength="90" placeholder="ምሳሌ፦ Samsung Galaxy">
+  <label>ምድብ *</label>
+  <select id="sellCategory">
+   <option value="electronics">ኤሌክትሮኒክስ</option>
+   <option value="vehicles">መኪና</option>
+   <option value="property">ቤት</option>
+   <option value="fashion">ልብስ</option>
+   <option value="other">ሌሎች</option>
+  </select>
   <div class="two-col">
    <div><label>ዋጋ (ብር) *</label><input id="sellPrice" type="number" min="1" placeholder="ዋጋ"></div>
    <div><label>ስልክ ቁጥር *</label><input id="sellPhone" type="tel" placeholder="09xxxxxxxx"></div>
   </div>
-  <label>አካባቢ *</label><input id="sellLocation" placeholder="ከተማ / አካባቢ">
-  <label>የምርት ፎቶ *</label><input id="sellImage" type="file" accept="image/*"><p class="hint">ከ2MB በታች የሆነ ፎቶ ይምረጡ።</p>
-  <label>ዝርዝር መግለጫ</label><textarea id="sellDescription" placeholder="ስለ ምርቱ ይግለጹ..."></textarea>
-  <button onclick="submitProduct()" style="width:100%">ምርት አስገባ</button>
+  <label>አካባቢ *</label>
+  <input id="sellLocation" placeholder="ከተማ / አካባቢ">
+  <label>የምርት ፎቶ *</label>
+  <input id="sellImage" type="file" accept="image/*">
+  <p class="hint">ከ2MB በታች የሆነ ፎቶ ይምረጡ።</p>
+  <label>ዝርዝር መግለጫ</label>
+  <textarea id="sellDescription" placeholder="ስለ ምርቱ ይግለጹ..."></textarea>
+  <button id="submitProductButton" onclick="submitProduct()" style="width:100%">ምርት አስገባ</button>
+  <p class="hint">ፎቶው Cloudinary ላይ ይጫናል።</p>
  </div>
-</section>
-
-<section id="favoritesPage" class="page">
- <h2 class="page-title">የምወዳቸው ምርቶች ❤️</h2><div id="favoritesGrid" class="grid"></div>
 </section>
 
 <section id="profilePage" class="page">
@@ -170,7 +181,7 @@ main{max-width:1180px;margin:auto;padding:15px}
  </div>
  <div class="form-box">
   <h3>የእኔ እንቅስቃሴ</h3>
-  <div class="user-links">
+  <div style="display:grid;gap:9px;margin-top:12px">
    <button class="secondary" onclick="showPage('myProductsPage')">📦 የእኔ ምርቶች</button>
    <button class="secondary" onclick="showPage('chatPage')">💬 መልዕክቶች</button>
    <button class="secondary" onclick="openAdmin()">⚙ Admin Dashboard</button>
@@ -180,19 +191,30 @@ main{max-width:1180px;margin:auto;padding:15px}
 </section>
 
 <section id="myProductsPage" class="page">
- <h2 class="page-title">የእኔ ምርቶች</h2><div id="myProductsGrid" class="grid"></div>
+ <h2 class="page-title">የእኔ ምርቶች</h2>
+ <div id="myProductsGrid" class="grid"></div>
 </section>
 
 <section id="chatPage" class="page">
  <h2 class="page-title">መልዕክቶች 💬</h2>
- <div class="panel"><strong>የውይይት ክፍል</strong><p class="muted">የቀጥታ ቻት ለመስራት Firebase ወይም Server ማገናኘት ያስፈልጋል።</p></div>
+ <div class="panel">
+  <strong>የውይይት ክፍል</strong>
+  <p class="muted">የቀጥታ ቻት ለመስራት Firebase ወይም Server ማገናኘት ያስፈልጋል።</p>
+ </div>
 </section>
 
 <section id="adminPage" class="page">
- <div class="admin-header"><h2>ALLIN ONE ADMIN</h2><p>የመድረኩ አስተዳደር ዳሽቦርድ</p></div>
- <div class="notice">ማስታወሻ፦ ይህ በስልክ/Browser LocalStorage ላይ የሚሰራ Demo ነው። በቀጥታ ድረገፅ ላይ Admin ደህንነትን በServer/Firebase መጠበቅ አለበት።</div>
+ <div class="admin-header">
+  <h2>ALLIN ONE ADMIN</h2>
+  <p>የመድረኩ አስተዳደር ዳሽቦርድ</p>
+ </div>
+ <div class="notice">ማስታወሻ፦ ይህ LocalStorage Demo ነው። በቀጥታ ድረገፅ ላይ Admin ደህንነትን Firebase/Server ላይ መጠበቅ አለበት።</div>
  <div class="admin-menu">
-  <button onclick="adminTab('overview')">📊 Overview</button><button onclick="adminTab('products')">📦 Products</button><button onclick="adminTab('users')">👥 Users</button><button onclick="adminTab('orders')">🛒 Orders</button><button onclick="adminTab('payments')">💳 Payments</button>
+  <button onclick="adminTab('overview')">📊 Overview</button>
+  <button onclick="adminTab('products')">📦 Products</button>
+  <button onclick="adminTab('users')">👥 Users</button>
+  <button onclick="adminTab('orders')">🛒 Orders</button>
+  <button onclick="adminTab('payments')">💳 Payments</button>
  </div>
  <div id="adminOverview" class="admin-section">
   <div class="admin-stats">
@@ -213,7 +235,6 @@ main{max-width:1180px;margin:auto;padding:15px}
 <nav class="bottom-nav">
  <button class="active" onclick="showPage('homePage',this)"><span>🏠</span><span>ቤት</span></button>
  <button onclick="showPage('sellPage',this)"><span>＋</span><span>ሽጥ</span></button>
- <button onclick="showPage('favoritesPage',this)"><span>❤️</span><span>የወደድኩት</span></button>
  <button onclick="showPage('chatPage',this)"><span>💬</span><span>ቻት</span></button>
  <button onclick="showPage('profilePage',this)"><span>👤</span><span>መለያ</span></button>
 </nav>
@@ -221,52 +242,399 @@ main{max-width:1180px;margin:auto;padding:15px}
 
 <script>
 "use strict";
-const KEYS={products:"allin_products",favorites:"allin_favorites",orders:"allin_orders",users:"allin_users",user:"allin_user"};
-function loadData(key,fallback){try{const v=localStorage.getItem(key);return v===null?fallback:JSON.parse(v)}catch(e){return fallback}}
+
+/* CLOUDINARY SETTINGS */
+const CLOUDINARY_CLOUD_NAME="idnxqboa";
+const CLOUDINARY_UPLOAD_PRESET="allinone_products";
+const CLOUDINARY_FOLDER="all-in-one-products";
+
+/* LOCAL DATA */
+const KEYS={
+ products:"allin_products",
+ orders:"allin_orders",
+ users:"allin_users",
+ user:"allin_user"
+};
+
+function loadData(key,fallback){
+ try{
+  const value=localStorage.getItem(key);
+  return value===null?fallback:JSON.parse(value);
+ }catch(error){return fallback}
+}
+
 let products=loadData(KEYS.products,[]);
-let favorites=loadData(KEYS.favorites,[]);
 let orders=loadData(KEYS.orders,[]);
 let users=loadData(KEYS.users,[]);
 let currentUser=loadData(KEYS.user,null);
-let activeCategory="all",searchQuery="";
+let activeCategory="all";
+
 function saveData(){
- try{localStorage.setItem(KEYS.products,JSON.stringify(products));localStorage.setItem(KEYS.favorites,JSON.stringify(favorites));localStorage.setItem(KEYS.orders,JSON.stringify(orders));localStorage.setItem(KEYS.users,JSON.stringify(users));}
- catch(e){alert("የማስቀመጫ ቦታ ተሞልቷል። የፎቶ መጠን ይቀንሱ።")}
+ try{
+  localStorage.setItem(KEYS.products,JSON.stringify(products));
+  localStorage.setItem(KEYS.orders,JSON.stringify(orders));
+  localStorage.setItem(KEYS.users,JSON.stringify(users));
+  return true;
+ }catch(error){
+  alert("መረጃውን ማስቀመጥ አልተቻለም።");
+  return false;
+ }
 }
-function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.style.display="none",2400)}
+
+function toast(message){
+ const box=document.getElementById("toast");
+ box.textContent=message;
+ box.style.display="block";
+ clearTimeout(toast.timer);
+ toast.timer=setTimeout(()=>box.style.display="none",2600);
+}
+
 function showPage(id,button){
- document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- const page=document.getElementById(id);if(page)page.classList.add("active");
- document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
+ document.querySelectorAll(".page").forEach(page=>page.classList.remove("active"));
+ const page=document.getElementById(id);
+ if(page)page.classList.add("active");
+
+ document.querySelectorAll(".bottom-nav button").forEach(btn=>btn.classList.remove("active"));
  if(button)button.classList.add("active");
- else {const map={homePage:0,sellPage:1,favoritesPage:2,chatPage:3,profilePage:4};if(map[id]!==undefined)document.querySelectorAll(".bottom-nav button")[map[id]].classList.add("active")}
- if(id==="homePage")renderProducts();if(id==="favoritesPage")renderFavorites();if(id==="myProductsPage")renderMyProducts();if(id==="profilePage")loadProfile();if(id==="adminPage")updateAdmin();
+ else{
+  const indexes={homePage:0,sellPage:1,chatPage:2,profilePage:3};
+  const index=indexes[id];
+  if(index!==undefined)document.querySelectorAll(".bottom-nav button")[index].classList.add("active");
+ }
+
+ if(id==="homePage")renderProducts();
+ if(id==="myProductsPage")renderMyProducts();
+ if(id==="profilePage")loadProfile();
+ if(id==="adminPage")updateAdmin();
  window.scrollTo({top:0,behavior:"smooth"});
 }
-function escapeHTML(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function safeImage(src){return src||"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='100%25' height='100%25' fill='%23edf2ee'/%3E%3Ctext x='50%25' y='50%25' font-size='28' text-anchor='middle' fill='%23748078' dominant-baseline='middle'%3EALLIN ONE%3C/text%3E%3C/svg%3E"}
-function visibleProducts(){let list=products.filter(p=>p.status==="approved");if(activeCategory!=="all")list=list.filter(p=>p.category===activeCategory);if(searchQuery){const q=searchQuery.toLowerCase();list=list.filter(p=>[p.title,p.location,p.description].some(v=>String(v||"").toLowerCase().includes(q)))}const sort=document.getElementById("sortSelect")?.value||"new";if(sort==="low")list.sort((a,b)=>Number(a.price)-Number(b.price));else if(sort==="high")list.sort((a,b)=>Number(b.price)-Number(a.price));else list.sort((a,b)=>Number(b.id)-Number(a.id));return list}
-function renderCard(p){return `<article class="card"><div class="card-img-wrap" onclick="openProduct(${Number(p.id)})"><img loading="lazy" src="${safeImage(p.image)}" alt="${escapeHTML(p.title)}" onerror="this.src='${safeImage("")}'"><button class="fav-float ${favorites.includes(p.id)?"saved":""}" onclick="event.stopPropagation();toggleFavorite(${Number(p.id)})">${favorites.includes(p.id)?"♥":"♡"}</button></div><div class="card-body"><div class="card-title" onclick="openProduct(${Number(p.id)})">${escapeHTML(p.title)}</div><div class="price">${Number(p.price).toLocaleString()} ብር</div><div class="card-meta"><span>📍 ${escapeHTML(p.location)}</span><span>🕒 ${new Date(p.date||Date.now()).toLocaleDateString()}</span></div><div class="card-actions"><a class="call-button" href="tel:${escapeHTML(p.phone)}">ደውል</a><button onclick="openProduct(${Number(p.id)})">ዝርዝር</button></div></div></article>`}
-function renderProducts(){const list=visibleProducts();document.getElementById("resultCount").textContent=list.length+" ምርቶች";document.getElementById("productGrid").innerHTML=list.length?list.map(renderCard).join(""):'<div class="empty"><strong>ምርቶች አልተገኙም</strong>ለጊዜው የተፈቀዱ ምርቶች የሉም። የመጀመሪያውን ምርት እርስዎ ያስገቡ።<br><br><button onclick="showPage(\'sellPage\')">＋ ምርት አስገባ</button></div>'}
-function resetFilters(){activeCategory="all";searchQuery="";document.getElementById("searchInput").value="";document.querySelectorAll(".categories button").forEach(b=>b.classList.toggle("active",b.dataset.cat==="all"));document.getElementById("listingHeading").textContent="አዳዲስ ምርቶች";renderProducts()}
-function filterCategory(cat,btn){activeCategory=cat;document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");document.getElementById("listingHeading").textContent=cat==="all"?"አዳዲስ ምርቶች":btn.textContent;renderProducts()}
-function searchProducts(){searchQuery=document.getElementById("searchInput").value.trim();activeCategory="all";document.querySelectorAll(".categories button").forEach(b=>b.classList.toggle("active",b.dataset.cat==="all"));document.getElementById("listingHeading").textContent=searchQuery?"የፍለጋ ውጤቶች":"አዳዲስ ምርቶች";renderProducts();showPage("homePage")}
-function openProduct(id){const p=products.find(x=>Number(x.id)===Number(id));if(!p||p.status!=="approved")return;document.getElementById("productDetails").innerHTML=`<img class="detail-img" src="${safeImage(p.image)}" alt="${escapeHTML(p.title)}"><h2 style="margin:15px 0 5px">${escapeHTML(p.title)}</h2><div class="price">${Number(p.price).toLocaleString()} ብር</div><p style="margin:12px 0;line-height:1.6">${escapeHTML(p.description||"ምንም ተጨማሪ መግለጫ አልተሰጠም።")}</p><p class="muted">📍 ${escapeHTML(p.location)}</p><p class="muted">📞 ${escapeHTML(p.phone)}</p><p class="muted">📅 ${new Date(p.date||Date.now()).toLocaleString()}</p><div class="detail-actions"><a class="call-button" style="padding:13px;border-radius:9px" href="tel:${escapeHTML(p.phone)}">📞 ሻጩን ደውል</a><button onclick="toggleFavorite(${Number(p.id)});openProduct(${Number(p.id)})">♡ ተወዳጅ</button></div>`;showPage("productPage")}
-function toggleFavorite(id){favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];saveData();renderProducts();renderFavorites();toast(favorites.includes(id)?"ወደ ተወዳጆች ተጨምሯል":"ከተወዳጆች ተወግዷል")}
-function renderFavorites(){const items=products.filter(p=>favorites.includes(p.id)&&p.status==="approved");document.getElementById("favoritesGrid").innerHTML=items.length?items.map(renderCard).join(""):'<div class="empty"><strong>የተወደዱ ምርቶች የሉም</strong>የሚወዱትን ምርት ላይ ♡ ይጫኑ።</div>'}
-function renderMyProducts(){const grid=document.getElementById("myProductsGrid");if(!currentUser){grid.innerHTML='<div class="empty">የእኔን ምርቶች ለማየት ከዚህ በታች Profile ውስጥ ስምና ስልክ ያስገቡ።</div>';return}const items=products.filter(p=>p.owner===currentUser.phone);grid.innerHTML=items.length?items.map(p=>`<article class="card"><div class="card-img-wrap"><img src="${safeImage(p.image)}" alt="${escapeHTML(p.title)}"></div><div class="card-body"><div class="card-title">${escapeHTML(p.title)}</div><div class="price">${Number(p.price).toLocaleString()} ብር</div><span class="badge ${p.status==="pending"?"pending":p.status==="rejected"?"rejected":""}">${p.status==="approved"?"ተፈቅዷል":p.status==="pending"?"በመጠባበቅ ላይ":"ተቀባይነት አላገኘም"}</span></div></article>`).join(""):'<div class="empty">ገና ምርት አላስገቡም።</div>'}
-function submitProduct(){const title=document.getElementById("sellTitle").value.trim(),category=document.getElementById("sellCategory").value,price=Number(document.getElementById("sellPrice").value),phone=document.getElementById("sellPhone").value.trim(),location=document.getElementById("sellLocation").value.trim(),description=document.getElementById("sellDescription").value.trim(),file=document.getElementById("sellImage").files[0];if(!title||!price||price<=0||!phone||!location||!file){alert("እባክዎ ሁሉንም አስፈላጊ መረጃዎች ይሙሉ።");return}if(file.size>2*1024*1024){alert("ፎቶው ከ2MB መብለጥ የለበትም።");return}if(!file.type.startsWith("image/")){alert("የምርት ፎቶ ይምረጡ።");return}const reader=new FileReader();reader.onload=()=>{const owner=currentUser?.phone||phone;products.push({id:Date.now(),title,category,price,phone,location,description,image:reader.result,status:"pending",owner,date:new Date().toISOString()});saveData();if(!currentUser){currentUser={name:"",phone,email:""};localStorage.setItem(KEYS.user,JSON.stringify(currentUser))}["sellTitle","sellPrice","sellPhone","sellLocation","sellImage","sellDescription"].forEach(id=>document.getElementById(id).value="");alert("ምርትዎ ተመዝግቧል። በAdmin ከጸደቀ በኋላ በHome ላይ ይታያል።");showPage("myProductsPage")};reader.onerror=()=>alert("ፎቶውን ማንበብ አልተቻለም።");reader.readAsDataURL(file)}
-function loadProfile(){document.getElementById("profileName").value=currentUser?.name||"";document.getElementById("profilePhone").value=currentUser?.phone||"";document.getElementById("profileEmail").value=currentUser?.email||""}
-function saveProfile(){const name=document.getElementById("profileName").value.trim(),phone=document.getElementById("profilePhone").value.trim(),email=document.getElementById("profileEmail").value.trim();if(!name||!phone){alert("ስምና ስልክ ቁጥር ያስፈልጋሉ።");return}const old=currentUser?.phone;currentUser={name,phone,email};if(old&&old!==phone)products.forEach(p=>{if(p.owner===old)p.owner=phone});const user={name,phone,email};if(!users.some(u=>u.phone===phone))users.push(user);else users=users.map(u=>u.phone===phone?user:u);localStorage.setItem(KEYS.user,JSON.stringify(currentUser));saveData();toast("የመለያ መረጃዎ ተቀምጧል")}
-function logout(){if(!confirm("ከመለያዎ መውጣት ይፈልጋሉ?"))return;currentUser=null;localStorage.removeItem(KEYS.user);toast("ከመለያዎ ወጥተዋል");showPage("homePage")}
-function openAdmin(){const pass=prompt("የAdmin ይለፍ ቃል ያስገቡ። (Default: 1234)");if(pass===null)return;if(pass!=="1234"){alert("የይለፍ ቃሉ ትክክል አይደለም።");return}adminTab("overview");showPage("adminPage")}
-function adminTab(tab){document.querySelectorAll(".admin-section,.admin-content").forEach(e=>e.classList.add("hidden"));const el=document.getElementById("admin"+tab[0].toUpperCase()+tab.slice(1));if(el)el.classList.remove("hidden");updateAdmin()}
-function updateAdmin(){document.getElementById("adminProductCount").textContent=products.length;document.getElementById("adminUserCount").textContent=users.length;document.getElementById("adminOrderCount").textContent=orders.length;document.getElementById("adminRevenue").textContent=orders.reduce((s,o)=>s+Number(o.total||0),0).toLocaleString();document.getElementById("adminProductList").innerHTML=products.length?products.map(p=>`<div class="admin-item"><strong>${escapeHTML(p.title)}</strong><p class="muted">${Number(p.price).toLocaleString()} ብር • ${escapeHTML(p.phone)} • ${escapeHTML(p.location)}</p><span class="badge ${p.status==="pending"?"pending":p.status==="rejected"?"rejected":""}">${escapeHTML(p.status)}</span><div class="admin-actions">${p.status!=="approved"?`<button onclick="approveProduct(${Number(p.id)})">አጽድቅ</button>`:""}<button class="secondary" onclick="rejectProduct(${Number(p.id)})">አትቀበል</button><button class="danger" onclick="deleteProduct(${Number(p.id)})">ሰርዝ</button></div></div>`).join(""):'ምርት የለም።';document.getElementById("adminUserList").innerHTML=users.length?users.map(u=>`<div class="admin-item"><strong>${escapeHTML(u.name)}</strong><p class="muted">${escapeHTML(u.phone)} • ${escapeHTML(u.email||"")}</p></div>`).join(""):"ተጠቃሚ የለም።";document.getElementById("adminOrderList").innerHTML=orders.length?orders.map(o=>`<div class="admin-item">ትዕዛዝ #${escapeHTML(o.id)}<p>${Number(o.total||0).toLocaleString()} ብር</p></div>`).join(""):"ትዕዛዝ የለም።";document.getElementById("adminPaymentList").innerHTML="<p class='muted'>የክፍያ ስርዓት ከServer ጋር ሲገናኝ የክፍያ መረጃ ይታያል።</p>"}
-function approveProduct(id){const p=products.find(x=>Number(x.id)===Number(id));if(!p)return;p.status="approved";saveData();updateAdmin();renderProducts();toast("ምርቱ ጸድቋል")}
-function rejectProduct(id){const p=products.find(x=>Number(x.id)===Number(id));if(!p)return;p.status="rejected";saveData();updateAdmin();renderProducts();toast("ምርቱ አልተቀበለም")}
-function deleteProduct(id){if(!confirm("ይህን ምርት ለማጥፋት እርግጠኛ ነዎት?"))return;products=products.filter(p=>Number(p.id)!==Number(id));favorites=favorites.filter(x=>Number(x)!==Number(id));saveData();updateAdmin();renderProducts();toast("ምርቱ ተሰርዟል")}
-function changeLanguage(){const s=document.getElementById("languageSelect");if(s.value==="en"){alert("English interface will be available in a future update.");s.value="am"}}
-document.addEventListener("DOMContentLoaded",()=>{renderProducts();loadProfile()});
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,char=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[char]));
+}
+
+function safeImage(source){
+ return source||"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect width='100%25' height='100%25' fill='%23edf2ee'/%3E%3Ctext x='50%25' y='50%25' font-size='28' text-anchor='middle' fill='%23748078' dominant-baseline='middle'%3EALLIN ONE%3C/text%3E%3C/svg%3E";
+}
+
+function visibleProducts(){
+ let list=products.filter(product=>product.status==="approved");
+ if(activeCategory!=="all"){
+  list=list.filter(product=>product.category===activeCategory);
+ }
+ const sort=document.getElementById("sortSelect")?.value||"new";
+ if(sort==="low")list.sort((a,b)=>Number(a.price)-Number(b.price));
+ else if(sort==="high")list.sort((a,b)=>Number(b.price)-Number(a.price));
+ else list.sort((a,b)=>Number(b.id)-Number(a.id));
+ return list;
+}
+
+function renderCard(product){
+ const id=Number(product.id);
+ return `
+ <article class="card">
+  <div class="card-img-wrap" onclick="openProduct(${id})">
+   <img loading="lazy" src="${safeImage(product.image)}" alt="${escapeHTML(product.title)}" onerror="this.onerror=null;this.src='${safeImage("")}'">
+  </div>
+  <div class="card-body">
+   <div class="card-title" onclick="openProduct(${id})">${escapeHTML(product.title)}</div>
+   <div class="price">${Number(product.price).toLocaleString()} ብር</div>
+   <div class="card-meta">
+    <span>📍 ${escapeHTML(product.location)}</span>
+    <span>🕒 ${new Date(product.date||Date.now()).toLocaleDateString()}</span>
+   </div>
+   <div class="card-actions">
+    <a class="call-button" href="tel:${escapeHTML(product.phone)}">📞 ደውል</a>
+    <button onclick="openProduct(${id})">ዝርዝር</button>
+   </div>
+  </div>
+ </article>`;
+}
+
+function renderProducts(){
+ const list=visibleProducts();
+ document.getElementById("resultCount").textContent=list.length+" ምርቶች";
+ document.getElementById("productGrid").innerHTML=list.length
+  ?list.map(renderCard).join("")
+  :'<div class="empty"><strong>ምርቶች አልተገኙም</strong>ለጊዜው የተፈቀዱ ምርቶች የሉም።<br><br><button onclick="showPage(\'sellPage\')">＋ ምርት አስገባ</button></div>';
+}
+
+function resetFilters(){
+ activeCategory="all";
+ document.querySelectorAll(".categories button").forEach(button=>{
+  button.classList.toggle("active",button.dataset.cat==="all");
+ });
+ document.getElementById("listingHeading").textContent="አዳዲስ ምርቶች";
+ renderProducts();
+}
+
+function filterCategory(category,button){
+ activeCategory=category;
+ document.querySelectorAll(".categories button").forEach(item=>item.classList.remove("active"));
+ button.classList.add("active");
+ document.getElementById("listingHeading").textContent=category==="all"?"አዳዲስ ምርቶች":button.textContent;
+ renderProducts();
+}
+
+function openProduct(id){
+ const product=products.find(item=>Number(item.id)===Number(id));
+ if(!product||product.status!=="approved")return;
+
+ document.getElementById("productDetails").innerHTML=`
+  <img class="detail-img" src="${safeImage(product.image)}" alt="${escapeHTML(product.title)}">
+  <h2 style="margin:15px 0 5px">${escapeHTML(product.title)}</h2>
+  <div class="price">${Number(product.price).toLocaleString()} ብር</div>
+  <p style="margin:12px 0;line-height:1.6">${escapeHTML(product.description||"ምንም ተጨማሪ መግለጫ አልተሰጠም።")}</p>
+  <p class="muted">📍 ${escapeHTML(product.location)}</p>
+  <p class="muted">📞 ${escapeHTML(product.phone)}</p>
+  <p class="muted">📅 ${new Date(product.date||Date.now()).toLocaleString()}</p>
+  <div class="detail-actions">
+   <a class="call-button" style="padding:13px;border-radius:9px" href="tel:${escapeHTML(product.phone)}">📞 ሻጩን ደውል</a>
+  </div>`;
+ showPage("productPage");
+}
+
+function renderMyProducts(){
+ const grid=document.getElementById("myProductsGrid");
+ if(!currentUser){
+  grid.innerHTML='<div class="empty">የእኔን ምርቶች ለማየት Profile ውስጥ ስምና ስልክ ያስገቡ።</div>';
+  return;
+ }
+ const items=products.filter(product=>product.owner===currentUser.phone);
+ grid.innerHTML=items.length?items.map(product=>`
+  <article class="card">
+   <div class="card-img-wrap"><img src="${safeImage(product.image)}" alt="${escapeHTML(product.title)}"></div>
+   <div class="card-body">
+    <div class="card-title">${escapeHTML(product.title)}</div>
+    <div class="price">${Number(product.price).toLocaleString()} ብር</div>
+    <span class="badge ${product.status==="pending"?"pending":product.status==="rejected"?"rejected":""}">
+     ${product.status==="approved"?"ተፈቅዷል":product.status==="pending"?"በመጠባበቅ ላይ":"ተቀባይነት አላገኘም"}
+    </span>
+   </div>
+  </article>`).join("")
+  :'<div class="empty">ገና ምርት አላስገቡም።</div>';
+}
+
+/* CLOUDINARY IMAGE UPLOAD */
+async function uploadImageToCloudinary(file){
+ const url=`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+ const formData=new FormData();
+ formData.append("file",file);
+ formData.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
+ formData.append("folder",CLOUDINARY_FOLDER);
+
+ const response=await fetch(url,{method:"POST",body:formData});
+ const result=await response.json();
+
+ if(!response.ok){
+  throw new Error(result.error?.message||"Cloudinary ፎቶውን መቀበል አልቻለም።");
+ }
+ if(!result.secure_url)throw new Error("የፎቶ ሊንክ አልተገኘም።");
+ return result.secure_url;
+}
+
+async function submitProduct(){
+ const title=document.getElementById("sellTitle").value.trim();
+ const category=document.getElementById("sellCategory").value;
+ const price=Number(document.getElementById("sellPrice").value);
+ const phone=document.getElementById("sellPhone").value.trim();
+ const location=document.getElementById("sellLocation").value.trim();
+ const description=document.getElementById("sellDescription").value.trim();
+ const file=document.getElementById("sellImage").files[0];
+ const button=document.getElementById("submitProductButton");
+
+ if(!title||!price||price<=0||!phone||!location||!file){
+  alert("እባክዎ ሁሉንም አስፈላጊ መረጃዎች ይሙሉ።");
+  return;
+ }
+ if(file.size>2*1024*1024){
+  alert("ፎቶው ከ2MB መብለጥ የለበትም።");
+  return;
+ }
+ if(!file.type.startsWith("image/")){
+  alert("የምርት ፎቶ ይምረጡ።");
+  return;
+ }
+
+ button.disabled=true;
+ button.textContent="ፎቶ በመጫን ላይ...";
+
+ try{
+  const imageUrl=await uploadImageToCloudinary(file);
+  const owner=currentUser?.phone||phone;
+
+  const newProduct={
+   id:Date.now(),
+   title,category,price,phone,location,description,
+   image:imageUrl,
+   status:"pending",
+   owner,
+   date:new Date().toISOString()
+  };
+
+  products.push(newProduct);
+  if(!saveData()){
+   products=products.filter(item=>item.id!==newProduct.id);
+   throw new Error("ምርቱን በስልክዎ ላይ ማስቀመጥ አልተቻለም።");
+  }
+
+  if(!currentUser){
+   currentUser={name:"",phone,email:""};
+   localStorage.setItem(KEYS.user,JSON.stringify(currentUser));
+  }
+
+  ["sellTitle","sellPrice","sellPhone","sellLocation","sellImage","sellDescription"].forEach(id=>{
+   document.getElementById(id).value="";
+  });
+
+  alert("ምርትዎ ተመዝግቧል። Admin ከጸደቀው በኋላ Home ላይ ይታያል።");
+  showPage("myProductsPage");
+ }catch(error){
+  alert("ስህተት፦ "+error.message+"\n\nየCloudinary Upload Preset እና Internet ያረጋግጡ።");
+ }finally{
+  button.disabled=false;
+  button.textContent="ምርት አስገባ";
+ }
+}
+
+function loadProfile(){
+ document.getElementById("profileName").value=currentUser?.name||"";
+ document.getElementById("profilePhone").value=currentUser?.phone||"";
+ document.getElementById("profileEmail").value=currentUser?.email||"";
+}
+
+function saveProfile(){
+ const name=document.getElementById("profileName").value.trim();
+ const phone=document.getElementById("profilePhone").value.trim();
+ const email=document.getElementById("profileEmail").value.trim();
+
+ if(!name||!phone){
+  alert("ስምና ስልክ ቁጥር ያስፈልጋሉ።");
+  return;
+ }
+
+ const oldPhone=currentUser?.phone;
+ currentUser={name,phone,email};
+
+ if(oldPhone&&oldPhone!==phone){
+  products.forEach(product=>{
+   if(product.owner===oldPhone)product.owner=phone;
+  });
+ }
+
+ const user={name,phone,email};
+ if(!users.some(item=>item.phone===phone))users.push(user);
+ else users=users.map(item=>item.phone===phone?user:item);
+
+ localStorage.setItem(KEYS.user,JSON.stringify(currentUser));
+ saveData();
+ toast("የመለያ መረጃዎ ተቀምጧል");
+}
+
+function logout(){
+ if(!confirm("ከመለያዎ መውጣት ይፈልጋሉ?"))return;
+ currentUser=null;
+ localStorage.removeItem(KEYS.user);
+ toast("ከመለያዎ ወጥተዋል");
+ showPage("homePage");
+}
+
+/* ADMIN DEMO ACCESS - NOT SECURE FOR A LIVE APP */
+function openAdmin(){
+ const password=prompt("የAdmin ይለፍ ቃል ያስገቡ። (Demo: 1234)");
+ if(password===null)return;
+ if(password!=="1234"){
+  alert("የይለፍ ቃሉ ትክክል አይደለም።");
+  return;
+ }
+ adminTab("overview");
+ showPage("adminPage");
+}
+
+function adminTab(tab){
+ document.querySelectorAll(".admin-section,.admin-content").forEach(element=>element.classList.add("hidden"));
+ const target=document.getElementById("admin"+tab[0].toUpperCase()+tab.slice(1));
+ if(target)target.classList.remove("hidden");
+ updateAdmin();
+}
+
+function updateAdmin(){
+ document.getElementById("adminProductCount").textContent=products.length;
+ document.getElementById("adminUserCount").textContent=users.length;
+ document.getElementById("adminOrderCount").textContent=orders.length;
+ document.getElementById("adminRevenue").textContent=orders.reduce((sum,order)=>sum+Number(order.total||0),0).toLocaleString();
+
+ document.getElementById("adminProductList").innerHTML=products.length?products.map(product=>`
+  <div class="admin-item">
+   <strong>${escapeHTML(product.title)}</strong>
+   <p class="muted">${Number(product.price).toLocaleString()} ብር • ${escapeHTML(product.phone)} • ${escapeHTML(product.location)}</p>
+   <span class="badge ${product.status==="pending"?"pending":product.status==="rejected"?"rejected":""}">${escapeHTML(product.status)}</span>
+   <div class="admin-actions">
+    ${product.status!=="approved"?`<button onclick="approveProduct(${Number(product.id)})">አጽድቅ</button>`:""}
+    <button class="secondary" onclick="rejectProduct(${Number(product.id)})">አትቀበል</button>
+    <button class="danger" onclick="deleteProduct(${Number(product.id)})">ሰርዝ</button>
+   </div>
+  </div>`).join(""):"ምርት የለም።";
+
+ document.getElementById("adminUserList").innerHTML=users.length?users.map(user=>`
+  <div class="admin-item">
+   <strong>${escapeHTML(user.name)}</strong>
+   <p class="muted">${escapeHTML(user.phone)} • ${escapeHTML(user.email||"")}</p>
+  </div>`).join(""):"ተጠቃሚ የለም።";
+
+ document.getElementById("adminOrderList").innerHTML=orders.length?orders.map(order=>`
+  <div class="admin-item">
+   ትዕዛዝ #${escapeHTML(order.id)}
+   <p>${Number(order.total||0).toLocaleString()} ብር</p>
+  </div>`).join(""):"ትዕዛዝ የለም።";
+
+ document.getElementById("adminPaymentList").innerHTML=
+  "<p class='muted'>የክፍያ ስርዓት ከServer/Firebase ጋር ሲገናኝ የክፍያ መረጃ ይታያል።</p>";
+}
+
+function approveProduct(id){
+ const product=products.find(item=>Number(item.id)===Number(id));
+ if(!product)return;
+ product.status="approved";
+ saveData();
+ updateAdmin();
+ renderProducts();
+ toast("ምርቱ ጸድቋል");
+}
+
+function rejectProduct(id){
+ const product=products.find(item=>Number(item.id)===Number(id));
+ if(!product)return;
+ product.status="rejected";
+ saveData();
+ updateAdmin();
+ renderProducts();
+ toast("ምርቱ አልተቀበለም");
+}
+
+function deleteProduct(id){
+ if(!confirm("ይህን ምርት ለማጥፋት እርግጠኛ ነዎት?"))return;
+ products=products.filter(item=>Number(item.id)!==Number(id));
+ saveData();
+ updateAdmin();
+ renderProducts();
+ toast("ምርቱ ተሰርዟል");
+}
+
+function changeLanguage(){
+ const select=document.getElementById("languageSelect");
+ if(select.value==="en"){
+  alert("English interface will be available in a future update.");
+  select.value="am";
+ }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+ renderProducts();
+ loadProfile();
+});
 </script>
 </body>
 </html>
